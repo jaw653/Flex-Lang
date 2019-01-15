@@ -5,48 +5,29 @@
 - do we have to use all the alternatives for every rule in our code or just every rule in our program?
 - how to add i++?
 - need to add a LOT of functionality for class
-    - ie. class.fc() (methodCall: VARIABLE PERIOD VARIABLE OPEN_PAREN CLOSE_PAREN)
+    - ie. class.fc() (methodCall: PERIOD VARIABLE OPEN_PAREN CLOSE_PAREN)
     - ie. "new" and creating an object
 - maybe change function definition to not include return type for the sake of continuity between definitions
 - what do you mean by "Also, make sure you edit your text files and source code under a linux/unix system (or at least convert them to only use newline for end of line). " on the forum?
+- did he say that a return statement is a unary?
+- is my *empty* ok or do I need to change it to EMPTY ?
+- is boolean ok?
+- do i need to define sum, increment, decrement, product, etc?
+- should operators be unary's?
 
+varDef: VAR ID ASSIGN expression SEMICOLON
+      | VAR ID SEMICOLON
 
-///
-varDef: VAR VARIABLE ASSIGN expression SEMICOLON
-      | VAR VARIABLE SEMICOLON
-///
+functionSignature: DEFINE FUNCTION ID OPEN_PAREN optArgList CLOSE_PAREN SEMICOLON
 
-///
-sum: unary PLUS unary SEMICOLON
+functionDef: DEFINE FUNCTION ID OPEN_PAREN optArgList CLOSE_PAREN block
 
-increment: unary PLUS PLUS SEMICOLON
+optArgList: argList
+          | *empty*
 
-product: unary TIMES unary SEMICOLON
+argList: ID
+       | ID COMMA argList
 
-difference: unary MINUS unary SEMICOLON
-
-decrement: unary MINUS MINUS SEMICOLON
-
-dividend: unary DIVIDE unary SEMICOLON
-///
-
-///
-functionSignature: DEFINE VAR_TYPE FUNCTION VARIABLE OPEN_PAREN optionalParamList CLOSE_PAREN SEMICOLON
-
-functionDef: DEFINE VAR_TYPE FUNCTION VARIABLE OPEN_PAREN optionalParamList CLOSE_PAREN block
-
-functionCall: VARIABLE OPEN_PAREN optionalParamList CLOSE_PAREN SEMICOLON
-///
-
-///
-optionalParamList: paramList
-                 | *empty*
-
-paramList: VARIABLE
-         | VARIABLE COMMA paramList
-///
-
-///
 block: OPEN_BRACE statements CLOSE_BRACE
 
 statements: statement
@@ -60,62 +41,54 @@ statement: expression SEMICOLON
 
 expression: unary
           | unary operator expression
+          
+exprList: expression
+        | expression COMMA exprList
+        
+optExprList: exprList
+           | *empty*
 
-unary: NUMBER
-     | VARIABLE
+unary: ID
+     | INTEGER
+     | REAL
+     | BOOLEAN
+     | CHARACTER
+     | STRING
      | OPEN_PAREN expression CLOSE_PAREN
-     | MINUS unary
-     // | VARIABLE OPEN_PAREN optExpressionList CLOSE_PAREN
+     | UMINUS unary
+     | ID OPEN_PAREN optExprList CLOSE_PAREN
+     | ID PLUS PLUS
+     | ID MINUS MINUS
 
 operator: PLUS
         | TIMES
         | DIVIDE
-        | SUBTRACT
+        | MINUS
         | GREATER_THAN
         | LESS_THAN
         | EQUAL_TO
         | GT_EQUAL
         | LT_EQUAL
         | MODULO
-///
+        | PLUS_EQUAL
+        | MINUS_EQUAL
 
-///
 ifStatement: IF OPEN_PAREN expression CLOSE_PAREN block optElse
 
 optElse: ELSE block
        | ELSE IF OPEN_PAREN expression CLOSE_PAREN block
        | *empty*
-///
 
-///
 whileLoop: WHILE OPEN_PAREN expression CLOSE_PAREN block
-///
 
-///
 forLoop: FOR OPEN_PAREN expression SEMICOLON expression SEMICOLON expression CLOSE_PAREN block
-///
 
-///
-comment: FWD_SLASH FWD_SLASH statements
-       | FWD_SLASH ASTERISK statements ASTERISK FWD_SLASH
-///
+classDef: DEFINE CLASS ID block
 
-///
-structDef: DEFINE STRUCTURE VARIABLE block
-///
+instantiateObj: VAR ID ASSIGN NEW UNDERSCORE ID UNDERSCORE SEMICOLON
 
-///
-classDef: DEFINE CLASS VARIABLE block
+callMethod: ID PERIOD ID OPEN_PAREN optionalParamList CLOSE_PAREN SEMICOLON
 
-instantiateObj: VAR VARIABLE ASSIGN NEW UNDERSCORE VARIABLE UNDERSCORE SEMICOLON
+importDef: BUNDLE SINGLE_QUOTE ID SINGLE_QUOTE
 
-callMethod: VARIABLE PERIOD VARIABLE OPEN_PAREN optionalParamList CLOSE_PAREN SEMICOLON
-///
-
-///
-importDef: BUNDLE SINGLE_QUOTE VARIABLE SINGLE_QUOTE
-///
-
-///
-returnStatement: RETURN statement UNARY SEMICOLON
-///
+returnStatement: RETURN statement unary SEMICOLON
