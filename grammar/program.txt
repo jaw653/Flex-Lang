@@ -1,0 +1,82 @@
+/*
+ * Author: Jake Wachs
+ * CS 403, Programming Languages
+ * Grammar program
+ */
+
+// Do we have to use all the alternatives for every rule or just each rule?
+// Do I need to decide how to print things or is that done in another phase?
+
+bundle 'example.h'
+bundle 'file.h'
+
+
+define structure box
+{
+    var height;
+    var width;
+    var depth;
+}
+
+define class plane
+{
+    var remainingFuel;
+    var speed;
+
+    define void function getFuel()
+    {
+        return remainingFuel;
+    }
+
+    define void function setFuel(x)
+    {
+        remainingFuel = x;
+    }
+                                        //FIXME: need to finish methods!
+}
+
+
+define void function sayHi();
+
+
+define integer function main()
+{
+    var a = 5;
+    var b = 10;
+
+    var sum = a + b;
+    var product = sum * b;
+    var difference = product - 3;
+    var dividend = difference / 4;
+
+    if (dividend > 2019)
+    {
+        while (dividend > 2019)
+        {
+            sum = sum + 50;
+            dividend = dividend / 10;
+        }
+    }
+    else
+    {
+        var i;
+        for (i = 0; i < 10; i++)            // FIXME: is i++ ok?
+        {
+            sayHi();
+        }
+    }
+
+    var boeing = new _plane_;
+    boeing.getFuel();
+
+    var j = 0;
+    j++;
+    j--;
+
+    return 1;
+}
+
+define void function sayHi()
+{
+    print "Hello, world!";           //FIXME: do I need to define fc's like print?
+}

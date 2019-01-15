@@ -1,0 +1,121 @@
+- can I make it so that int OR integer is accepted?
+- is VAR_TYPE Okay for function def?
+- did I do operator right?
+- is comment done correctly?
+- do we have to use all the alternatives for every rule in our code or just every rule in our program?
+- how to add i++?
+- need to add a LOT of functionality for class
+    - ie. class.fc() (methodCall: VARIABLE PERIOD VARIABLE OPEN_PAREN CLOSE_PAREN)
+    - ie. "new" and creating an object
+- maybe change function definition to not include return type for the sake of continuity between definitions
+- what do you mean by "Also, make sure you edit your text files and source code under a linux/unix system (or at least convert them to only use newline for end of line). " on the forum?
+
+
+///
+varDef: VAR VARIABLE ASSIGN expression SEMICOLON
+      | VAR VARIABLE SEMICOLON
+///
+
+///
+sum: unary PLUS unary SEMICOLON
+
+increment: unary PLUS PLUS SEMICOLON
+
+product: unary TIMES unary SEMICOLON
+
+difference: unary MINUS unary SEMICOLON
+
+decrement: unary MINUS MINUS SEMICOLON
+
+dividend: unary DIVIDE unary SEMICOLON
+///
+
+///
+functionSignature: DEFINE VAR_TYPE FUNCTION VARIABLE OPEN_PAREN optionalParamList CLOSE_PAREN SEMICOLON
+
+functionDef: DEFINE VAR_TYPE FUNCTION VARIABLE OPEN_PAREN optionalParamList CLOSE_PAREN block
+
+functionCall: VARIABLE OPEN_PAREN optionalParamList CLOSE_PAREN SEMICOLON
+///
+
+///
+optionalParamList: paramList
+                 | *empty*
+
+paramList: VARIABLE
+         | VARIABLE COMMA paramList
+///
+
+///
+block: OPEN_BRACE statements CLOSE_BRACE
+
+statements: statement
+          | statement statements
+          | *empty*
+
+statement: expression SEMICOLON
+         | ifStatement
+         | whileLoop
+         | forLoop
+
+expression: unary
+          | unary operator expression
+
+unary: NUMBER
+     | VARIABLE
+     | OPEN_PAREN expression CLOSE_PAREN
+     | MINUS unary
+     // | VARIABLE OPEN_PAREN optExpressionList CLOSE_PAREN
+
+operator: PLUS
+        | TIMES
+        | DIVIDE
+        | SUBTRACT
+        | GREATER_THAN
+        | LESS_THAN
+        | EQUAL_TO
+        | GT_EQUAL
+        | LT_EQUAL
+        | MODULO
+///
+
+///
+ifStatement: IF OPEN_PAREN expression CLOSE_PAREN block optElse
+
+optElse: ELSE block
+       | ELSE IF OPEN_PAREN expression CLOSE_PAREN block
+       | *empty*
+///
+
+///
+whileLoop: WHILE OPEN_PAREN expression CLOSE_PAREN block
+///
+
+///
+forLoop: FOR OPEN_PAREN expression SEMICOLON expression SEMICOLON expression CLOSE_PAREN block
+///
+
+///
+comment: FWD_SLASH FWD_SLASH statements
+       | FWD_SLASH ASTERISK statements ASTERISK FWD_SLASH
+///
+
+///
+structDef: DEFINE STRUCTURE VARIABLE block
+///
+
+///
+classDef: DEFINE CLASS VARIABLE block
+
+instantiateObj: VAR VARIABLE ASSIGN NEW UNDERSCORE VARIABLE UNDERSCORE SEMICOLON
+
+callMethod: VARIABLE PERIOD VARIABLE OPEN_PAREN optionalParamList CLOSE_PAREN SEMICOLON
+///
+
+///
+importDef: BUNDLE SINGLE_QUOTE VARIABLE SINGLE_QUOTE
+///
+
+///
+returnStatement: RETURN statement UNARY SEMICOLON
+///
