@@ -7,46 +7,54 @@
 // Do we have to use all the alternatives for every rule or just each rule?
 // Do I need to decide how to print things or is that done in another phase?
 
+
 bundle 'example.h'
 bundle 'file.h'
 
-
-define structure box
-{
-    var height;
-    var width;
-    var depth;
-}
 
 define class plane
 {
     var remainingFuel;
     var speed;
 
-    define void function getFuel()
+    define function _init_()
+    {
+    }
+
+    define function _init_(fuel, speed)
+    {
+    }
+
+    define function getFuel()
     {
         return remainingFuel;
     }
 
-    define void function setFuel(x)
+    define function setFuel(x)
     {
         remainingFuel = x;
     }
 }
 
 
-define function sayHi();
-define function manyArgs(a, b, c);
+define function sayHi()
+{
+}
 
 
-define integer function main()
+define function manyArgs(a, b, c)
+{
+}
+
+
+define function main()
 {
     var a = 5;
     var b = 10;
     var c = 5.5;
     var d;
     var e = false;
-    var f =             //FIXME: string once you talk to Lusth
+    var f = "hello world";
 
     var sum = a + b;
     var product = sum * b;
@@ -83,7 +91,7 @@ define integer function main()
         }
     }
 
-    var boeing = new _plane_;
+    var boeing = new _plane_();
     boeing.getFuel();
 
     var j = 0;
@@ -91,12 +99,4 @@ define integer function main()
     j--;
 
     return 1;
-}
-
-define function sayHi()
-{
-}
-
-define function manyArgs(a, b, c)
-{
 }
