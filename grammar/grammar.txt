@@ -1,19 +1,20 @@
 - can I make it so that int OR integer is accepted?
-- is VAR_TYPE Okay for function def?
 - did I do operator right?
-- is comment done correctly?
 - do we have to use all the alternatives for every rule in our code or just every rule in our program?
-- how to add i++?
 - need to add a LOT of functionality for class
     - ie. class.fc() (methodCall: PERIOD VARIABLE OPEN_PAREN CLOSE_PAREN)
     - ie. "new" and creating an object
-- maybe change function definition to not include return type for the sake of continuity between definitions
 - what do you mean by "Also, make sure you edit your text files and source code under a linux/unix system (or at least convert them to only use newline for end of line). " on the forum?
 - did he say that a return statement is a unary?
 - is my *empty* ok or do I need to change it to EMPTY ?
 - is boolean ok?
-- do i need to define sum, increment, decrement, product, etc?
-- should operators be unary's?
+- should operators be unary's instead?
+- do I need to add pointers/how to do that?
+- why wouldn't line 56 under unary be optArg or paramlist rather than expression list?
+- do we need to define a separate rule for defining a string with quotes?
+- what is UMINUS?
+- should importDef and returnStatement be unary's?
+- is my use of "UNDERSCORE" alright?
 
 varDef: VAR ID ASSIGN expression SEMICOLON
       | VAR ID SEMICOLON
@@ -38,13 +39,14 @@ statement: expression SEMICOLON
          | ifStatement
          | whileLoop
          | forLoop
+         | functionDef
 
 expression: unary
           | unary operator expression
-          
+
 exprList: expression
         | expression COMMA exprList
-        
+
 optExprList: exprList
            | *empty*
 
@@ -59,6 +61,7 @@ unary: ID
      | ID OPEN_PAREN optExprList CLOSE_PAREN
      | ID PLUS PLUS
      | ID MINUS MINUS
+     | ID PERIOD ID OPEN_PAREN optExprList CLOSE_PAREN
 
 operator: PLUS
         | TIMES
@@ -72,11 +75,12 @@ operator: PLUS
         | MODULO
         | PLUS_EQUAL
         | MINUS_EQUAL
+        | ASSIGN
 
 ifStatement: IF OPEN_PAREN expression CLOSE_PAREN block optElse
 
 optElse: ELSE block
-       | ELSE IF OPEN_PAREN expression CLOSE_PAREN block
+       | ELSE IF OPEN_PAREN expression CLOSE_PAREN block optElse
        | *empty*
 
 whileLoop: WHILE OPEN_PAREN expression CLOSE_PAREN block
@@ -86,8 +90,6 @@ forLoop: FOR OPEN_PAREN expression SEMICOLON expression SEMICOLON expression CLO
 classDef: DEFINE CLASS ID block
 
 instantiateObj: VAR ID ASSIGN NEW UNDERSCORE ID UNDERSCORE SEMICOLON
-
-callMethod: ID PERIOD ID OPEN_PAREN optionalParamList CLOSE_PAREN SEMICOLON
 
 importDef: BUNDLE SINGLE_QUOTE ID SINGLE_QUOTE
 
