@@ -1,28 +1,19 @@
-- can I make it so that int OR integer is accepted?
-- did I do operator right?
-- do we have to use all the alternatives for every rule in our code or just every rule in our program?
-- need to add a LOT of functionality for class
-    - ie. class.fc() (methodCall: PERIOD VARIABLE OPEN_PAREN CLOSE_PAREN)
-    - ie. "new" and creating an object
-- what do you mean by "Also, make sure you edit your text files and source code under a linux/unix system (or at least convert them to only use newline for end of line). " on the forum?
-- did he say that a return statement is a unary?
-- is my *empty* ok or do I need to change it to EMPTY ?
-- is boolean ok?
-- should operators be unary's instead?
-- do I need to add pointers/how to do that?
-- why wouldn't line 56 under unary be optArg or paramlist rather than expression list?
-- do we need to define a separate rule for defining a string with quotes?
-- what is UMINUS?
-- should importDef and returnStatement be unary's?
-- is my use of "UNDERSCORE" alright?
-- how should boolean be defined?
+- add _init_ keyword to grammar
+
+
+program: def
+       | def program
+
+def: varDef
+   | functionDef
+   | classDef
 
 varDef: VAR ID ASSIGN expression SEMICOLON
       | VAR ID SEMICOLON
 
-functionSignature: DEFINE FUNCTION ID OPEN_PAREN optArgList CLOSE_PAREN SEMICOLON
-
 functionDef: DEFINE FUNCTION ID OPEN_PAREN optArgList CLOSE_PAREN block
+
+classDef: DEFINE CLASS ID block
 
 optArgList: argList
           | *empty*
@@ -30,7 +21,12 @@ optArgList: argList
 argList: ID
        | ID COMMA argList
 
-block: OPEN_BRACE statements CLOSE_BRACE
+block: OPEN_BRACE statements optReturn CLOSE_BRACE
+
+optReturn: returnStatement
+         | *empty*
+
+returnStatement: RETURN expression SEMICOLON
 
 statements: statement
           | statement statements
@@ -41,6 +37,7 @@ statement: expression SEMICOLON
          | whileLoop
          | forLoop
          | functionDef
+         | BUNDLE SINGLE_QUOTE ID SINGLE_QUOTE
 
 expression: unary
           | unary operator expression
@@ -57,12 +54,14 @@ unary: ID
      | BOOLEAN
      | CHARACTER
      | STRING
+     | NOT unary
      | OPEN_PAREN expression CLOSE_PAREN
      | UMINUS unary
      | ID OPEN_PAREN optExprList CLOSE_PAREN
      | ID PLUS PLUS
      | ID MINUS MINUS
      | ID PERIOD ID OPEN_PAREN optExprList CLOSE_PAREN
+     | NEW UNDERSCORE ID UNDERSCORE OPEN_PAREN optExprList CLOSE_PAREN
 
 operator: PLUS
         | TIMES
@@ -87,11 +86,3 @@ optElse: ELSE block
 whileLoop: WHILE OPEN_PAREN expression CLOSE_PAREN block
 
 forLoop: FOR OPEN_PAREN expression SEMICOLON expression SEMICOLON expression CLOSE_PAREN block
-
-classDef: DEFINE CLASS ID block
-
-instantiateObj: VAR ID ASSIGN NEW UNDERSCORE ID UNDERSCORE SEMICOLON
-
-importDef: BUNDLE SINGLE_QUOTE ID SINGLE_QUOTE
-
-returnStatement: RETURN unary SEMICOLON
