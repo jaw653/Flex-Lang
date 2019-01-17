@@ -1,11 +1,8 @@
-/*
+/**
  * Author: Jake Wachs
  * CS 403, Programming Languages
  * Grammar program
  */
-
-// Do we have to use all the alternatives for every rule or just each rule?
-// Do I need to decide how to print things or is that done in another phase?
 
 
 bundle 'example.h'
@@ -16,14 +13,6 @@ define class plane
 {
     var remainingFuel;
     var speed;
-
-    define function _init_()
-    {
-    }
-
-    define function _init_(fuel, speed)
-    {
-    }
 
     define function getFuel()
     {
@@ -53,7 +42,7 @@ define function main()
     var b = 10;
     var c = 5.5;
     var d;
-    var e = false;
+    var myBool = false;
     var f = "hello world";
 
     var sum = a + b;
@@ -91,7 +80,7 @@ define function main()
         }
     }
 
-    var boeing = new _plane_();
+    var boeing = new _plane()_;
     boeing.getFuel();
 
     var j = 0;
