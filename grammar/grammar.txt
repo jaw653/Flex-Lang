@@ -75,6 +75,7 @@ operator: PLUS
         | PLUS_EQUAL
         | MINUS_EQUAL
         | ASSIGN
+        | ASTERISK
 
 ifStatement: IF OPEN_PAREN expression CLOSE_PAREN block optElse
 
