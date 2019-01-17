@@ -21,16 +21,18 @@ optArgList: argList
 argList: ID
        | ID COMMA argList
 
-block: OPEN_BRACE statements optReturn CLOSE_BRACE
+block: OPEN_BRACE optStatements optReturn CLOSE_BRACE
 
 optReturn: returnStatement
          | *empty*
 
 returnStatement: RETURN expression SEMICOLON
 
+optStatements: statements
+             | *empty*
+
 statements: statement
           | statement statements
-          | *empty*
 
 statement: expression SEMICOLON
          | ifStatement
