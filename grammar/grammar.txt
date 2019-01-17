@@ -1,12 +1,10 @@
-- add _init_ keyword to grammar
-
-
 program: def
        | def program
 
 def: varDef
    | functionDef
    | classDef
+   | importDef
 
 varDef: VAR ID ASSIGN expression SEMICOLON
       | VAR ID SEMICOLON
@@ -14,6 +12,8 @@ varDef: VAR ID ASSIGN expression SEMICOLON
 functionDef: DEFINE FUNCTION ID OPEN_PAREN optArgList CLOSE_PAREN block
 
 classDef: DEFINE CLASS ID block
+
+importDef: BUNDLE SINGLE_QUOTE ID SINGLE_QUOTE
 
 optArgList: argList
           | *empty*
@@ -37,7 +37,6 @@ statement: expression SEMICOLON
          | whileLoop
          | forLoop
          | functionDef
-         | BUNDLE SINGLE_QUOTE ID SINGLE_QUOTE
 
 expression: unary
           | unary operator expression
@@ -61,7 +60,7 @@ unary: ID
      | ID PLUS PLUS
      | ID MINUS MINUS
      | ID PERIOD ID OPEN_PAREN optExprList CLOSE_PAREN
-     | NEW UNDERSCORE ID UNDERSCORE OPEN_PAREN optExprList CLOSE_PAREN
+     | NEW UNDERSCORE ID OPEN_PAREN optExprList CLOSE_PAREN UNDERSCORE
 
 operator: PLUS
         | TIMES
