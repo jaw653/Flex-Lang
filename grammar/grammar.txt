@@ -39,6 +39,7 @@ statement: expression SEMICOLON
          | whileLoop
          | forLoop
          | functionDef
+         | varDef
 
 expression: unary
           | unary operator expression
@@ -55,6 +56,7 @@ unary: ID
      | BOOLEAN
      | CHARACTER
      | STRING
+     | ARRAY
      | NOT unary
      | OPEN_PAREN expression CLOSE_PAREN
      | UMINUS unary
@@ -80,10 +82,12 @@ operator: PLUS
         | ASSIGN
         | ASTERISK
 
-ifStatement: IF OPEN_PAREN expression CLOSE_PAREN block optElse
+ifStatement: IF OPEN_PAREN expression CLOSE_PAREN block optElseIf optElse
+
+optElseIf: ELSE IF OPEN_PAREN expression CLOSE_PAREN block
+         | *empty*
 
 optElse: ELSE block
-       | ELSE IF OPEN_PAREN expression CLOSE_PAREN block optElse
        | *empty*
 
 whileLoop: WHILE OPEN_PAREN expression CLOSE_PAREN block
