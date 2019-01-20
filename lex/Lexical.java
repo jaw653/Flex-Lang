@@ -34,15 +34,37 @@ class Lexical
             for (int i = 0; i < size; i++)
             {
                 ch = Character.valueOf(currString.charAt(i));
-                input.add(ch);
-/*
-*** Should not need cause scanner does not take whitespace
-                if ( !(ch.isWhitespace()) )
+
+                if ( ch != '/' )
                 {
                     input.add(ch);
                 }
-*/
-            }
+                else
+                {
+                    if ( i+1 < currString.length() )
+                    {
+                        Character tmp = Character.valueOf(currString.charAt(++i));
+
+                        if (tmp == '/' || tmp == '*')
+                        {
+                            if (tmp == '/')
+                            {
+                                // skip until newline
+                            }
+                            else
+                            {
+                                // skip until '*/' is found
+
+
+                            }
+                        }
+                        else
+                        {
+                            i--;
+                        }
+                    }
+
+                }
 
             currString = sc.next();
         }
