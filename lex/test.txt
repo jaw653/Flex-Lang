@@ -1,0 +1,10 @@
+/**
+ * Author: jake wachs
+ */
+
+static int main(int argc, char **argv)
+{
+	printf("hello world");	//fixme: add newline
+
+	return 1;
+}
