@@ -95,7 +95,7 @@ class Lexer
      * @file The file to read from
      * return The Lexeme of the next token
      */
-    public int lex(File file) throws IOException
+    public Lexeme lex(File file) throws IOException
     {
         Character ch;
         PushbackInputStream stream = new PushbackInputStream(new FileInputStream(file));
@@ -164,6 +164,6 @@ class Lexer
                     // return new Lexeme(UNKNOWN, ch);
                     System.out.println("Placeholder");
         }
-        return 1;
+        return new Lexeme();
     }
 }
