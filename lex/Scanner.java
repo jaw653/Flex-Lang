@@ -1,12 +1,15 @@
 /**
  * Author: Jake Wachs
  * CS 403, Programming Languages
+ * The University of Alabama
+ *
  * Lexical Analysis Module
  */
 
  // Is there a way to compile with more warning settings and do I need to do it?
  // Need to account for something like below that ends with '\n'. Do I need to escape newline char?
             // printf("hello world\n");
+// should not have newline characters in the array. Maybe make it easy on myself and just get rid of '//' comments?
 
 
 import java.io.*;
@@ -36,6 +39,7 @@ class Scanner
                         if (next == '/')
                             return;
                     }
+
                     curr = Character.valueOf( (char)stream.read() );
                 }
             }
@@ -74,7 +78,6 @@ class Scanner
             while (stream.available() > 0)
             {
                 current = Character.valueOf( (char)stream.read() );
-                // System.out.println(current);
 
                 if ( current != ' ' && current != '\t')
                 {
@@ -85,17 +88,15 @@ class Scanner
                     {
                         Character next = Character.valueOf( (char)stream.read() );      // FIXME: might run into an issue if there is no next (idk if while loop exits immediately)
 
+                        /* if next character is '*', skip until you find end comment */
                         if (next == '*' || next == '/')
                         {
                             // stream.unread(next);
                             skipComment(stream, next);
                         }
+                        /* if next character is '\n', skip until you find '\n' */
                         else
                             input.add(current);
-
-                        // if next character is '*', skip until you find '*/'
-
-                        // if next character is '\n', skip until you find '\n'
                     }
                 }
             }
@@ -162,7 +163,7 @@ class Scanner
         ArrayList<Character> input = new ArrayList<Character>();
         input = skipWhiteSpace(file);
 
-        System.out.println(input);
+        // System.out.println(input);       // FIXME: for testing purposes only
 
 /*
         if ( lex(input) != 1 )
