@@ -5,6 +5,7 @@
 static int main(int argc, char **argv)
 {
 	printf("hello world");	//fixme: add newline
-
+	
+	this/should/be/included//not this
 	return 1;
 }
