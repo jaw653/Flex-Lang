@@ -15,12 +15,11 @@ import java.util.ArrayList;
 class Scanner
 {
     /**
-     * Safe method for getting the next Character in a String
-     * @str String from which to get next Character
-     * @index Index of String from which to get Character
-     * returns Character at index
+     * Method for skipping over comments employed by skipWhiteSpace
+     * @stream Stream from which to get next Character
+     * @identifier The second char of a possible comment
      */
-    private static void skipComment(PushbackInputStream stream, char identifier) throws IOException
+    private static void skipComment(FileInputStream stream, char identifier) throws IOException
     {
         try
         {
@@ -58,9 +57,9 @@ class Scanner
     }
 
     /**
-     * Method to skip over any whitespace in a File
+     * Method to skip over any whitespace and comments in a File
      * @file The file to be read
-     * returns ArrayList of Character objects from the file excluding whitespace
+     * returns ArrayList of Character objects from the file excluding whitespace & comments
      */
     private static ArrayList<Character> skipWhiteSpace(File file) throws IOException
     {
@@ -68,8 +67,8 @@ class Scanner
 
         try
         {
-            PushbackInputStream stream = new PushbackInputStream(new FileInputStream(file));
-            // FileInputStream stream = new FileInputStream(file);
+            // PushbackInputStream stream = new PushbackInputStream(new FileInputStream(file));
+            FileInputStream stream = new FileInputStream(file);
             Character current;
 
             while (stream.available() > 0)
