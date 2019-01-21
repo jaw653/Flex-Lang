@@ -56,6 +56,10 @@ class Lexer
         }
     }
 
+    /**
+     * Method to continue reading from input stream if whitespace or comment is found
+     * @stream The input stream from which to read chars
+     */
     private static void skipWhiteSpace(PushbackInputStream stream) throws IOException
     {
         Character ch = Character.valueOf( (char)stream.read() );
