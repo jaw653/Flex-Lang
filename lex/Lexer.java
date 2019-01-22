@@ -7,60 +7,55 @@
  */
 
 // Might need to fix ASTERISK vs TIMES ???
+// skipwhitespace() needs to also account for spaces within a string like "hello world"
+// should my new Lexemes() in the switch statement be "quoted" ?
 
 import java.io.*;
 import java.util.ArrayList;
 
 class Lexer
 {
-    /**
-     * Helper method for skipWhiteSpace()
-     * @stream The stream from which chars are being read
-     * @identifier The second char in a possible comment token (either '*' or '/')
-     */
-    private static void skipComment(PushbackInputStream stream, Character identifier) throws IOException
+    File file;
+    PushbackInputStream stream;
+    boolean inQuote = false;
+
+    public Lexer(PushbackInputStream stream) throws IOException
     {
-        try
+        this.stream = stream;
+    }
+
+    private void skipComment(Character identifier) throws IOException
+    {
+        Character curr = Character.valueOf( (char)stream.read() );
+
+        if (identifier == '*')
         {
-            Character curr = Character.valueOf( (char)stream.read() );
-
-            if (identifier == '*')
+            while (stream.available() > 0)
             {
-                while (stream.available() > 0)
+                if (curr == '*')
                 {
-                    if (curr == '*')
-                    {
-                        Character next = Character.valueOf( (char)stream.read() );
+                    Character next = Character.valueOf( (char)stream.read() );
 
-                        if (next == '/')
-                            return;
-                    }
-
-                    curr = Character.valueOf( (char)stream.read() );
-                }
-            }
-            else
-            {
-                while (stream.available() > 0)
-                {
-                    if (curr == '\n')
+                    if (next == '/')
                         return;
-
-                    curr = Character.valueOf( (char)stream.read() );
                 }
+
+                curr = Character.valueOf( (char)stream.read() );
             }
         }
-        catch (IOException e)
+        else
         {
-            e.printStackTrace();
+            while (stream.available() > 0)
+            {
+                if (curr == '\n')
+                    return;
+
+                curr = Character.valueOf( (char)stream.read() );
+            }
         }
     }
 
-    /**
-     * Method to continue reading from input stream if whitespace or comment is found
-     * @stream The input stream from which to read chars
-     */
-    private static void skipWhiteSpace(PushbackInputStream stream) throws IOException
+    private void skipWhiteSpace() throws IOException
     {
         Character ch = Character.valueOf( (char)stream.read() );
 
@@ -72,7 +67,7 @@ class Lexer
 
                 if (next == '/' || next == '*')
                 {
-                    skipComment(stream, next);
+                    skipComment(next);
                 }
                 else
                 {
@@ -82,68 +77,67 @@ class Lexer
             }
             else if ( !(Character.isWhitespace(ch)) )
             {
+                if (ch == '\"')
+                {
+                    if (inQuote)
+                        inQuote = false;
+                    else
+                        inQuote = true;
+                }
+                
                 stream.unread(ch);
                 return;
+            }
+            else if (Character.isWhitespace(ch))
+            {
+                if (ch == ' ' && inQuote)
+                {
+                    stream.unread(ch);
+                    return;
+                }
             }
 
             ch = Character.valueOf( (char)stream.read() );
         }
     }
 
-    /**
-     * Lex method for returning Lexemes
-     * @file The file to read from
-     * return The Lexeme of the next token
-     */
-    public Lexeme lex(File file) throws IOException
+    public Lexeme lex() throws IOException
     {
         Character ch;
-        PushbackInputStream stream = new PushbackInputStream(new FileInputStream(file));
 
-        skipWhiteSpace(stream);
+        skipWhiteSpace();
 
         ch = Character.valueOf( (char)stream.read() );
+        System.out.println("ch is: " + ch);
 
-        // if input failed return lexeme(ENDofINPUT);
+        // if read fails return ENDofINPUT Lexeme
 
         switch (ch)
         {
             case '(':
-                //return new Lexeme(OPEN_PAREN);
-                break;
+                return new Lexeme("OPEN_PAREN");
             case ')':
-                //return new Lexeme(CLOSE_PAREN);
-                break;
+                return new Lexeme("CLOSE_PAREN");
             case ',':
-                //return new Lexeme(COMMA);
-                break;
+                return new Lexeme("COMMA");
             case '+':
-                //return new Lexeme(PLUS);
-                break;
+                return new Lexeme("PLUS");
             case '*':
-                //return new Lexeme(TIMES);
-                break;
+                return new Lexeme("TIMES");
             case '-':
-                //return new Lexeme(MINUS);
-                break;
+                return new Lexeme("MINUS");
             case '/':
-                //return new Lexeme(DIVIDE);
-                break;
+                return new Lexeme("DIVIDE");
             case '<':
-                //return new Lexeme(LESS_THAN);
-                break;
+                return new Lexeme("LESS_THAN");
             case '>':
-                //return new Lexeme(GREATER_THAN);
-                break;
+                return new Lexeme("GREATER_THAN");
             case '=':
-                //return new Lexeme(ASSIGN);
-                break;
+                return new Lexeme("ASSIGN");
             case ';':
-                //return new Lexeme(SEMICOLON);
-                break;
+                return new Lexeme("SEMICOLON");
             case '%':
-                //return new Lexeme(MODULO);
-                break;
+                return new Lexeme("MODULO");
 
             default:
                 if ( Character.isDigit(ch) )
@@ -161,9 +155,13 @@ class Lexer
                     // return lexString();
                 }
                 else
-                    // return new Lexeme(UNKNOWN, ch);
-                    System.out.println("Placeholder");
+                    return new Lexeme("UNKNOWN", ch);
+                    // System.out.println("Placeholder");
         }
-        return new Lexeme();
+        return new Lexeme("UNKNOWN", ch);                   // FIXME: might need to edit this guy. Just put him here until I could get away without a compile warning for no return statement
+
+        // return new Lexeme("test");
     }
+
+
 }
