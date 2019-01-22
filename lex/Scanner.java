@@ -11,6 +11,7 @@
             // printf("hello world\n");
 // should not have newline characters in the array. Maybe make it easy on myself and just get rid of '//' comments?
 // does main() need to return an int?
+// need 'make run' functionality from makefile
 
 
 import java.io.*;
@@ -56,18 +57,41 @@ class Scanner
      */
     public static void main(String[] args) throws IOException
     {
-        checkCmdArgs(args);
-
+/*
         File file = openFile(args[0]);
+        PushbackInputStream stream = new PushbackInputStream(new FileInputStream(file));
 
-        Lexeme token;
-        Lexer i = new Lexer();
-
-        token = i.lex(file);
-        while (token.getType() != "ENDofINPUT")
+        char ch = (char)stream.read();
+        while (stream.available() > 0)
         {
-            Lexeme.display(token);
-            token = i.lex(file);
+            System.out.println("ch: " + ch);
+
+            ch = (char)stream.read();
         }
+*/
+
+        try
+        {
+            checkCmdArgs(args);
+
+            File file = openFile(args[0]);
+            PushbackInputStream stream = new PushbackInputStream(new FileInputStream(file));
+
+            Lexeme token;
+            Lexer i = new Lexer(stream);
+
+            token = i.lex();
+            while (stream.available() > 0)     // FIXME: might need to change this to "token.getType() != ENDofINPUT"
+            {
+                // token.display();            // FIXME: need to implement this in Lexeme
+                token = i.lex();
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+
     }
 }
