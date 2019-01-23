@@ -9,7 +9,7 @@
 class Lexeme
 {
     String type;
-    String string;
+    String token;
     int integer;
     double real;
     char character;
@@ -25,7 +25,7 @@ class Lexeme
     }
 
     /**
-     * Override constructor
+     * Overloaded constructor
      * @type The type of the new Lexeme
      * @str The string of the new Lexeme
      */
