@@ -113,6 +113,43 @@ class Lexer
     }
 
     /**
+     * placeholder
+     * @return Placeholder
+     */
+    private Lexeme lexNumber() throws IOException
+    {
+        boolean real = false;
+        Character ch;
+        String buffer = "";
+
+        ch = Character.valueOf( (char)stream.read() );
+        if (ch == '.')
+            real = true;
+
+        while ( stream.available() > 0 && (Character.isDigit(ch) || ch == '.') )
+        {
+            buffer += ch;
+
+            if (ch == '.' && !real)
+                // return new Lexeme(BADNUM, buffer);
+                System.out.println("placeholder for above");
+
+            if (ch == '.')
+                real = true;
+
+            ch = Character.valueOf( (char)stream.read() );
+        }
+
+        stream.unread(ch);
+        if (real)
+            //return new Lexeme(REAL, toReal(buffer));
+            System.out.println("placeholder for above");
+        else
+            // return new Lexeme(INTEGER, toInt(buffer));
+            System.out.println("placeholder for above");
+    }
+
+    /**
      * Gets next non-whitespace token from stream
      * return The Lexeme of the next token
      */
@@ -157,7 +194,7 @@ class Lexer
             default:
                 if ( Character.isDigit(ch) )
                 {
-                    // pushback(ch);
+                    stream.unread(ch);
                     // return lexNumber();
                 }
                 else if ( Character.isLetter(ch) )
