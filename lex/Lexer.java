@@ -276,7 +276,7 @@ class Lexer implements Types
                 return new Lexeme(SEMICOLON);
             case '%':
                 return new Lexeme(MODULO);
-
+/*
             default:
                 if ( Character.isDigit(ch) )
                 {
@@ -294,6 +294,7 @@ class Lexer implements Types
                 }
                 else
                     return new Lexeme(UNKNOWN, ch);
+*/
         }
 
         return new Lexeme(UNKNOWN, ch);                   // FIXME: might need to edit this guy. Just put him here until I could get away without a compile warning for no return statement
