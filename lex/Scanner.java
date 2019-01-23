@@ -93,7 +93,5 @@ class Scanner
         {
             e.printStackTrace();
         }
-
-
     }
 }
