@@ -8,6 +8,8 @@
 
  // need to create a constructor for taking in reals, ints, bools - not just tokens
  // is it ok that I got rid of BOOLEAN from my grammar and here b/c I realized it could be done with an int?
+ // do I need to set the other types to null or can I just left unset in overloaded constructors?
+ 
 
 
 class Lexeme
