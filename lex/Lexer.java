@@ -10,11 +10,12 @@
 // skipwhitespace() needs to also account for spaces within a string like "hello world"
 // should my new Lexemes() in the switch statement be "quoted" ?
 // does lexVarOrKeyword() need to account for i++/i--?
+// still need to write lexString() ?
 
 import java.io.*;
 import java.util.ArrayList;
 
-class Lexer
+class Lexer implements Types
 {
     File file;
     PushbackInputStream stream;
@@ -135,8 +136,7 @@ class Lexer
 
             if (ch == '.' && !real)
             {
-                // return new Lexeme(BADNUM, buffer);
-                System.out.println("placeholder for above");
+                return new Lexeme(BADNUM, buffer);
             }
             if (ch == '.')
             {
@@ -149,16 +149,13 @@ class Lexer
         stream.unread(ch);
         if (real)
         {
-            //return new Lexeme(REAL, toReal(buffer));
-            System.out.println("placeholder for above");
+            return new Lexeme(REAL, Double.parseDouble(buffer));
         }
         else
         {
-            // return new Lexeme(INTEGER, toInt(buffer));
-            System.out.println("placeholder for above");
+            return new Lexeme(INTEGER, Integer.parseInt(buffer));
         }
 
-        return null;                                        // FIXME: null placeholder
     }
 
     /**
@@ -182,25 +179,34 @@ class Lexer
 
         // figure out if buffer is variable or keyword
         if ( buffer.equals("var") )
-            return new Lexeme("VAR");
+            return new Lexeme(VAR);
         else if ( buffer.equals("define") )
-            return new Lexeme("DEFINE");
+            return new Lexeme(DEFINE);
         else if ( buffer.equals("function") )
-            return new Lexeme("FUNCTION");
+            return new Lexeme(FUNCTION);
         else if ( buffer.equals("bundle") )
-            return new Lexeme("BUNDLE");
+            return new Lexeme(BUNDLE);
         else if ( buffer.equals("return") )
-            return new Lexeme("RETURN");
+            return new Lexeme(RETURN);
         else if ( buffer.equals("if") )
-            return new Lexeme("IF");
+            return new Lexeme(IF);
         else if ( buffer.equals("else") )
-            return new Lexeme("ELSE");
+            return new Lexeme(ELSE);
         else if ( buffer.equals("while") )
-            return new Lexeme("WHILE");
+            return new Lexeme(WHILE);
         else if ( buffer.equals("for") )
-            return new Lexeme("FOR");
+            return new Lexeme(FOR);
         else
-            return new Lexeme("ID", buffer);
+            return new Lexeme(ID, buffer);
+    }
+
+    /**
+     * placeholder
+     * @return placeholder
+     */
+    private Lexeme lexString() throws IOException
+    {
+        
     }
 
     /**
@@ -221,29 +227,29 @@ class Lexer
         switch (ch)
         {
             case '(':
-                return new Lexeme("OPEN_PAREN");
+                return new Lexeme(OPEN_PAREN);
             case ')':
-                return new Lexeme("CLOSE_PAREN");
+                return new Lexeme(CLOSE_PAREN);
             case ',':
-                return new Lexeme("COMMA");
+                return new Lexeme(COMMA);
             case '+':
-                return new Lexeme("PLUS");
+                return new Lexeme(PLUS);
             case '*':
-                return new Lexeme("TIMES");
+                return new Lexeme(TIMES);
             case '-':
-                return new Lexeme("MINUS");
+                return new Lexeme(MINUS);
             case '/':
-                return new Lexeme("DIVIDE");
+                return new Lexeme(DIVIDE);
             case '<':
-                return new Lexeme("LESS_THAN");
+                return new Lexeme(LESS_THAN);
             case '>':
-                return new Lexeme("GREATER_THAN");
+                return new Lexeme(GREATER_THAN);
             case '=':
-                return new Lexeme("ASSIGN");
+                return new Lexeme(ASSIGN);
             case ';':
-                return new Lexeme("SEMICOLON");
+                return new Lexeme(SEMICOLON);
             case '%':
-                return new Lexeme("MODULO");
+                return new Lexeme(MODULO);
 
             default:
                 if ( Character.isDigit(ch) )
@@ -261,12 +267,10 @@ class Lexer
                     // return lexString();
                 }
                 else
-                    return new Lexeme("UNKNOWN", ch);
-                    // System.out.println("Placeholder");
+                    return new Lexeme(UNKNOWN, ch);
         }
-        return new Lexeme("UNKNOWN", ch);                   // FIXME: might need to edit this guy. Just put him here until I could get away without a compile warning for no return statement
 
-        // return new Lexeme("test");
+        return new Lexeme(UNKNOWN, ch);                   // FIXME: might need to edit this guy. Just put him here until I could get away without a compile warning for no return statement
     }
 
 
