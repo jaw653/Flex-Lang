@@ -86,6 +86,8 @@ class Scanner
                 // token.display();            // FIXME: need to implement this in Lexeme
                 token = i.lex();
             }
+
+            stream.close();
         }
         catch (IOException e)
         {
