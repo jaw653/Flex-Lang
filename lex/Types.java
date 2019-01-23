@@ -38,8 +38,10 @@ interface Types
     public static final String SEMICOLON = "SEMICOLON";
     public static final String MODULO = "MODULO";
     public static final String UNKNOWN = "UNKNOWN";       //FIXME: what should this be?
-    public static final String ENDofINPUT = "ENDOFINPUT";    //FIXME: what shoud this be?
+    public static final String ENDOFINPUT = "ENDOFINPUT";    //FIXME: what shoud this be?
     public static final String BADNUM = "BADNUM";
+    public static final String INCREMENT = "INCREMENT";
+    public static final String DECREMENT = "DECREMENT";
 
 
 }
