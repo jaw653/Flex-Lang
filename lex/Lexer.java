@@ -19,11 +19,19 @@ class Lexer
     PushbackInputStream stream;
     boolean inQuote = false;
 
+    /**
+     * Default constructor
+     * @stream Input stream passed in from main
+     */
     public Lexer(PushbackInputStream stream) throws IOException
     {
         this.stream = stream;
     }
 
+    /**
+     * Helper method for skipWhiteSpace()
+     * @identifier The second char in a possible comment token (either '*' or '/')
+     */
     private void skipComment(Character identifier) throws IOException
     {
         Character curr = Character.valueOf( (char)stream.read() );
@@ -55,6 +63,9 @@ class Lexer
         }
     }
 
+    /**
+     * Method to continue reading from input stream if whitespace or comment is found
+     */
     private void skipWhiteSpace() throws IOException
     {
         Character ch = Character.valueOf( (char)stream.read() );
@@ -84,7 +95,7 @@ class Lexer
                     else
                         inQuote = true;
                 }
-                
+
                 stream.unread(ch);
                 return;
             }
@@ -101,6 +112,10 @@ class Lexer
         }
     }
 
+    /**
+     * Gets next non-whitespace token from stream
+     * return The Lexeme of the next token
+     */
     public Lexeme lex() throws IOException
     {
         Character ch;
