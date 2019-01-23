@@ -61,8 +61,8 @@ unary: ID
      | UMINUS unary
      | ID ASSIGN unary
      | ID OPEN_PAREN optExprList CLOSE_PAREN
-     | ID PLUS PLUS
-     | ID MINUS MINUS
+     | ID INCREMENT
+     | ID DECREMENT
      | ID PERIOD ID OPEN_PAREN optExprList CLOSE_PAREN
      | NEW UNDERSCORE ID OPEN_PAREN optExprList CLOSE_PAREN UNDERSCORE
 
