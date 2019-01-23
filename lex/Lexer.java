@@ -66,7 +66,8 @@ class Lexer implements Types
     }
 
     /**
-     * Method to continue reading from input stream if whitespace or comment is found
+     * Method to continue reading from input stream
+     * if whitespace or comment is found
      */
     private void skipWhiteSpace() throws IOException
     {
@@ -115,8 +116,8 @@ class Lexer implements Types
     }
 
     /**
-     * placeholder
-     * @return Placeholder
+     * Lex specifically for numbers
+     * @return Lexeme of number found
      */
     private Lexeme lexNumber() throws IOException
     {
@@ -155,12 +156,11 @@ class Lexer implements Types
         {
             return new Lexeme(INTEGER, Integer.parseInt(buffer));
         }
-
     }
 
     /**
-     * placeholder
-     * @return placeholder
+     * Lex function specifically for variables and keywords
+     * @return Lexeme of var or keyword found
      */
     private Lexeme lexVarOrKeyword() throws IOException
     {
@@ -201,12 +201,22 @@ class Lexer implements Types
     }
 
     /**
-     * placeholder
-     * @return placeholder
+     * Lex specifically for a double quoted string
+     * @return Lexeme of String found
      */
     private Lexeme lexString() throws IOException
     {
+        String buffer = "";
+        Character ch = Character.valueOf( (char)stream.read() );
 
+        while (ch != '\"')
+        {
+            buffer += ch;
+
+            ch = Character.valueOf( (char)stream.read() );
+        }
+
+        return new Lexeme(STRING, buffer);
     }
 
     /**
@@ -280,7 +290,7 @@ class Lexer implements Types
                 }
                 else if (ch == '\"')
                 {
-                    // return lexString();
+                    return lexString();
                 }
                 else
                     return new Lexeme(UNKNOWN, ch);
