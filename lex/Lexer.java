@@ -206,7 +206,7 @@ class Lexer implements Types
      */
     private Lexeme lexString() throws IOException
     {
-        
+
     }
 
     /**
@@ -222,7 +222,7 @@ class Lexer implements Types
         ch = Character.valueOf( (char)stream.read() );
         System.out.println("ch is: " + ch);
 
-        // if read fails return ENDofINPUT Lexeme
+        // if read fails return ENDOFINPUT Lexeme
 
         switch (ch)
         {
@@ -233,10 +233,26 @@ class Lexer implements Types
             case ',':
                 return new Lexeme(COMMA);
             case '+':
+                ch = Character.valueOf( (char)stream.read() );
+
+                if (ch == '+')
+                {
+                    return new Lexeme(INCREMENT);
+                }
+
+                stream.unread(ch);
                 return new Lexeme(PLUS);
             case '*':
                 return new Lexeme(TIMES);
             case '-':
+                ch = Character.valueOf( (char)stream.read() );
+
+                if (ch == '-')
+                {
+                    return new Lexeme(DECREMENT);
+                }
+
+                stream.unread(ch);
                 return new Lexeme(MINUS);
             case '/':
                 return new Lexeme(DIVIDE);
