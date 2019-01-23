@@ -9,6 +9,7 @@
 // Might need to fix ASTERISK vs TIMES ???
 // skipwhitespace() needs to also account for spaces within a string like "hello world"
 // should my new Lexemes() in the switch statement be "quoted" ?
+// does lexVarOrKeyword() need to account for i++/i--?
 
 import java.io.*;
 import java.util.ArrayList;
@@ -124,29 +125,82 @@ class Lexer
 
         ch = Character.valueOf( (char)stream.read() );
         if (ch == '.')
+        {
             real = true;
+        }
 
         while ( stream.available() > 0 && (Character.isDigit(ch) || ch == '.') )
         {
             buffer += ch;
 
             if (ch == '.' && !real)
+            {
                 // return new Lexeme(BADNUM, buffer);
                 System.out.println("placeholder for above");
-
+            }
             if (ch == '.')
+            {
                 real = true;
+            }
 
             ch = Character.valueOf( (char)stream.read() );
         }
 
         stream.unread(ch);
         if (real)
+        {
             //return new Lexeme(REAL, toReal(buffer));
             System.out.println("placeholder for above");
+        }
         else
+        {
             // return new Lexeme(INTEGER, toInt(buffer));
             System.out.println("placeholder for above");
+        }
+
+        return null;                                        // FIXME: null placeholder
+    }
+
+    /**
+     * placeholder
+     * @return placeholder
+     */
+    private Lexeme lexVarOrKeyword() throws IOException
+    {
+        Character ch;
+        String buffer = "";
+
+        ch = Character.valueOf( (char)stream.read() );
+
+        while (stream.available() > 0 && (Character.isLetter(ch) || Character.isDigit(ch)) )
+        {
+            buffer += ch;
+            ch = Character.valueOf( (char)stream.read() );
+        }
+
+        stream.unread(ch);
+
+        // figure out if buffer is variable or keyword
+        if ( buffer.equals("var") )
+            return new Lexeme("VAR");
+        else if ( buffer.equals("define") )
+            return new Lexeme("DEFINE");
+        else if ( buffer.equals("function") )
+            return new Lexeme("FUNCTION");
+        else if ( buffer.equals("bundle") )
+            return new Lexeme("BUNDLE");
+        else if ( buffer.equals("return") )
+            return new Lexeme("RETURN");
+        else if ( buffer.equals("if") )
+            return new Lexeme("IF");
+        else if ( buffer.equals("else") )
+            return new Lexeme("ELSE");
+        else if ( buffer.equals("while") )
+            return new Lexeme("WHILE");
+        else if ( buffer.equals("for") )
+            return new Lexeme("FOR");
+        else
+            return new Lexeme("ID", buffer);
     }
 
     /**
@@ -195,12 +249,12 @@ class Lexer
                 if ( Character.isDigit(ch) )
                 {
                     stream.unread(ch);
-                    // return lexNumber();
+                    return lexNumber();
                 }
                 else if ( Character.isLetter(ch) )
                 {
-                    // pushback(ch);
-                    // return lexVariableOrKeyword();
+                    stream.unread(ch);
+                    return lexVarOrKeyword();
                 }
                 else if (ch == '\"')
                 {
