@@ -11,6 +11,9 @@
 // should my new Lexemes() in the switch statement be "quoted" ?
 // does lexVarOrKeyword() need to account for i++/i--?
 // still need to write lexString() ?
+// make sure bundle uses double qoutes in grammar
+// make sure you have and use all TERMINALS from grammar
+// add line-knowledge for error-throwing
 
 import java.io.*;
 import java.util.ArrayList;
