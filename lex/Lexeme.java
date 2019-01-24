@@ -9,10 +9,10 @@
  // need to create a constructor for taking in reals, ints, bools - not just tokens
  // is it ok that I got rid of BOOLEAN from my grammar and here b/c I realized it could be done with an int?
  // do I need to set the other types to null or can I just left unset in overloaded constructors?
- 
 
 
-class Lexeme
+
+class Lexeme implements Types
 {
     String type;
     String sval;
@@ -26,7 +26,7 @@ class Lexeme
      */
     public Lexeme(String type)
     {
-        type = this.type;
+        this.type = type;
     }
 
     /**
@@ -88,5 +88,22 @@ class Lexeme
     public void display()
     {
         System.out.println(this.type);
+
+        if (this.type == STRING)
+        {
+            System.out.print(this.sval);
+        }
+        else if (this.type == INTEGER)
+        {
+            System.out.println(this.ival);
+        }
+        else if (this.type == REAL)
+        {
+            System.out.println(this.rval);
+        }
+        else if (this.type == CHARACTER)
+        {
+            System.out.print(this.cval);
+        }
     }
 }
