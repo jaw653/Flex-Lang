@@ -2,7 +2,7 @@
  * Author: jake wachs
  */
 
-bundle 'sup.flex'
+bundle "sup.flex"
 
 define class
 {
