@@ -12,11 +12,12 @@
 // should not have newline characters in the array. Maybe make it easy on myself and just get rid of '//' comments?
 // does main() need to return an int?
 // need 'make run' functionality from makefile
+// need to add sh file to run Scanner binary w/o java command
 // need test programs (4 I think). Last should throw an error (print line of error as well)
 
 
 import java.io.*;
-import java.util.ArrayList;
+// import java.util.ArrayList;
 
 
 class Scanner
@@ -84,7 +85,6 @@ class Scanner
             token = i.lex();
             while (stream.available() > 1)     // FIXME: might need to change this to "token.getType() != ENDofINPUT"
             {
-                System.out.println("token below:");
                 token.display();            // FIXME: need to implement this in Lexeme
                 token = i.lex();
             }
