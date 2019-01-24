@@ -230,7 +230,7 @@ class Lexer implements Types
         skipWhiteSpace();
 
         ch = Character.valueOf( (char)stream.read() );
-        System.out.println("ch is: " + ch);              //FIXME: for testing purposes only
+        // System.out.println("ch is: " + ch);              //FIXME: for testing purposes only
 
         // if read fails return ENDOFINPUT Lexeme
 
@@ -276,7 +276,10 @@ class Lexer implements Types
                 return new Lexeme(SEMICOLON);
             case '%':
                 return new Lexeme(MODULO);
-
+            case '_':
+                return new Lexeme(UNDERSCORE);
+            case '\'':
+                return new Lexeme(SINGLE_QUOTE);
             default:
                 if ( Character.isDigit(ch) )
                 {
@@ -289,17 +292,17 @@ class Lexer implements Types
                     stream.unread(ch);
                     return lexVarOrKeyword();
                 }
-/*
+
                 else if (ch == '\"')
                 {
                     return lexString();
                 }
                 else
                     return new Lexeme(UNKNOWN, ch);
-*/
+
         }
 
-        return new Lexeme(UNKNOWN, ch);                   // FIXME: might need to edit this guy. Just put him here until I could get away without a compile warning for no return statement
+    //    return new Lexeme(UNKNOWN, ch);                   // FIXME: might need to edit this guy. Just put him here until I could get away without a compile warning for no return statement
     }
 
 

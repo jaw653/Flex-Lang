@@ -42,6 +42,9 @@ interface Types
     public static final String BADNUM = "BADNUM";
     public static final String INCREMENT = "INCREMENT";
     public static final String DECREMENT = "DECREMENT";
+    public static final String UNDERSCORE = "UNDERSCORE";
+    public static final String SINGLE_QUOTE = "SINGLE_QUOTE";
+    public static final String PERIOD = "PERIOD";
 
 
 }
