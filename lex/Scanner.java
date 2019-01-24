@@ -12,7 +12,7 @@
 // should not have newline characters in the array. Maybe make it easy on myself and just get rid of '//' comments?
 // does main() need to return an int?
 // need 'make run' functionality from makefile
-// still need .sh file to run scanner as executable
+// need test programs (4 I think). Last should throw an error (print line of error as well)
 
 
 import java.io.*;
