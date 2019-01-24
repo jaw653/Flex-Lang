@@ -12,6 +12,7 @@
 // should not have newline characters in the array. Maybe make it easy on myself and just get rid of '//' comments?
 // does main() need to return an int?
 // need 'make run' functionality from makefile
+// still need .sh file to run scanner as executable
 
 
 import java.io.*;
@@ -83,7 +84,8 @@ class Scanner
             token = i.lex();
             while (stream.available() > 1)     // FIXME: might need to change this to "token.getType() != ENDofINPUT"
             {
-                // token.display();            // FIXME: need to implement this in Lexeme
+                System.out.println("token below:");
+                token.display();            // FIXME: need to implement this in Lexeme
                 token = i.lex();
             }
 
