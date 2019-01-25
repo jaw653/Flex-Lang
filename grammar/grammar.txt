@@ -13,7 +13,7 @@ functionDef: DEFINE FUNCTION ID OPEN_PAREN optArgList CLOSE_PAREN block
 
 classDef: DEFINE CLASS ID block
 
-importDef: BUNDLE SINGLE_QUOTE ID SINGLE_QUOTE
+importDef: BUNDLE STRING
 
 optArgList: argList
           | *empty*
