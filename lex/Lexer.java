@@ -6,22 +6,17 @@
  * Lexer Module
  */
 
-// Might need to fix ASTERISK vs TIMES ???
-// skipwhitespace() needs to also account for spaces within a string like "hello world"
-// should my new Lexemes() in the switch statement be "quoted" ?
-// does lexVarOrKeyword() need to account for i++/i--?
-// still need to write lexString() ?
 // make sure bundle uses double qoutes in grammar
 // make sure you have and use all TERMINALS from grammar
 // add line-knowledge for error-throwing
 
 import java.io.*;
-// import java.util.ArrayList;
 
 class Lexer implements Types
 {
     File file;
     PushbackInputStream stream;
+    int lineNum = 1;
 
     /**
      * Default constructor
@@ -60,7 +55,10 @@ class Lexer implements Types
             while (stream.available() > 0)
             {
                 if (curr == '\n')
+                {
+                    lineNum += 1;
                     return;
+                }
 
                 curr = Character.valueOf( (char)stream.read() );
             }
@@ -97,17 +95,10 @@ class Lexer implements Types
                 stream.unread(ch);
                 return;
             }
-/*
-            else if (Character.isWhitespace(ch))
+            else if (ch == '\n')
             {
-                if (ch == ' ' && inQuote)
-                {
-                    System.out.println("keeping space");
-                    stream.unread(ch);
-                    return;
-                }
+                lineNum += 1;
             }
-*/
 
             ch = Character.valueOf( (char)stream.read() );
         }
