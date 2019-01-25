@@ -35,6 +35,7 @@ test4: $(CLASSES)
 	scanner test4.flex
 
 test5: $(CLASSES)
+	scanner test5.flex
 
 ##### Clean target #####
 clean:
