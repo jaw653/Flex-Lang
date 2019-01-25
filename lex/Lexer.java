@@ -6,10 +6,8 @@
  * Lexer Module
  */
 
-// make sure bundle uses double qoutes in grammar
 // make sure you have and use all TERMINALS from grammar
-// add line-knowledge for error-throwing
-// need to account for .. BADNUM, two periods in a row
+// need to error handle
 
 import java.io.*;
 
