@@ -87,23 +87,23 @@ class Lexeme implements Types
      */
     public void display()
     {
-        System.out.println(this.type);
-
         if (this.type == STRING)
         {
-            System.out.print(this.sval);
+            System.out.println(this.type + " " + this.sval);
         }
         else if (this.type == INTEGER)
         {
-            System.out.println(this.ival);
+            System.out.println(this.type + " " + this.ival);
         }
         else if (this.type == REAL)
         {
-            System.out.println(this.rval);
+            System.out.println(this.type + " " + this.rval);
         }
         else if (this.type == CHARACTER)
         {
-            System.out.print(this.cval);
+            System.out.println(this.type + " " + this.cval);
         }
+        else
+            System.out.println(this.type);
     }
 }
