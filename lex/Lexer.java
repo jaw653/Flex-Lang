@@ -16,7 +16,7 @@
 // add line-knowledge for error-throwing
 
 import java.io.*;
-import java.util.ArrayList;
+// import java.util.ArrayList;
 
 class Lexer implements Types
 {
@@ -109,6 +109,7 @@ class Lexer implements Types
             {
                 if (ch == ' ' && inQuote)
                 {
+                    System.out.println("keeping space");
                     stream.unread(ch);
                     return;
                 }
@@ -199,6 +200,8 @@ class Lexer implements Types
             return new Lexeme(WHILE);
         else if ( buffer.equals("for") )
             return new Lexeme(FOR);
+        else if ( buffer.equals("class") )
+            return new Lexeme(CLASS);
         else
             return new Lexeme(ID, buffer);
     }
@@ -283,6 +286,10 @@ class Lexer implements Types
                 return new Lexeme(UNDERSCORE);
             case '\'':
                 return new Lexeme(SINGLE_QUOTE);
+            case '{':
+                return new Lexeme(OPEN_BRACE);
+            case '}':
+                return new Lexeme(CLOSE_BRACE);
             default:
                 if ( Character.isDigit(ch) )
                 {
