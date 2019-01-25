@@ -9,6 +9,7 @@
 // make sure bundle uses double qoutes in grammar
 // make sure you have and use all TERMINALS from grammar
 // add line-knowledge for error-throwing
+// note in README that you cannot start numbers with a period (must be 0.5 not .5)
 
 import java.io.*;
 
@@ -110,6 +111,35 @@ class Lexer implements Types
      */
     private Lexeme lexNumber() throws IOException
     {
+        Character ch;
+        String buffer = "";
+        boolean isReal = false;
+
+        ch = Character.valueOf( (char)stream.read() );
+
+        while (stream.available() > 0 && (Character.isDigit(ch) || ch == '.') )
+        {
+            if (ch == '.')
+                isReal = true;
+
+
+            if (buffer.length() > 0)
+            {
+                if (buffer.charAt(buffer.length() - 1) == '.' && ch == '.')
+                    return new Lexeme(BADNUM, buffer);
+            }
+
+
+            buffer += ch;
+
+            ch = Character.valueOf( (char)stream.read() );
+        }
+
+        if (isReal)
+            return new Lexeme( REAL, Double.valueOf(buffer) );
+        else
+            return new Lexeme( INTEGER, Integer.valueOf(buffer) );
+/*
         boolean real = false;
         Character ch;
         String buffer = "";
@@ -145,6 +175,7 @@ class Lexer implements Types
         {
             return new Lexeme(INTEGER, Integer.parseInt(buffer));
         }
+*/
     }
 
     /**
@@ -279,6 +310,8 @@ class Lexer implements Types
                 return new Lexeme(OPEN_BRACE);
             case '}':
                 return new Lexeme(CLOSE_BRACE);
+            case '.':
+                return new Lexeme(PERIOD);
             default:
                 if ( Character.isDigit(ch) )
                 {
