@@ -6,22 +6,11 @@
  * Lexical Analysis Module
  */
 
- // Is there a way to compile with more warning settings and do I need to do it?
  // Need to account for something like below that ends with '\n'. Do I need to escape newline char?
             // printf("hello world\n");
-// should not have newline characters in the array. Maybe make it easy on myself and just get rid of '//' comments?
-// does main() need to return an int?
-// need 'make run' functionality from makefile
-// need test programs (4 I think). Last should throw an error (print line of error as well)
-
-// need a readme file
-// need 4 tests, with the 5th one throwing an error
-// test REALs
 // change the while loop here to look for ENDofINPUT Lexeme, not what it currently is
 
 import java.io.*;
-// import java.util.ArrayList;
-
 
 class Scanner
 {
