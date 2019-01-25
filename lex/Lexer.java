@@ -223,6 +223,7 @@ class Lexer implements Types
 
         // if read fails return ENDOFINPUT Lexeme
 
+
         switch (ch)
         {
             case '(':
