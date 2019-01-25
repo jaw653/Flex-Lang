@@ -17,6 +17,7 @@
 // need a readme file
 // need 4 tests, with the 5th one throwing an error
 // test REALs
+// change the while loop here to look for ENDofINPUT Lexeme, not what it currently is
 
 import java.io.*;
 // import java.util.ArrayList;
@@ -61,19 +62,6 @@ class Scanner
      */
     public static void main(String[] args) throws IOException
     {
-/*
-        File file = openFile(args[0]);
-        PushbackInputStream stream = new PushbackInputStream(new FileInputStream(file));
-
-        char ch = (char)stream.read();
-        while (stream.available() > 0)
-        {
-            System.out.println("ch: " + ch);
-
-            ch = (char)stream.read();
-        }
-*/
-
         try
         {
             checkCmdArgs(args);
