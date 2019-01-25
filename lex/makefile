@@ -37,6 +37,14 @@ test4: $(CLASSES)
 test5: $(CLASSES)
 	scanner test5.flex
 
+##### Run targets #####
+run: $(CLASSES)
+	make test1
+	make test2
+	make test3
+	make test4
+	make test5
+
 ##### Clean target #####
 clean:
 	rm *.class
