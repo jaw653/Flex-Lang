@@ -48,6 +48,7 @@ interface Types
     public static final String SINGLE_QUOTE = "SINGLE_QUOTE";
     public static final String PERIOD = "PERIOD";
     public static final String CLASS = "CLASS";
+    public static final String NEW = "NEW";
 
 
 }
