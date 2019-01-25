@@ -9,7 +9,8 @@
 OPTS = -Xlint
 CLASSES = Lexeme.class Lexer.class Scanner.class
 
-all: $(CLASSES)
+##### Main scanner target #####
+scanner: $(CLASSES)
 
 Lexeme.class: Lexeme.java
 	javac $(OPTS) Lexeme.java
@@ -20,5 +21,18 @@ Lexer.class: Lexer.java
 Scanner.class: Scanner.java
 	javac $(OPTS) Scanner.java
 
+##### Test targets #####
+test1: $(CLASSES)
+	scanner test.flex
+
+test2: $(CLASSES)
+
+test3: $(CLASSES)
+
+test4: $(CLASSES)
+
+test5: $(CLASSES)
+
+##### Clean target #####
 clean:
 	rm *.class
