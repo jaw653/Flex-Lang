@@ -50,5 +50,4 @@ interface Types
     public static final String CLASS = "CLASS";
     public static final String NEW = "NEW";
 
-
 }
