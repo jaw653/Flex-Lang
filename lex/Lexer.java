@@ -22,7 +22,6 @@ class Lexer implements Types
 {
     File file;
     PushbackInputStream stream;
-    boolean inQuote = false;
 
     /**
      * Default constructor
@@ -88,23 +87,17 @@ class Lexer implements Types
                 }
                 else
                 {
-                    stream.unread(next);
+                    stream.unread(ch);
                     return;
                 }
             }
+
             else if ( !(Character.isWhitespace(ch)) )
             {
-                if (ch == '\"')
-                {
-                    if (inQuote)
-                        inQuote = false;
-                    else
-                        inQuote = true;
-                }
-
                 stream.unread(ch);
                 return;
             }
+/*
             else if (Character.isWhitespace(ch))
             {
                 if (ch == ' ' && inQuote)
@@ -114,6 +107,7 @@ class Lexer implements Types
                     return;
                 }
             }
+*/
 
             ch = Character.valueOf( (char)stream.read() );
         }
@@ -264,9 +258,7 @@ class Lexer implements Types
                 ch = Character.valueOf( (char)stream.read() );
 
                 if (ch == '-')
-                {
                     return new Lexeme(DECREMENT);
-                }
 
                 stream.unread(ch);
                 return new Lexeme(MINUS);
@@ -277,6 +269,12 @@ class Lexer implements Types
             case '>':
                 return new Lexeme(GREATER_THAN);
             case '=':
+                ch = Character.valueOf( (char)stream.read() );
+
+                if (ch == '=')
+                    return new Lexeme(EQUAL_TO);
+
+                stream.unread(ch);
                 return new Lexeme(ASSIGN);
             case ';':
                 return new Lexeme(SEMICOLON);
