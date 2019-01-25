@@ -26,6 +26,8 @@ interface Types
     public static final String FOR = "FOR";
     public static final String OPEN_PAREN = "OPEN_PAREN";
     public static final String CLOSE_PAREN = "CLOSE_PAREN";
+    public static final String OPEN_BRACE = "OPEN_BRACE";
+    public static final String CLOSE_BRACE = "CLOSE_BRACE";
     public static final String COMMA = "COMMA";
     public static final String PLUS = "PLUS";
     public static final String MINUS = "MINUS";
@@ -45,6 +47,7 @@ interface Types
     public static final String UNDERSCORE = "UNDERSCORE";
     public static final String SINGLE_QUOTE = "SINGLE_QUOTE";
     public static final String PERIOD = "PERIOD";
+    public static final String CLASS = "CLASS";
 
 
 }
