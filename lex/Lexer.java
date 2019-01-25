@@ -9,7 +9,7 @@
 // make sure bundle uses double qoutes in grammar
 // make sure you have and use all TERMINALS from grammar
 // add line-knowledge for error-throwing
-// note in README that you cannot start numbers with a period (must be 0.5 not .5)
+// need to account for .. BADNUM, two periods in a row
 
 import java.io.*;
 
@@ -135,47 +135,12 @@ class Lexer implements Types
             ch = Character.valueOf( (char)stream.read() );
         }
 
+        stream.unread(ch);
+
         if (isReal)
             return new Lexeme( REAL, Double.valueOf(buffer) );
         else
             return new Lexeme( INTEGER, Integer.valueOf(buffer) );
-/*
-        boolean real = false;
-        Character ch;
-        String buffer = "";
-
-        ch = Character.valueOf( (char)stream.read() );
-        if (ch == '.')
-        {
-            real = true;
-        }
-
-        while ( stream.available() > 0 && (Character.isDigit(ch) || ch == '.') )
-        {
-            buffer += ch;
-
-            if (ch == '.' && !real)
-            {
-                return new Lexeme(BADNUM, buffer);
-            }
-            if (ch == '.')
-            {
-                real = true;
-            }
-
-            ch = Character.valueOf( (char)stream.read() );
-        }
-
-        stream.unread(ch);
-        if (real)
-        {
-            return new Lexeme(REAL, Double.parseDouble(buffer));
-        }
-        else
-        {
-            return new Lexeme(INTEGER, Integer.parseInt(buffer));
-        }
-*/
     }
 
     /**
@@ -197,7 +162,7 @@ class Lexer implements Types
 
         stream.unread(ch);
 
-        // figure out if buffer is variable or keyword
+        /* Figure out if buffer is variable or keyword */
         if ( buffer.equals("var") )
             return new Lexeme(VAR);
         else if ( buffer.equals("define") )
@@ -218,6 +183,8 @@ class Lexer implements Types
             return new Lexeme(FOR);
         else if ( buffer.equals("class") )
             return new Lexeme(CLASS);
+        else if ( buffer.equals("new") )
+            return new Lexeme(NEW);
         else
             return new Lexeme(ID, buffer);
     }
