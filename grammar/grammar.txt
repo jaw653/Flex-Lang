@@ -18,8 +18,8 @@ importDef: BUNDLE SINGLE_QUOTE ID SINGLE_QUOTE
 optArgList: argList
           | *empty*
 
-argList: ID
-       | ID COMMA argList
+argList: VAR ID
+       | VAR ID COMMA argList
 
 block: OPEN_BRACE optStatements optReturn CLOSE_BRACE
 
