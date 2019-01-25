@@ -12,9 +12,11 @@
 // should not have newline characters in the array. Maybe make it easy on myself and just get rid of '//' comments?
 // does main() need to return an int?
 // need 'make run' functionality from makefile
-// need to add sh file to run Scanner binary w/o java command
 // need test programs (4 I think). Last should throw an error (print line of error as well)
 
+// need a readme file
+// need 4 tests, with the 5th one throwing an error
+// test REALs
 
 import java.io.*;
 // import java.util.ArrayList;
