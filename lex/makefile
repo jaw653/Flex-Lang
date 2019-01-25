@@ -26,8 +26,10 @@ test1: $(CLASSES)
 	scanner test.flex
 
 test2: $(CLASSES)
+	scanner test2.flex
 
 test3: $(CLASSES)
+	scanner test3.flex
 
 test4: $(CLASSES)
 
