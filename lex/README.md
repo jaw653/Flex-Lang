@@ -1,11 +1,11 @@
-# FlEX Programming Language
+# FLEX Programming Language
 
 Note that you cannot start numbers with a period (must be 0.5, not .5)
 
-FlEX is a dynamically typed programming language developed with the principals of RISC in mind. The idea is that every type of definition will follow the same format so as to minimize confusion and maximize consistency.
+FLEX is a dynamically typed programming language developed with the principals of RISC in mind. The idea is that every type of definition will follow the same format so as to minimize confusion and maximize consistency.
 
 # Usage
-Find below the Usage Details for FlEX
+Find below the Usage Details for FLEX
 
 ## Defining Functions
 ```
