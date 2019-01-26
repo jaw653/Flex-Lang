@@ -38,6 +38,12 @@ class Lexer implements Types
         {
             while (stream.available() > 0)
             {
+                if (curr == '\n')
+                {
+                    // System.out.println("line increment");
+                    lineNum += 1;
+                }
+
                 if (curr == '*')
                 {
                     Character next = Character.valueOf( (char)stream.read() );
@@ -56,6 +62,7 @@ class Lexer implements Types
                 if (curr == '\n')
                 {
                     lineNum += 1;
+                    // System.out.println("line increment");
                     return;
                 }
 
@@ -97,6 +104,7 @@ class Lexer implements Types
             else if (ch == '\n')
             {
                 lineNum += 1;
+                // System.out.println("line increment");
             }
 
             ch = Character.valueOf( (char)stream.read() );
@@ -216,7 +224,10 @@ class Lexer implements Types
 
         skipWhiteSpace();
 
-        ch = Character.valueOf( (char)stream.read() );
+        if (stream.available() > 0)
+            ch = Character.valueOf( (char)stream.read() );
+        else
+            return new Lexeme(ENDOFINPUT);
         // System.out.println("ch is: " + ch);              //FIXME: for testing purposes only
 
         // if read fails return ENDOFINPUT Lexeme
@@ -296,7 +307,14 @@ class Lexer implements Types
                     return lexString();
                 }
                 else
-                    return new Lexeme(UNKNOWN, ch);
+                {
+                    System.out.println("FLEX error line " + lineNum + ": [" +
+                        ch + "] is of type UNKNOWN");
+                    System.exit(-1);
+                    // return new Lexeme(UNKNOWN, ch);
+                }
+
+                return null;
 
         }
 
