@@ -12,7 +12,7 @@
 
 import java.io.*;
 
-class Scanner
+class Scanner implements Types
 {
     /**
      * Checks to make sure there is a correct number of command line args
@@ -62,7 +62,7 @@ class Scanner
             Lexer i = new Lexer(stream);
 
             token = i.lex();
-            while (stream.available() > 0)     // FIXME: might need to change this to "token.getType() != ENDofINPUT"
+            while (token.getType() != ENDOFINPUT)     // FIXME: might need to change this to "token.getType() != ENDofINPUT"
             {
                 token.display();            // FIXME: need to implement this in Lexeme
                 token = i.lex();
