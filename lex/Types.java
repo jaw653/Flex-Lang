@@ -6,8 +6,6 @@
  * Types Module
  */
 
-// Is it ok that some of these are actually only characters but are stored as Strings?
-
 interface Types
 {
     public static final String VAR = "VAR";
@@ -49,5 +47,4 @@ interface Types
     public static final String PERIOD = "PERIOD";
     public static final String CLASS = "CLASS";
     public static final String NEW = "NEW";
-
 }
