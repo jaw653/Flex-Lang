@@ -50,6 +50,8 @@ class Lexer implements Types
 
                     if (next == '/')
                         return;
+
+                    stream.unread(next);
                 }
 
                 curr = Character.valueOf( (char)stream.read() );
@@ -128,7 +130,7 @@ class Lexer implements Types
             if (ch == '.')
                 isReal = true;
 
-
+            /* If two periods occur back-to-back, return bad number */
             if (buffer.length() > 0)
             {
                 if (buffer.charAt(buffer.length() - 1) == '.' && ch == '.')
@@ -228,10 +230,6 @@ class Lexer implements Types
             ch = Character.valueOf( (char)stream.read() );
         else
             return new Lexeme(ENDOFINPUT);
-        // System.out.println("ch is: " + ch);              //FIXME: for testing purposes only
-
-        // if read fails return ENDOFINPUT Lexeme
-
 
         switch (ch)
         {
@@ -311,15 +309,9 @@ class Lexer implements Types
                     System.out.println("FLEX error line " + lineNum + ": [" +
                         ch + "] is of type UNKNOWN");
                     System.exit(-1);
-                    // return new Lexeme(UNKNOWN, ch);
                 }
 
                 return null;
-
         }
-
-    //    return new Lexeme(UNKNOWN, ch);                   // FIXME: might need to edit this guy. Just put him here until I could get away without a compile warning for no return statement
     }
-
-
 }
