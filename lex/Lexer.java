@@ -7,7 +7,6 @@
  */
 
 // make sure you have and use all TERMINALS from grammar
-// need to error handle
 
 import java.io.*;
 
