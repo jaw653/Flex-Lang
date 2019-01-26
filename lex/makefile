@@ -4,7 +4,6 @@
 #
 # Lexical Module Makefile
 
-# Still need to add 'make run' functionality
 
 OPTS = -Xlint
 CLASSES = Lexeme.class Lexer.class Scanner.class
