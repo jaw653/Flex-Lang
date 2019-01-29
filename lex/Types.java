@@ -17,7 +17,7 @@ public interface Types
     public static final String STRING = "STRING";
     public static final String DEFINE = "DEFINE";
     public static final String FUNCTION = "FUNCTION";
-    public static final String ID = "ID";            //FIXME: what should this be?
+    public static final String ID = "ID";
     public static final String BUNDLE = "BUNDLE";
     public static final String RETURN = "RETURN";
     public static final String IF = "IF";
@@ -39,8 +39,8 @@ public interface Types
     public static final String ASSIGN = "ASSIGN";
     public static final String SEMICOLON = "SEMICOLON";
     public static final String MODULO = "MODULO";
-    public static final String UNKNOWN = "UNKNOWN";       //FIXME: what should this be?
-    public static final String ENDOFINPUT = "ENDOFINPUT";    //FIXME: what shoud this be?
+    public static final String UNKNOWN = "UNKNOWN";
+    public static final String ENDOFINPUT = "ENDOFINPUT";
     public static final String BADNUM = "BADNUM";
     public static final String INCREMENT = "INCREMENT";
     public static final String DECREMENT = "DECREMENT";
