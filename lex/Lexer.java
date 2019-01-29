@@ -262,8 +262,20 @@ public class Lexer implements Types
             case '/':
                 return new Lexeme(DIVIDE);
             case '<':
+                ch = Character.valueOf( (char)stream.read() );
+
+                if (ch == '=')
+                    return new Lexeme(LT_EQUAL);
+
+                stream.unread(ch);
                 return new Lexeme(LESS_THAN);
             case '>':
+                ch = Character.valueOf( (char)stream.read() );
+
+                if (ch == '=')
+                    return new Lexeme(GT_EQUAL);
+
+                stream.unread(ch);
                 return new Lexeme(GREATER_THAN);
             case '=':
                 ch = Character.valueOf( (char)stream.read() );
