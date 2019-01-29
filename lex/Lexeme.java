@@ -5,9 +5,9 @@
  *
  * Lexeme Class
  */
+package lex;
 
-
-class Lexeme implements Types
+public class Lexeme implements Types
 {
     String type;
     String sval;

@@ -9,6 +9,7 @@
  // Need to account for something like below that ends with '\n'. Do I need to escape newline char?
             // printf("hello world\n");
 // change the while loop here to look for ENDofINPUT Lexeme, not what it currently is
+package lex;
 
 import java.io.*;
 

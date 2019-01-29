@@ -6,7 +6,9 @@
  * Types Module
  */
 
-interface Types
+package lex;
+
+public interface Types
 {
     public static final String VAR = "VAR";
     public static final String REAL = "REAL";

@@ -7,6 +7,7 @@
  */
 
 // make sure you have and use all TERMINALS from grammar
+package lex;
 
 import java.io.*;
 

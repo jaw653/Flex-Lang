@@ -3,13 +3,19 @@
 # The University of Alabama
 #
 # Lexical Module Makefile
+#
+# !!! Note: This makefile is now deprecated due to Java classpath overlap, use
+# !!! 	the makefile in the parent directory instead.
 
 
 OPTS = -Xlint
-CLASSES = Lexeme.class Lexer.class Scanner.class
+CLASSES = Types.class Lexeme.class Lexer.class Scanner.class
 
 ##### Main scanner target #####
 scanner: $(CLASSES)
+
+Types.class: Types.java
+	javac $(OPTS) Types.java
 
 Lexeme.class: Lexeme.java
 	javac $(OPTS) Lexeme.java
