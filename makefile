@@ -3,6 +3,8 @@
 # The University of Alabama
 #
 # Parent Makefile
+# Does the main rule need to be 'make parser', 'make recognizer',
+#	or does it not matter because I'll have a shell script for executing?
 
 OPTS = -Xlint
 CLASSES = Types.class Lexeme.class Lexer.class Recognizer.class Parser.class
