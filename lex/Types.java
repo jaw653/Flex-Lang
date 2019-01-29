@@ -53,4 +53,5 @@ public interface Types
     public static final String PERIOD = "PERIOD";
     public static final String CLASS = "CLASS";
     public static final String NEW = "NEW";
+    public static final String NOT = "NOT";
 }
