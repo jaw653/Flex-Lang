@@ -45,6 +45,10 @@ public class Parser
         return file;
     }
 
+    /**
+     * Main method to be run for Parser
+     * @args The command line arguments
+     */
     public static void main(String[] args) throws IOException
     {
         checkCmdArgs(args);
