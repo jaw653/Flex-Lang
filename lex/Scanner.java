@@ -63,9 +63,9 @@ class Scanner implements Types
             Lexer i = new Lexer(stream);
 
             token = i.lex();
-            while (token.getType() != ENDOFINPUT)     // FIXME: might need to change this to "token.getType() != ENDofINPUT"
+            while (token.getType() != ENDOFINPUT)
             {
-                token.display();            // FIXME: need to implement this in Lexeme
+                token.display();
                 token = i.lex();
             }
 
