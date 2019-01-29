@@ -11,7 +11,7 @@ package lex;
 
 import java.io.*;
 
-class Lexer implements Types
+public class Lexer implements Types
 {
     File file;
     PushbackInputStream stream;
