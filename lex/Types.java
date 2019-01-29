@@ -45,7 +45,9 @@ public interface Types
     public static final String ENDOFINPUT = "ENDOFINPUT";
     public static final String BADNUM = "BADNUM";
     public static final String INCREMENT = "INCREMENT";
+    public static final String PLUS_EQUAL = "PLUS_EQUAL";
     public static final String DECREMENT = "DECREMENT";
+    public static final String MINUS_EQUAL = "MINUS_EQUAL";
     public static final String UNDERSCORE = "UNDERSCORE";
     public static final String SINGLE_QUOTE = "SINGLE_QUOTE";
     public static final String PERIOD = "PERIOD";

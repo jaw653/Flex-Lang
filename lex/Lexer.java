@@ -243,9 +243,9 @@ public class Lexer implements Types
                 ch = Character.valueOf( (char)stream.read() );
 
                 if (ch == '+')
-                {
                     return new Lexeme(INCREMENT);
-                }
+                else if (ch == '=')
+                    return new Lexeme(PLUS_EQUAL);
 
                 stream.unread(ch);
                 return new Lexeme(PLUS);
@@ -256,6 +256,8 @@ public class Lexer implements Types
 
                 if (ch == '-')
                     return new Lexeme(DECREMENT);
+                else if (ch == '=')
+                    return new Lexeme(MINUS_EQUAL);
 
                 stream.unread(ch);
                 return new Lexeme(MINUS);
