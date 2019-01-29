@@ -7,6 +7,7 @@
  */
 
 // Do I need an optArgList() and optArgListPending() because it would just be empty or argList()
+// Should asterisk and times both be in operatorPending()?
 
 package parse;
 
@@ -135,32 +136,72 @@ public class Recognizer implements Types
     /**
      * Class definition non-terminal method
      */
-    public void classDef()
-    {}
+    public void classDef() throws IOException
+    {
+        match(DEFINE);
+        match(CLASS);
+        match(ID);
+        block();
+    }
 
     /**
      * Import definition non-terminal method
      */
-    public void importDef()
-    {}
+    public void importDef() throws IOException
+    {
+        match(BUNDLE);
+        match(STRING);
+    }
 
     /**
      * Expression non-terminal method
      */
-    public void expression()
-    {}
+    public void expression() throws IOException
+    {
+        unary();
+        if ( operatorPending() )
+        {
+            operator();
+            expression();
+        }
+    }
 
     /**
      * Argument List non-terminal method
      */
-    public void argList()
-    {}
+    public void argList() throws IOException
+    {
+        match(VAR);
+        match(ID);
+
+        if ( check(COMMA) )
+        {
+            match(COMMA);
+            argList();
+        }
+    }
 
     /**
      * Statement block non-terminal method
      */
     public void block()
-    {}
+    {
+
+    }
+
+    /**
+     * Unary non-terminal method
+     */
+    public void unary()
+    {
+    }
+
+    /**
+     * Operator non-terminal method
+     */
+    public void operator()
+    {
+    }
 
 
 /***** Non-terminal pending methods *****/
@@ -198,6 +239,14 @@ public class Recognizer implements Types
     public boolean argListPending()
     {
         return check(VAR);
+    }
+
+    public boolean operatorPending() throws IOException
+    {
+        return ( check(PLUS) || check(TIMES) || check(DIVIDE) || check(MINUS) ||
+            check(GREATER_THAN) || check(LESS_THAN) || check(EQUAL_TO) || check(GT_EQUAL) ||
+            check(LT_EQUAL) || check(MODULO) || check(PLUS_EQUAL) || check(MINUS_EQUAL) ||
+            check(ASSIGN) );                                             //FIXME: should asterisk and times both be here?
     }
 
 /***** Terminals *****/
