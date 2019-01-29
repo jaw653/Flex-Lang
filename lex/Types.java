@@ -35,6 +35,8 @@ public interface Types
     public static final String DIVIDE = "DIVIDE";
     public static final String LESS_THAN = "LESS_THAN";
     public static final String GREATER_THAN = "GREATER_THAN";
+    public static final String LT_EQUAL = "LT_EQUAL";
+    public static final String GT_EQUAL = "GT_EQUAL";
     public static final String EQUAL_TO = "EQUAL_TO";
     public static final String ASSIGN = "ASSIGN";
     public static final String SEMICOLON = "SEMICOLON";
