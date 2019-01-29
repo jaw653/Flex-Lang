@@ -37,6 +37,8 @@ public class Recognizer implements Types
      */
     private boolean check(String type)
     {
+        // System.out.println("curr type is: " + currLexeme.getType() +
+            // " and type is: " + type);
         return currLexeme.getType() == type;
     }
 
@@ -90,10 +92,26 @@ public class Recognizer implements Types
      */
     public void def() throws IOException
     {
-        varDef();
-        functionDef();
-        classDef();
-        importDef();
+        if ( varDefPending() )
+        {
+            System.out.println("variable definition");
+            varDef();
+        }
+        else if ( functionDefPending() )
+        {
+            System.out.println("function definition");
+            functionDef();
+        }
+        else if ( classDefPending() )
+        {
+            System.out.println("class definition");
+            classDef();
+        }
+        else if ( importDefPending() )
+        {
+            System.out.println("import definition");
+            importDef();
+        }
     }
 
     /**
@@ -118,7 +136,7 @@ public class Recognizer implements Types
      */
     public void functionDef() throws IOException
     {
-        match(DEFINE);
+        // match(DEFINE);
         match(FUNCTION);
         match(ID);
         match(OPEN_PAREN);
@@ -138,7 +156,7 @@ public class Recognizer implements Types
      */
     public void classDef() throws IOException
     {
-        match(DEFINE);
+        // match(DEFINE);
         match(CLASS);
         match(ID);
         block();
@@ -205,12 +223,12 @@ public class Recognizer implements Types
 
 
 /***** Non-terminal pending methods *****/
-    public boolean programPending()
+    public boolean programPending() throws IOException
     {
         return defPending();
     }
 
-    public boolean defPending()
+    public boolean defPending() throws IOException
     {
         return ( varDefPending() || functionDefPending() ||
             classDefPending() || importDefPending() );
@@ -221,14 +239,18 @@ public class Recognizer implements Types
         return check(VAR);
     }
 
-    public boolean functionDefPending()
+    public boolean functionDefPending() throws IOException
     {
-        return check(DEFINE);
+        if ( check(DEFINE) )
+            match(DEFINE);
+        return check(FUNCTION);
     }
 
-    public boolean classDefPending()
+    public boolean classDefPending() throws IOException
     {
-        return check(DEFINE);
+        if ( check(DEFINE) )
+            match(DEFINE);
+        return check(CLASS);
     }
 
     public boolean importDefPending()
