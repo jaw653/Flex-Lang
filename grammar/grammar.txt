@@ -2,23 +2,21 @@ program: def
        | def program
 
 def: varDef
-   | functionDef
-   | classDef
+   | defined
    | importDef
 
 varDef: VAR ID ASSIGN expression SEMICOLON
       | VAR ID SEMICOLON
 
-functionDef: DEFINE FUNCTION ID OPEN_PAREN optArgList CLOSE_PAREN block
-
-classDef: DEFINE CLASS ID block
+defined: DEFINE FUNCTION ID OPEN_PAREN optParamList CLOSE_PAREN block
+       | DEFINE CLASS ID block
 
 importDef: BUNDLE STRING
 
-optArgList: argList
+optParamList: argList
           | *empty*
 
-argList: VAR ID
+paramList: VAR ID
        | VAR ID COMMA argList
 
 block: OPEN_BRACE optStatements optReturn CLOSE_BRACE
@@ -55,7 +53,6 @@ unary: ID
      | REAL
      | CHARACTER
      | STRING
-     | ARRAY
      | NOT unary
      | OPEN_PAREN expression CLOSE_PAREN
      | UMINUS unary
