@@ -98,15 +98,9 @@ public class Recognizer implements Types
             //System.out.println("variable definition");
             varDef();
         }
-        else if ( functionDefPending() )
+        else if ( definedPending() )
         {
-            //System.out.println("function definition");
-            functionDef();
-        }
-        else if ( classDefPending() )
-        {
-            //System.out.println("class definition");
-            classDef();
+            defined();
         }
         else if ( importDefPending() )
         {
@@ -132,6 +126,29 @@ public class Recognizer implements Types
         match(SEMICOLON);
     }
 
+    public void defined() throws IOException
+    {
+        match(DEFINE);
+
+        if ( check(FUNCTION) )
+        {
+            match(FUNCTION);
+            match(ID);
+            match(OPEN_PAREN);
+
+            if ( paramListPending() )
+                paramList();
+
+            match(CLOSE_PAREN);
+        }
+        else
+        {
+            match(CLASS);
+            match(ID);
+        }
+
+        block();
+    }
     /**
      * Function definition non-terminal method
      */
@@ -142,9 +159,9 @@ public class Recognizer implements Types
         match(ID);
         match(OPEN_PAREN);
 
-        if ( argListPending() )
+        if ( paramListPending() )
         {
-            argList();
+            paramList();
         }
 
         match(CLOSE_PAREN);
@@ -188,7 +205,7 @@ public class Recognizer implements Types
     /**
      * Argument List non-terminal method
      */
-    public void argList() throws IOException
+    public void paramList() throws IOException
     {
         match(VAR);
         match(ID);
@@ -196,7 +213,7 @@ public class Recognizer implements Types
         if ( check(COMMA) )
         {
             match(COMMA);
-            argList();
+            paramList();
         }
     }
 
@@ -209,7 +226,6 @@ public class Recognizer implements Types
         // optStatements
         if ( statementsPending() )
         {
-            // System.out.println("statements are indeed pending");
             statements();
         }
 
@@ -374,7 +390,6 @@ public class Recognizer implements Types
         {
             varDef();
         }
-        // System.out.println("something else");
     }
 
     public void ifStatement() throws IOException
@@ -398,13 +413,12 @@ public class Recognizer implements Types
 
         if ( check(IF) )
         {
-            match(IF);
-            match(OPEN_PAREN);
-            expression();
-            match(CLOSE_PAREN);
+            ifStatement();
         }
-
-        block();
+        else
+        {
+            block();
+        }
     }
 
     public void whileLoop() throws IOException
@@ -463,8 +477,7 @@ public class Recognizer implements Types
 
     public boolean defPending() throws IOException
     {
-        return ( varDefPending() || functionDefPending() ||
-            classDefPending() || importDefPending() );
+        return ( varDefPending() || definedPending() || importDefPending() );
     }
 
     public boolean varDefPending()
@@ -472,24 +485,9 @@ public class Recognizer implements Types
         return check(VAR);
     }
 
-    public boolean functionDefPending() throws IOException
+    public boolean definedPending() throws IOException
     {
-        // System.out.println("functiondef");
-        //System.out.println("checking if function pending");
-        //if ( check(DEFINE) )
-        //{
-        //    System.out.println("define found");
-        //    match(DEFINE);
-        //}
-        return check(FUNCTION);
-    }
-
-    public boolean classDefPending() throws IOException
-    {
-        // System.out.println("classDef");
-        if ( check(DEFINE) )
-            match(DEFINE);
-        return check(CLASS);
+        return check(DEFINE);
     }
 
     public boolean importDefPending()
@@ -497,7 +495,7 @@ public class Recognizer implements Types
         return check(BUNDLE);
     }
 
-    public boolean argListPending()
+    public boolean paramListPending()
     {
         return check(VAR);
     }
@@ -563,6 +561,11 @@ public class Recognizer implements Types
     public boolean exprListPending()
     {
         return expressionPending();
+    }
+
+    public boolean elseIfPending()
+    {
+        return check(ELSE);
     }
 
 /***** Terminals *****/
