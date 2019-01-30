@@ -37,8 +37,8 @@ public class Recognizer implements Types
      */
     private boolean check(String type)
     {
-        // System.out.println("curr type is: " + currLexeme.getType() +
-            // " and type is: " + type);
+        //System.out.println("curr type is: " + currLexeme.getType() +
+        //    " checking against: " + type);
         return currLexeme.getType() == type;
     }
 
@@ -149,36 +149,6 @@ public class Recognizer implements Types
 
         block();
     }
-    /**
-     * Function definition non-terminal method
-     */
-    public void functionDef() throws IOException
-    {
-        // match(DEFINE);
-        match(FUNCTION);
-        match(ID);
-        match(OPEN_PAREN);
-
-        if ( paramListPending() )
-        {
-            paramList();
-        }
-
-        match(CLOSE_PAREN);
-
-        block();
-    }
-
-    /**
-     * Class definition non-terminal method
-     */
-    public void classDef() throws IOException
-    {
-        // match(DEFINE);
-        match(CLASS);
-        match(ID);
-        block();
-    }
 
     /**
      * Import definition non-terminal method
@@ -226,6 +196,7 @@ public class Recognizer implements Types
         // optStatements
         if ( statementsPending() )
         {
+			// System.out.println("entered statements pending conditional");
             statements();
         }
 
@@ -234,6 +205,7 @@ public class Recognizer implements Types
             returnStatement();
         }
         // optReturn
+		// System.out.println("testing testing one two three");
         match(CLOSE_BRACE);
     }
 
@@ -243,33 +215,7 @@ public class Recognizer implements Types
     public void unary() throws IOException
     {
         if ( check(ID) )
-        {
-            match(ID);
-
-            if ( check(ASSIGN) )
-                unary();
-            else if ( check(OPEN_PAREN) )
-            {
-                if ( exprListPending() )
-                    exprList();
-                match(CLOSE_PAREN);
-            }
-            else if ( check(INCREMENT) )
-                match(INCREMENT);
-            else if ( check(DECREMENT) )
-                match(DECREMENT);
-            else if ( check(PERIOD) )
-            {
-                match(PERIOD);
-                match(ID);
-                match(OPEN_PAREN);
-
-                if ( exprListPending() )
-                    exprList();
-
-                match(CLOSE_PAREN);
-            }
-        }
+            idStart();
         else if ( check(INTEGER) )
             match(INTEGER);
         else if ( check(REAL) )
@@ -365,6 +311,7 @@ public class Recognizer implements Types
 
     public void statement() throws IOException
     {
+        // System.out.println("hello there");
         if ( expressionPending() )
         {
             expression();
@@ -382,9 +329,10 @@ public class Recognizer implements Types
         {
             forLoop();
         }
-        else if ( functionDefPending() )
+        else if ( definedPending() )
         {
-            functionDef();
+            // System.out.println("here");
+            defined();
         }
         else if ( varDefPending() )
         {
@@ -468,6 +416,45 @@ public class Recognizer implements Types
         }
     }
 
+	public void idStart() throws IOException
+	{
+		match(ID);
+
+		if ( check(ASSIGN) )
+		{
+			match(ASSIGN);
+			unary();
+		}
+		else if ( check(OPEN_PAREN) )
+		{
+			match(OPEN_PAREN);
+
+			if ( exprListPending() )
+			{
+				exprList();
+			}
+
+			match(CLOSE_PAREN);
+		}
+		else if ( check(INCREMENT) )
+			match(INCREMENT);
+		else if ( check(DECREMENT) )
+			match(DECREMENT);
+		else if ( check(PERIOD) )
+		{
+			match(PERIOD);
+			match(ID);
+			match(OPEN_PAREN);
+
+			if ( exprListPending() )
+			{
+				exprList();
+			}
+
+			match(CLOSE_PAREN);
+		}
+	}
+
 
 /***** Non-terminal pending methods *****/
     public boolean programPending() throws IOException
@@ -523,10 +510,14 @@ public class Recognizer implements Types
             return true;
         else if ( forLoopPending() )
             return true;
-        else if ( functionDefPending() )
+        else if ( definedPending() )
             return true;
         else if ( varDefPending() )
             return true;
+		else if ( unaryPending() )
+			return true;
+		else if ( idStartPending() )
+			return true;
         else
         {
             return false;
@@ -535,22 +526,22 @@ public class Recognizer implements Types
 
     public boolean expressionPending()
     {
-        return false;               // FIXME: placeholder false
+        return unaryPending();
     }
 
     public boolean ifStatementPending()
     {
-        return false;               // FIXME: placeholder false
+        return check(IF);
     }
 
     public boolean whileLoopPending()
     {
-        return false;               // FIXME: placeholder false
+        return check(WHILE);
     }
 
     public boolean forLoopPending()
     {
-        return false;               // FIXME: placeholder false
+        return check(FOR);
     }
 
     public boolean returnStatementPending()
@@ -568,6 +559,14 @@ public class Recognizer implements Types
         return check(ELSE);
     }
 
-/***** Terminals *****/
+	public boolean unaryPending()
+	{
+		return ( idStartPending() || check(INTEGER) || check(REAL) || check(STRING) ||
+			check(NOT) || check(OPEN_PAREN) || check(MINUS) || check(NEW) );
+	}
 
+	public boolean idStartPending()
+	{
+		return check(ID);
+	}
 }
