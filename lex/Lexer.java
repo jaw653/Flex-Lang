@@ -301,6 +301,8 @@ public class Lexer implements Types
                 return new Lexeme(CLOSE_BRACE);
             case '.':
                 return new Lexeme(PERIOD);
+            case '!':
+                return new Lexeme(NOT);
             default:
                 if ( Character.isDigit(ch) )
                 {
