@@ -6,4 +6,5 @@ define class myClass
 
 define function main()
 {
+	return a;
 }
