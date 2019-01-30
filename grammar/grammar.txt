@@ -17,7 +17,7 @@ optParamList: argList
           | *empty*
 
 paramList: VAR ID
-       | VAR ID COMMA argList
+         | VAR ID COMMA argList
 
 block: OPEN_BRACE optStatements optReturn CLOSE_BRACE
 
@@ -48,7 +48,7 @@ exprList: expression
 optExprList: exprList
            | *empty*
 
-unary: ID
+unary: idStart
      | INTEGER
      | REAL
      | CHARACTER
@@ -56,12 +56,14 @@ unary: ID
      | NOT unary
      | OPEN_PAREN expression CLOSE_PAREN
      | UMINUS unary
-     | ID ASSIGN unary
-     | ID OPEN_PAREN optExprList CLOSE_PAREN
-     | ID INCREMENT
-     | ID DECREMENT
-     | ID PERIOD ID OPEN_PAREN optExprList CLOSE_PAREN
      | NEW UNDERSCORE ID OPEN_PAREN optExprList CLOSE_PAREN UNDERSCORE
+
+idStart: ID
+	   | ID ASSIGN unary
+	   | ID OPEN_PAREN optExprList CLOSE_PAREN
+	   | ID INCREMENT
+	   | ID DECREMENT
+	   | ID PERIOD ID OPEN_PAREN optExprList CLOSE_PAREN
 
 operator: PLUS
         | TIMES
