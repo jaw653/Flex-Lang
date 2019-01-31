@@ -27,6 +27,15 @@ public class Lexer implements Types
     }
 
     /**
+     * Getter function for lineNum
+     * @return The current line number
+     */
+    public int getLineNum()
+    {
+        return lineNum;
+    }
+
+    /**
      * Helper method for skipWhiteSpace()
      * @identifier The second char in a possible comment token (either '*' or '/')
      */
