@@ -37,8 +37,8 @@ public class Recognizer implements Types
      */
     private boolean check(String type)
     {
-        //System.out.println("curr type is: " + currLexeme.getType() +
-        //    " checking against: " + type);
+// System.out.println("curr type is: " + currLexeme.getType() +
+//  " checking against: " + type);
         return currLexeme.getType() == type;
     }
 
@@ -205,7 +205,7 @@ public class Recognizer implements Types
             returnStatement();
         }
         // optReturn
-		// System.out.println("testing testing one two three");
+		// System.out.println("flag");
         match(CLOSE_BRACE);
     }
 
@@ -301,11 +301,12 @@ public class Recognizer implements Types
      */
     public void statements() throws IOException        //FIXME: does this need to have statements in it?
     {
+
         statement();
 
         if ( statementsPending() )
         {
-            statement();
+            statements();
         }
     }
 
@@ -502,26 +503,10 @@ public class Recognizer implements Types
 
     public boolean statementPending() throws IOException
     {
-        if ( expressionPending() )
-            return true;
-        else if ( ifStatementPending() )
-            return true;
-        else if ( whileLoopPending() )
-            return true;
-        else if ( forLoopPending() )
-            return true;
-        else if ( definedPending() )
-            return true;
-        else if ( varDefPending() )
-            return true;
-		else if ( unaryPending() )
-			return true;
-		else if ( idStartPending() )
-			return true;
-        else
-        {
-            return false;
-        }
+//        if (definedPending()) System.out.println("statement is pending!");
+        return ( expressionPending() || ifStatementPending() || whileLoopPending() ||
+            forLoopPending() || definedPending() || varDefPending() ||
+            unaryPending() || idStartPending() );
     }
 
     public boolean expressionPending()
