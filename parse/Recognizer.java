@@ -17,17 +17,17 @@ import java.io.*;
 
 public class Recognizer implements Types
 {
+    Lexer i;
     Lexeme currLexeme;
-    PushbackInputStream stream;
 
 
     /**
      * Default constructor
      */
-    public Recognizer(Lexeme curr, PushbackInputStream stream)
+    public Recognizer(Lexeme curr, PushbackInputStream stream) throws IOException
     {
         currLexeme = curr;
-        this.stream = stream;
+        i = new Lexer(stream);
     }
 
     /**
@@ -47,7 +47,6 @@ public class Recognizer implements Types
      */
     private void advance() throws IOException
     {
-        Lexer i = new Lexer(stream);
         currLexeme = i.lex();
     }
 
@@ -59,7 +58,10 @@ public class Recognizer implements Types
     {
         if ( !check(type) )
         {
-            System.out.println("Syntax error, " + currLexeme.getType() + " is not of type " + type);
+            int line = i.getLineNum();
+            if (line > 1)
+                line += 1;
+            System.out.println("Syntax error > line " + line + ", " + currLexeme.getType() + " is not of type " + type);
             System.exit(-1);
         }
     }
