@@ -78,6 +78,15 @@ public class Lexeme implements Types
     }
 
     /**
+     * Basic getter function for the name of an ID Lexeme
+     * @return The name of an ID Lexeme
+     */
+    public String getName()
+    {
+        return sval;
+    }
+
+    /**
      * Displays Lexeme type to stdout
      */
     public void display()
