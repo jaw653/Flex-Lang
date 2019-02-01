@@ -10,7 +10,7 @@
 # make sure to have ./ before executable
 
 OPTS = -Xlint
-CLASSES = Types.class Lexeme.class Lexer.class Recognizer.class Parser.class
+CLASSES = Types.class Lexeme.class Lexer.class Recognizer.class GrammarCheck.class
 
 recognizer: $(CLASSES)
 
@@ -31,43 +31,43 @@ Lexeme.class: lex/Lexeme.java
 Lexer.class: lex/Lexer.java
 	javac $(OPTS) lex/Lexer.java
 
-Recognizer.class: parse/Recognizer.java
-	javac $(OPTS) parse/Recognizer.java
+Recognizer.class: recognize/Recognizer.java
+	javac $(OPTS) recognize/Recognizer.java
 
-Parser.class: parse/Parser.java
-	javac $(OPTS) parse/Parser.java
+GrammarCheck.class: recognize/GrammarCheck.java
+	javac $(OPTS) recognize/GrammarCheck.java
 
 ##### Test Cases #####
 test1:
 	@echo "Running test1, should fail"
-	@cat parse/test1.flex
-	-./recognizer parse/test1.flex
+	@cat recognize/test1.flex
+	-./recognizer recognize/test1.flex
 	@echo "\n=========================\n"
 
 test2:
 	@echo "Running test2, should pass"
-	@cat parse/test2.flex
-	-./recognizer parse/test2.flex
+	@cat recognize/test2.flex
+	-./recognizer recognize/test2.flex
 	@echo "\n=========================\n"
 
 test3:
 	@echo "Running test3, should fail"
-	@cat parse/test3.flex
-	-./recognizer parse/test3.flex
+	@cat recognize/test3.flex
+	-./recognizer recognize/test3.flex
 	@echo "\n=========================\n"
 
 test4:
 	@echo "Running test4, should pass"
-	@cat parse/test4.flex
-	-./recognizer parse/test4.flex
+	@cat recognize/test4.flex
+	-./recognizer recognize/test4.flex
 	@echo "\n=========================\n"
 
 test5:
 	@echo "Running test5, should fail"
-	@cat parse/test5.flex
-	-./recognizer parse/test5.flex
+	@cat recognize/test5.flex
+	-./recognizer recognize/test5.flex
 	@echo "\n"
 
 ##### Clean Command #####
 clean:
-	rm *.class
+	rm recognize/*.class
