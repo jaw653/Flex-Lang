@@ -83,10 +83,11 @@ public class Recognizer implements Types
      */
     public void program() throws IOException
     {
+System.out.println("program");
         def();
         if (programPending())
         {
-            def();
+            program();
         }
     }
 

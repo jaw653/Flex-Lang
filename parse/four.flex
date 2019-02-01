@@ -1,23 +1,14 @@
 // test function myfc() {}
 
+bundle "test2.flex"
+
 define class MyClass
 {
 	var a;
 
-	define function fc1()
-	{
-	}
-
-	// next add a function with a list of variable parameters
-	define function myfc(var a, var b, var c)
+	define another()
 	{
 		s = a;
-		s2 = b;
-		s3 = c;
-	}
-
-	define function another()
-	{
 	}
 }
 

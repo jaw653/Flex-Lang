@@ -2,18 +2,16 @@
  * Author: Jake Wachs
  * YATF
  */
-
-bundle "file.flex"
+bundle "one.flex"
+bundle "anotha.flex"
 
 define class myClass
 {
-	define function sayHi()
+	var a;
+
+	define function another()
 	{
-		printHello();
-	}
-	
-	define functin test()
-	{
+		s = a;
 	}
 }
 
