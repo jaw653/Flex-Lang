@@ -65,5 +65,7 @@ public class Parser
         r.program();
 
         stream.close();
+
+        System.out.println("legal");
     }
 }

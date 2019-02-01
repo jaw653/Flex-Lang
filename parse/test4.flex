@@ -6,9 +6,14 @@ define class MyClass
 {
 	var a;
 
-	define another()
+	define function another()
 	{
 		s = a;
+	}
+
+	define function andAnother()
+	{
+		a = 5 * 5;
 	}
 }
 

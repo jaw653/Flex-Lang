@@ -48,6 +48,7 @@ public class Recognizer implements Types
     private void advance() throws IOException
     {
         currLexeme = i.lex();
+// System.out.println("advance() num lines is: " + i.getLineNum());
     }
 
     /**
@@ -58,10 +59,11 @@ public class Recognizer implements Types
     {
         if ( !check(type) )
         {
-            int line = i.getLineNum();
-            if (line > 1)
-                line += 1;
-            System.out.println("Syntax error > line " + line + ", " + currLexeme.getType() + " is not of type " + type);
+//System.out.println("getLineNum() is: " + i.getLineNum());
+            //int line = i.getLineNum();
+            //if (line > 1)
+            //    line += 1;
+            System.out.println("Illegal syntax error > line " + i.getLineNum() + ", " + currLexeme.getType() );
             System.exit(-1);
         }
     }
@@ -88,6 +90,7 @@ public class Recognizer implements Types
         {
             program();
         }
+
     }
 
     /**

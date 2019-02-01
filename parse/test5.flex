@@ -9,7 +9,7 @@ define class myClass
 {
 	var a;
 
-	define function another()
+	define unction another()
 	{
 		s = a;
 	}
