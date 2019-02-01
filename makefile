@@ -90,3 +90,4 @@ test5: $(CLASSES)
 ##### Clean Command #####
 clean:
 	rm recognize/*.class
+	rm lex/*.class
