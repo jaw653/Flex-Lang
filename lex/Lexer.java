@@ -50,7 +50,6 @@ public class Lexer implements Types
             {
                 if (curr == '\n')
                 {
-// System.out.println("lexer lineNum is: " + lineNum);
                     lineNum += 1;
                 }
 
@@ -74,7 +73,6 @@ public class Lexer implements Types
                 if (curr == '\n')
                 {
                     lineNum += 1;
-// System.out.println("lexer lineNum is: " + lineNum);
                     return;
                 }
 
@@ -116,7 +114,6 @@ public class Lexer implements Types
             else if (ch == '\n')
             {
                 lineNum += 1;
-// System.out.println("lexer lineNum is: " + lineNum);
             }
 
             ch = Character.valueOf( (char)stream.read() );
