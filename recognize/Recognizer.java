@@ -48,7 +48,6 @@ public class Recognizer implements Types
     private void advance() throws IOException
     {
         currLexeme = i.lex();
-// System.out.println("advance() num lines is: " + i.getLineNum());
     }
 
     /**
@@ -59,11 +58,10 @@ public class Recognizer implements Types
     {
         if ( !check(type) )
         {
-//System.out.println("getLineNum() is: " + i.getLineNum());
-            //int line = i.getLineNum();
-            //if (line > 1)
-            //    line += 1;
-            System.out.println("Illegal syntax error > line " + i.getLineNum() );
+            int line = i.getLineNum();
+            if (line > 2)
+                line += 2;
+            System.out.println("Illegal syntax error > line " + line );
             System.exit(-1);
         }
     }
@@ -76,7 +74,6 @@ public class Recognizer implements Types
     {
         matchNoAdvance(type);
         advance();
-        // System.out.println("currLexeme is now: " + currLexeme.getType());
     }
 
 /***** Non-terminals *****/
@@ -100,7 +97,6 @@ public class Recognizer implements Types
     {
         if ( varDefPending() )
         {
-            //System.out.println("variable definition");
             varDef();
         }
         else if ( definedPending() )
@@ -109,7 +105,6 @@ public class Recognizer implements Types
         }
         else if ( importDefPending() )
         {
-            //System.out.println("import definition");
             importDef();
         }
     }
@@ -201,7 +196,6 @@ public class Recognizer implements Types
         // optStatements
         if ( statementsPending() )
         {
-			// System.out.println("entered statements pending conditional");
             statements();
         }
 
@@ -209,8 +203,7 @@ public class Recognizer implements Types
         {
             returnStatement();
         }
-        // optReturn
-		// System.out.println("flag");
+
         match(CLOSE_BRACE);
     }
 
@@ -225,7 +218,7 @@ public class Recognizer implements Types
             match(INTEGER);
         else if ( check(REAL) )
             match(REAL);
-        else if ( check(CHARACTER) )        //FIXME: don't think I'm accounting for a character anymore
+        else if ( check(CHARACTER) )
             match(CHARACTER);
         else if ( check(STRING) )
             match(STRING);
@@ -304,7 +297,7 @@ public class Recognizer implements Types
     /**
      * Statements non-terminal method
      */
-    public void statements() throws IOException        //FIXME: does this need to have statements in it?
+    public void statements() throws IOException
     {
 
         statement();
@@ -317,7 +310,6 @@ public class Recognizer implements Types
 
     public void statement() throws IOException
     {
-        // System.out.println("hello there");
         if ( expressionPending() )
         {
             expression();
@@ -337,7 +329,6 @@ public class Recognizer implements Types
         }
         else if ( definedPending() )
         {
-            // System.out.println("here");
             defined();
         }
         else if ( varDefPending() )
@@ -351,14 +342,13 @@ public class Recognizer implements Types
         match(IF);
         match(OPEN_PAREN);
 
-        expression();                               //FIXME: Might need an expressionPending() here?
+        expression();
 
         match(CLOSE_PAREN);
 
         block();
 
         elseIf();
-        // optElse
     }
 
     public void elseIf() throws IOException
@@ -508,7 +498,6 @@ public class Recognizer implements Types
 
     public boolean statementPending() throws IOException
     {
-//        if (definedPending()) System.out.println("statement is pending!");
         return ( expressionPending() || ifStatementPending() || whileLoopPending() ||
             forLoopPending() || definedPending() || varDefPending() ||
             unaryPending() || idStartPending() );
