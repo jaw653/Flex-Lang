@@ -9,7 +9,7 @@
 // Do I need an optArgList() and optArgListPending() because it would just be empty or argList()
 // Should asterisk and times both be in operatorPending()?
 
-package parse;
+package recognize;
 
 import lex.*;
 import java.io.*;
@@ -63,7 +63,7 @@ public class Recognizer implements Types
             //int line = i.getLineNum();
             //if (line > 1)
             //    line += 1;
-            System.out.println("Illegal syntax error > line " + i.getLineNum() + ", " + currLexeme.getType() );
+            System.out.println("Illegal syntax error > line " + i.getLineNum() );
             System.exit(-1);
         }
     }
