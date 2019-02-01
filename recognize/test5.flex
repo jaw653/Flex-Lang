@@ -9,10 +9,15 @@ define class myClass
 {
 	var a;
 
-	define unction another()
+	define function another()
 	{
 		s = a;
 	}
 }
 
+define function main()
+{
+	var a = new _myClass()_;
+	a.another()
+}
 
