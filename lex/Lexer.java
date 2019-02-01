@@ -15,7 +15,7 @@ public class Lexer implements Types
 {
     File file;
     PushbackInputStream stream;
-    int lineNum;
+    static int lineNum;
 
     /**
      * Default constructor
