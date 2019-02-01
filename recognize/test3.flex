@@ -23,7 +23,7 @@ define class Box
 		weight = wt;
 	}
 
-	define setHeight(var h)
+	define function setHeight(var h)
 	{
 		height = h;
 	}
@@ -66,7 +66,7 @@ define class Box
 
 define function main()
 {
-	Box myBox = new _Box()_;
+	Box myBox = new Box()_;
 
 	myBox.setHeight(5);
 	myBox.setWeight(3.2);
