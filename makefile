@@ -10,7 +10,7 @@
 # make sure to have ./ before executable
 
 OPTS = -Xlint
-CLASSES = Types.class Lexeme.class Lexer.class Recognizer.class GrammarCheck.class
+CLASSES = Types.class Lexeme.class Lexer.class Recognizer.class GrammarCheck.class Environment.class
 
 recognizer: $(CLASSES)
 
@@ -56,6 +56,9 @@ Recognizer.class: recognize/Recognizer.java
 GrammarCheck.class: recognize/GrammarCheck.java
 	javac $(OPTS) recognize/GrammarCheck.java
 
+Environment.class: env/Environment.java
+	javac $(OPTS) env/Environment.java
+
 ##### Test Cases #####
 test1: $(CLASSES)
 	@echo "Running test1, should fail"
@@ -91,3 +94,4 @@ test5: $(CLASSES)
 clean:
 	rm recognize/*.class
 	rm lex/*.class
+	rm env/*.class
