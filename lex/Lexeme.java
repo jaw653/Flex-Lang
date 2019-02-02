@@ -14,6 +14,8 @@ public class Lexeme implements Types
     int ival;
     double rval;
     char cval;
+    Lexeme car;
+    Lexeme cdr;
 
     /**
      * Constructor method
@@ -66,6 +68,42 @@ public class Lexeme implements Types
     {
         this.type = type;
         this.cval = cval;
+    }
+
+    /**
+     * Left getter method for linked list
+     * @return The Lexeme to the left
+     */
+    public Lexeme getCar()
+    {
+        return car;
+    }
+
+    /**
+     * Right getter method for linked list
+     * @return The Lexeme to the right
+     */
+    public Lexeme getCdr()
+    {
+        return cdr;
+    }
+
+    /**
+     * Left setter method for linked list
+     * @l Lexeme to set to the left of the current object
+     */
+    public void setCar(Lexeme l)
+    {
+        car = l;
+    }
+
+    /**
+     * Right setter method for linked list
+     * @r Lexeme to set to the right of the current object
+     */
+    public void setCdr(Lexeme r)
+    {
+        cdr = r;
     }
 
     /**
