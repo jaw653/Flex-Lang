@@ -12,7 +12,7 @@
 OPTS = -Xlint
 CLASSES = Types.class Lexeme.class Lexer.class Recognizer.class GrammarCheck.class Environment.class
 
-recognizer: $(CLASSES)
+all: $(CLASSES)
 
 run: $(CLASSES)
 	@echo "Running test1, should fail"
