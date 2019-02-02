@@ -54,4 +54,8 @@ public interface Types
     public static final String CLASS = "CLASS";
     public static final String NEW = "NEW";
     public static final String NOT = "NOT";
+    public static final String ENV = "ENV";
+    public static final String TABLE = "TABLE";
+    public static final String I = "I";
+    public static final String V = "V";
 }
