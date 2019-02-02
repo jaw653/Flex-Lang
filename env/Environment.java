@@ -12,11 +12,6 @@ import lex.Lexeme;
 import lex.Types;
 import lex.Lexer;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.PushbackInputStream;
-import java.io.IOException;
-
 public class Environment implements Types
 {
     Lexeme env;
@@ -47,37 +42,6 @@ public class Environment implements Types
         return ret;
     }
 
-    /**
-     * Checks to make sure there is a correct number of command line args
-     * @args String array of command line args
-     */
-    private static void checkCmdArgs(String[] args)
-    {
-        if (args.length != 1)
-        {
-            System.out.println("Incorrect number of command line args");
-            System.exit(-1);
-        }
-    }
-
-    /**
-     * Safe method for opening file
-     * @filename The name of the file to be opened
-     * @return The pointer to the opened file object
-     */
-    private static File openFile(String filename) throws IOException
-    {
-        File file = new File(filename);
-
-        if ( !file.exists() )
-        {
-            System.out.println("File does not exist");
-            System.exit(-1);
-        }
-
-        return file;
-    }
-
 /********** Public Methods **********/
     /**
      * Getter method for env Lexeme
@@ -94,7 +58,7 @@ public class Environment implements Types
      * @id The ID of the Lexeme
      * @val The actual held value of the Lexeme identified by ID
      */
-    public void insertEnv(Lexeme env, Lexeme id, Lexeme val)
+    public void insertEnv(Lexeme id, Lexeme val)
     {
         Lexeme car = env.getCar();
         car.setCar( cons(I, id, car.getCar()) );
@@ -179,47 +143,32 @@ public class Environment implements Types
      * @vals The corresponding values of the variables above
      * @return a pointer to the new environment scope
      */
-    public Lexeme newScope(Lexeme env, Lexeme vars, Lexeme vals)        //FIXME: don't know if this should return a lexeme and/or if env, vars, and vals should be of type lexeme
+    public Lexeme newScope(Environment e, Lexeme vars, Lexeme vals)        //FIXME: don't know if this should return a lexeme and/or if env, vars, and vals should be of type lexeme
     {
-        return cons(ENV, cons(TABLE, vars, vals), env);
+        return cons( ENV, cons(TABLE, vars, vals), e.getEnv() );
     }
 
-    public static void main(String[] args) throws IOException
+    public static void main(String[] args)
     {
-        checkCmdArgs(args);
-
-        /* Open file for reading character-by-character */
-        File file = openFile(args[0]);
-        PushbackInputStream stream = new PushbackInputStream(new FileInputStream(file));
-
-        /* Init token and i to store current Lexeme serve as Lexer object, respectively */
-        Lexeme token;
-        Lexer i = new Lexer(stream);
-
         /* Init empty environment with only a TABLE */
-        Environment myEnv = new Environment();
+        Environment env = new Environment();
 
-        /* Iterate over every Lexeme and add it to the environment */
-        token = i.lex();
-        while (token.getType() != ENDOFINPUT)
-        {
-            Lexeme id;
-            Lexeme val;
+        System.out.println("The environment is: ...");                  //FIXME: should this be ... or should something take the ellipses place?
 
-            if (token.getType() == ID)
-            {
-                id = new Lexeme( token.getType(), token.getName() );
+        System.out.println("Adding variable x with value 3");
+        Lexeme id = new Lexeme(ID, "x");
+        Lexeme val = new Lexeme(INTEGER, 3);
+        env.insertEnv(id, val);
 
-                token = i.lex();
+        System.out.println("The environment is: ...");
+        System.out.println("Extending the environment with y:4 and z:\"hello\"");
+        Lexeme vars = new Lexeme(ID, "y");
+        Lexeme vals = new Lexeme(STRING, "hello");
+        Lexeme extension = env.newScope(env, vars, vals);
 
-                val = new Lexeme( token.getType(), token.getName() );
 
-                myEnv.insertEnv(myEnv.getEnv(), id, val);
-            }
-            else
-                token = i.lex();
-        }
-
-        stream.close();
+        System.out.println("The local environment is: ...");
+        System.out.println("The environment is: ...");
+        // ...
     }
 }
