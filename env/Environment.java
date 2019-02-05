@@ -71,19 +71,21 @@ public class Environment implements Types
      * @id The name of the variable of whom's value is wanted
      * @return A Lexeme with the searched-for id
      */
-    public Lexeme getVal(Lexeme env, Lexeme id)
+    public Lexeme getVal(Lexeme id)
     {
         Lexeme vars;
         Lexeme vals;
 
         while (env != null)
         {
+//            System.out.println("loop");
             vars = (env.getCar()).getCar();
             vals = (env.getCar()).getCdr();
 
             while (vars != null)
             {
-                if ( id.getName() == vars.getCar().getName() )
+//                System.out.println("comparing " + id.getName() + " to " + vars.getCar().getName());
+                if ( id.getName().equals(vars.getCar().getName()) )
                     return vals.getCar();
 
                 vars = vars.getCdr();
@@ -105,20 +107,25 @@ public class Environment implements Types
      * @id The name of the variable of whom's value is wanted
      * @newVal The new value of the variable mentioned above
      */
-    public boolean updateVal(Lexeme env, Lexeme id, Lexeme newVal)
+    public boolean updateVal(Lexeme id, Lexeme newVal)
     {
         Lexeme vars;
         Lexeme vals;
 
         while (env != null)
         {
+//            System.out.println("loop");
             vars = (env.getCar()).getCar();
             vals = (env.getCar()).getCdr();
 
             while (vars != null)
             {
-                if ( id.getName() == vars.getCar().getName() )
+//                System.out.println("loop2");
+//                System.out.println("searching for: " + id.getName());
+//                System.out.println("comparing to: " + vars.getCar().getName());
+                if ( id.getName().equals(vars.getCar().getName()) )
                 {
+//                    System.out.println("good!");
                     vals.setCar(newVal);
                     return true;
                 }
@@ -155,6 +162,7 @@ public class Environment implements Types
 
         System.out.println("The environment is: ...");                  //FIXME: should this be ... or should something take the ellipses place?
 
+/*
         System.out.println("Adding variable x with value 3");
         Lexeme id = new Lexeme(ID, "x");
         Lexeme val = new Lexeme(INTEGER, 3);
@@ -166,9 +174,64 @@ public class Environment implements Types
         Lexeme vals = new Lexeme(STRING, "hello");
         Lexeme extension = env.newScope(env, vars, vals);
 
+        System.out.println("Updating value with ID x in original environment...");
+        Lexeme searchID = new Lexeme(I, "x");
+        Lexeme newVal = new Lexeme(V, 10);
+        if ( env.updateVal(searchID, newVal) == false )
+            System.out.println("ERROR: Update unsuccessful.");
+        else
+            System.out.println("Update successful!");
+
 
         System.out.println("The local environment is: ...");
         System.out.println("The environment is: ...");
         // ...
+*/
+        String var = "a";
+        int val = 1;
+
+        Lexeme id;
+        Lexeme value;
+
+        for (int i = 0; i < 10; i++)
+        {
+            System.out.println("Adding variable " + var + " with value: " + val);
+
+            /* Set the value of the ID Lexeme */
+            id = new Lexeme(I, var);
+
+            /* Changing the value of var */
+            char tmp = var.charAt(0);
+            tmp++;
+            var = String.valueOf(tmp);
+
+            /* Set the value Lexeme and then increase for next set */
+            value = new Lexeme(V, val++);
+
+            /* Insert id, value pair to env */
+            env.insertEnv(id, value);
+        }
+
+        /* Resetting var to the beginning */
+        var = "a";
+        Lexeme getVal;
+        for (int i = 0; i < 10; i++)
+        {
+            getVal = env.getVal(new Lexeme(I, var));
+
+            System.out.println("ID " + var + " has value: " + getVal.getInt());
+
+            char tmp = var.charAt(0);
+            tmp++;
+            var = String.valueOf(tmp);
+        }
+
+        System.out.println("Updating variable a to have value 50");
+        env.updateVal(new Lexeme(I, "a"), new Lexeme(V, 50));
+        System.out.println("New val of Lexeme with ID a is: " + env.getVal(new Lexeme(I, "a")).getInt() );
+
+        System.out.println("Updating variable c to have value 35");
+        env.updateVal(new Lexeme(I, "c"), new Lexeme(V, 35));
+        System.out.println("New val of Lexeme with ID c is: " + env.getVal(new Lexeme(I, "c")).getInt() );
     }
 }
