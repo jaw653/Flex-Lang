@@ -125,6 +125,15 @@ public class Lexeme implements Types
     }
 
     /**
+     * Basic getter function for the value of an int Lexeme
+     * @return The value of the ival
+     */
+    public int getInt()
+    {
+        return ival;
+    }
+
+    /**
      * Displays Lexeme type to stdout
      */
     public void display()
