@@ -6,6 +6,8 @@
  * Environment Class
  */
 
+// if extra time make nicer looking test methods (static private)
+
 package env;
 
 import lex.Lexeme;
@@ -233,5 +235,7 @@ public class Environment implements Types
         System.out.println("Updating variable c to have value 35");
         env.updateVal(new Lexeme(I, "c"), new Lexeme(V, 35));
         System.out.println("New val of Lexeme with ID c is: " + env.getVal(new Lexeme(I, "c")).getInt() );
+
+        // need to test extend/newScope here...
     }
 }
