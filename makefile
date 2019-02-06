@@ -15,30 +15,8 @@ CLASSES = Types.class Lexeme.class Lexer.class Recognizer.class GrammarCheck.cla
 all: $(CLASSES)
 
 run: $(CLASSES)
-	@echo "Running test1, should fail"
-	@cat recognize/test1.flex
-	-./recognizer recognize/test1.flex
-	@echo "\n=========================\n"
-
-	@echo "Running test2, should pass"
-	@cat recognize/test2.flex
-	-./recognizer recognize/test2.flex
-	@echo "\n=========================\n"
-
-	@echo "Running test3, should fail"
-	@cat recognize/test3.flex
-	-./recognizer recognize/test3.flex
-	@echo "\n=========================\n"
-
-	@echo "Running test4, should pass"
-	@cat recognize/test4.flex
-	-./recognizer recognize/test4.flex
-	@echo "\n=========================\n"
-
-	@echo "Running test5, should fail"
-	@cat recognize/test5.flex
-	-./recognizer recognize/test5.flex
-	@echo "\n"
+	@echo "Running test file..."
+	./environment
 
 ##### Classes #####
 Types.class: lex/Types.java
@@ -60,35 +38,35 @@ Environment.class: env/Environment.java
 	javac $(OPTS) env/Environment.java
 
 ##### Test Cases #####
-test1: $(CLASSES)
-	@echo "Running test1, should fail"
-	@cat recognize/test1.flex
-	-./recognizer recognize/test1.flex
-	@echo "\n=========================\n"
+# test1: $(CLASSES)
+#	@echo "Running test1, should fail"
+#	@cat recognize/test1.flex
+#	-./recognizer recognize/test1.flex
+#	@echo "\n=========================\n"
 
-test2: $(CLASSES)
-	@echo "Running test2, should pass"
-	@cat recognize/test2.flex
-	-./recognizer recognize/test2.flex
-	@echo "\n=========================\n"
+#test2: $(CLASSES)
+#	@echo "Running test2, should pass"
+#	@cat recognize/test2.flex
+#	-./recognizer recognize/test2.flex
+#	@echo "\n=========================\n"
 
-test3: $(CLASSES)
-	@echo "Running test3, should fail"
-	@cat recognize/test3.flex
-	-./recognizer recognize/test3.flex
-	@echo "\n=========================\n"
+#test3: $(CLASSES)
+#	@echo "Running test3, should fail"
+#	@cat recognize/test3.flex
+#	-./recognizer recognize/test3.flex
+#	@echo "\n=========================\n"
 
-test4: $(CLASSES)
-	@echo "Running test4, should pass"
-	@cat recognize/test4.flex
-	-./recognizer recognize/test4.flex
-	@echo "\n=========================\n"
+#test4: $(CLASSES)
+#	@echo "Running test4, should pass"
+#	@cat recognize/test4.flex
+#	-./recognizer recognize/test4.flex
+#	@echo "\n=========================\n"
 
-test5: $(CLASSES)
-	@echo "Running test5, should fail"
-	@cat recognize/test5.flex
-	-./recognizer recognize/test5.flex
-	@echo "\n"
+#test5: $(CLASSES)
+#	@echo "Running test5, should fail"
+#	@cat recognize/test5.flex
+#	-./recognizer recognize/test5.flex
+#	@echo "\n"
 
 ##### Clean Command #####
 clean:
