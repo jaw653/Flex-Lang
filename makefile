@@ -10,7 +10,7 @@
 # make sure to have ./ before executable
 
 OPTS = -Xlint
-CLASSES = Types.class Lexeme.class Lexer.class Recognizer.class GrammarCheck.class Environment.class
+CLASSES = lex/Types.class lex/Lexeme.class lex/Lexer.class recognize/Recognizer.class recognize/GrammarCheck.class env/Environment.class
 
 all: $(CLASSES)
 
@@ -19,22 +19,22 @@ run: $(CLASSES)
 	./environment
 
 ##### Classes #####
-Types.class: lex/Types.java
+lex/Types.class: lex/Types.java
 	javac $(OPTS) lex/Types.java
 
-Lexeme.class: lex/Lexeme.java
+lex/Lexeme.class: lex/Lexeme.java
 	javac $(OPTS) lex/Lexeme.java
 
-Lexer.class: lex/Lexer.java
+lex/Lexer.class: lex/Lexer.java
 	javac $(OPTS) lex/Lexer.java
 
-Recognizer.class: recognize/Recognizer.java
+recognize/Recognizer.class: recognize/Recognizer.java
 	javac $(OPTS) recognize/Recognizer.java
 
-GrammarCheck.class: recognize/GrammarCheck.java
+recognize/GrammarCheck.class: recognize/GrammarCheck.java
 	javac $(OPTS) recognize/GrammarCheck.java
 
-Environment.class: env/Environment.java
+env/Environment.class: env/Environment.java
 	javac $(OPTS) env/Environment.java
 
 ##### Test Cases #####
