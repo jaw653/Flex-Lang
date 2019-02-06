@@ -7,6 +7,8 @@
  */
 
 // if extra time make nicer looking test methods (static private)
+// is the way I tested sufficient?
+// is the way I proved extend() good?
 
 package env;
 
@@ -75,6 +77,7 @@ public class Environment implements Types
      */
     public Lexeme getVal(Lexeme id)
     {
+        Lexeme env = this.env;
         Lexeme vars;
         Lexeme vals;
 
@@ -111,6 +114,8 @@ public class Environment implements Types
      */
     public boolean updateVal(Lexeme id, Lexeme newVal)
     {
+        Lexeme env = this.env;
+
         Lexeme vars;
         Lexeme vals;
 
@@ -152,9 +157,42 @@ public class Environment implements Types
      * @vals The corresponding values of the variables above
      * @return a pointer to the new environment scope
      */
-    public Lexeme newScope(Environment e, Lexeme vars, Lexeme vals)        //FIXME: don't know if this should return a lexeme and/or if env, vars, and vals should be of type lexeme
+    public Lexeme extendEnv(Lexeme vars, Lexeme vals)        //FIXME: don't know if this should return a lexeme and/or if env, vars, and vals should be of type lexeme
     {
-        return cons( ENV, cons(TABLE, vars, vals), e.getEnv() );
+        return cons(ENV, cons(TABLE, vars, vals), env);
+    }
+
+    /**
+     * Displays the current environment
+     */
+    public void displayEnv()
+    {
+        Lexeme env = this.env;
+
+        System.out.println("Environment is:");
+
+        Lexeme vars;
+        Lexeme vals;
+
+        while (env != null)
+        {
+//            System.out.println("loop");
+            vars = (env.getCar()).getCar();
+            vals = (env.getCar()).getCdr();
+
+            while (vars != null)
+            {
+//                System.out.println("comparing " + id.getName() + " to " + vars.getCar().getName());
+                System.out.println("<" + vars.getCar().getName() + "-" + vals.getCar().getInt() + ">");
+
+                vars = vars.getCdr();
+                vals = vals.getCdr();
+            }
+
+            env = env.getCdr();
+        }
+
+//        System.out.println("Undefined variable error");
     }
 
     public static void main(String[] args)
@@ -162,39 +200,15 @@ public class Environment implements Types
         /* Init empty environment with only a TABLE */
         Environment env = new Environment();
 
-        System.out.println("The environment is: ...");                  //FIXME: should this be ... or should something take the ellipses place?
+        env.displayEnv();
 
-/*
-        System.out.println("Adding variable x with value 3");
-        Lexeme id = new Lexeme(ID, "x");
-        Lexeme val = new Lexeme(INTEGER, 3);
-        env.insertEnv(id, val);
-
-        System.out.println("The environment is: ...");
-        System.out.println("Extending the environment with y:4 and z:\"hello\"");
-        Lexeme vars = new Lexeme(ID, "y");
-        Lexeme vals = new Lexeme(STRING, "hello");
-        Lexeme extension = env.newScope(env, vars, vals);
-
-        System.out.println("Updating value with ID x in original environment...");
-        Lexeme searchID = new Lexeme(I, "x");
-        Lexeme newVal = new Lexeme(V, 10);
-        if ( env.updateVal(searchID, newVal) == false )
-            System.out.println("ERROR: Update unsuccessful.");
-        else
-            System.out.println("Update successful!");
-
-
-        System.out.println("The local environment is: ...");
-        System.out.println("The environment is: ...");
-        // ...
-*/
         String var = "a";
         int val = 1;
 
         Lexeme id;
         Lexeme value;
 
+        System.out.println("\nTesting insertEnv()...");
         for (int i = 0; i < 10; i++)
         {
             System.out.println("Adding variable " + var + " with value: " + val);
@@ -214,6 +228,10 @@ public class Environment implements Types
             env.insertEnv(id, value);
         }
 
+        env.displayEnv();
+
+        System.out.println("\nTesting getVal()...");
+
         /* Resetting var to the beginning */
         var = "a";
         Lexeme getVal;
@@ -228,14 +246,36 @@ public class Environment implements Types
             var = String.valueOf(tmp);
         }
 
+        env.displayEnv();
+
+        System.out.println("\nTesting updateVal()...");
         System.out.println("Updating variable a to have value 50");
         env.updateVal(new Lexeme(I, "a"), new Lexeme(V, 50));
         System.out.println("New val of Lexeme with ID a is: " + env.getVal(new Lexeme(I, "a")).getInt() );
 
-        System.out.println("Updating variable c to have value 35");
+        env.displayEnv();
+
+        System.out.println("\nUpdating variable c to have value 35");
         env.updateVal(new Lexeme(I, "c"), new Lexeme(V, 35));
         System.out.println("New val of Lexeme with ID c is: " + env.getVal(new Lexeme(I, "c")).getInt() );
 
+        env.displayEnv();
         // need to test extend/newScope here...
+
+        System.out.println("\nTesting extend()...");
+        /* Building a list of vars and vals inside of env1 so I don't have to do it by hand */
+        Environment env1 = new Environment();
+        env1.insertEnv(new Lexeme(I, "var0"), new Lexeme(V, 81));
+        env1.insertEnv(new Lexeme(I, "var1"), new Lexeme(V, 82));
+        env1.insertEnv(new Lexeme(I, "var2"), new Lexeme(V, 83));
+        Lexeme vars = env1.getEnv().getCar().getCar();
+        Lexeme vals = env1.getEnv().getCar().getCdr();
+        /* Actual testing of the extendEnv() method comes here */
+        env.extendEnv(vars, vals);
+
+        env1.displayEnv();
+        System.out.println("Followed by:");
+        env.displayEnv();
+
     }
 }
