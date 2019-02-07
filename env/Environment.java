@@ -44,7 +44,7 @@ public class Environment implements Types
      * @l The pointer to the left of the Lexeme
      * @r The pointer to the right of the Lexeme
      */
-    private Lexeme cons(String type, Lexeme l, Lexeme r)     //FIXME: what are the types of the params and what is the return type?
+    private Lexeme cons(String type, Lexeme l, Lexeme r)
     {
         Lexeme ret = new Lexeme(type);
         ret.setCar(l);
@@ -92,13 +92,11 @@ public class Environment implements Types
 
         while (env != null)
         {
-//            System.out.println("loop");
             vars = (env.getCar()).getCar();
             vals = (env.getCar()).getCdr();
 
             while (vars != null)
             {
-//                System.out.println("comparing " + id.getName() + " to " + vars.getCar().getName());
                 if ( id.getName().equals(vars.getCar().getName()) )
                     return vals.getCar();
 
@@ -130,18 +128,13 @@ public class Environment implements Types
 
         while (env != null)
         {
-//            System.out.println("loop");
             vars = (env.getCar()).getCar();
             vals = (env.getCar()).getCdr();
 
             while (vars != null)
             {
-//                System.out.println("loop2");
-//                System.out.println("searching for: " + id.getName());
-//                System.out.println("comparing to: " + vars.getCar().getName());
                 if ( id.getName().equals(vars.getCar().getName()) )
                 {
-//                    System.out.println("good!");
                     vals.setCar(newVal);
                     return true;
                 }
@@ -152,9 +145,6 @@ public class Environment implements Types
 
             env = env.getCdr();
         }
-
-        // System.out.println("Undefined variable error");
-        // System.exit(-1);
 
         return false;
     }
@@ -187,17 +177,10 @@ public class Environment implements Types
 
         while (env != null)
         {
-//            System.out.println("loop");
             vars = (env.getCar()).getCar();
             vals = (env.getCar()).getCdr();
-/*
-			if (envChoice == 1)
-			{
-				if (vars == null && env.getCdr() != null)
-				vars = env.getCdr().getCar().getCar();
-			}
-*/
-            while (vars != null)
+            
+			while (vars != null)
             {
 //                System.out.println("comparing " + id.getName() + " to " + vars.getCar().getName());
                 System.out.println("<" + vars.getCar().getName() + "-" + vals.getCar().getInt() + ">");
@@ -206,10 +189,17 @@ public class Environment implements Types
                 vals = vals.getCdr();
             }
 
-            env = env.getCdr();
+           if (envChoice == 1)
+		   {
+			   env = env.getCdr();
+			   if (env != null)
+			   {
+				   System.out.println("  |");
+				   System.out.println("  V");
+			   }
+		   }
+		   else break;
         }
-
-//        System.out.println("Undefined variable error");
     }
 
     public static void main(String[] args)
@@ -278,20 +268,17 @@ public class Environment implements Types
 
         env.displayEnv(0);
 
-        System.out.println("\nTesting extend()...");
         /* Building a list of vars and vals inside of env1 so I don't have to do it by hand */
+        System.out.println("\nTesting extend()...");
         Environment env1 = new Environment();
         env1.insertEnv(new Lexeme(I, "var0"), new Lexeme(V, 81));
         env1.insertEnv(new Lexeme(I, "var1"), new Lexeme(V, 82));
         env1.insertEnv(new Lexeme(I, "var2"), new Lexeme(V, 83));
         Lexeme vars = env1.getEnv().getCar().getCar();
         Lexeme vals = env1.getEnv().getCar().getCdr();
-        /* Actual testing of the extendEnv() method comes here */
+
+		/* Actual testing of the extendEnv() method comes here */
         env.extendEnv(vars, vals);
-
-        env1.displayEnv(1);
-//        System.out.println("Followed by:");
-//        env.displayEnv();
-
+        env.displayEnv(1);
     }
 }
