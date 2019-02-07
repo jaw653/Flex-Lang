@@ -119,7 +119,7 @@ public class Environment implements Types
      * @id The name of the variable of whom's value is wanted
      * @newVal The new value of the variable mentioned above
      */
-    public boolean updateVal(Lexeme id, Lexeme newVal)
+    public Lexeme updateVal(Lexeme id, Lexeme newVal)
     {
         Lexeme env = this.env;
 
@@ -136,7 +136,7 @@ public class Environment implements Types
                 if ( id.getName().equals(vars.getCar().getName()) )
                 {
                     vals.setCar(newVal);
-                    return true;
+                    return newVal;
                 }
 
                 vars = vars.getCdr();
@@ -146,7 +146,7 @@ public class Environment implements Types
             env = env.getCdr();
         }
 
-        return false;
+        return null;
     }
 
     /**
