@@ -6,22 +6,13 @@
  * Environment Class
  */
 
-// still need to implement 2 versions of display()
-//      1. displays only local table
-//      2. displays all tables
-// does insertVal() need to return a value of the val inserted (as per instructions)?
-// do current update() and insert() methods search all environments? (my guess is yes since he gave us this code)
-// if extra time make nicer looking test methods (static private)
-// is the way I tested sufficient?
-// is the way I proved extend() good?
-// use envChoice once again in display()
-// implement/fix implementation of display()
 
 package env;
 
 import lex.Lexeme;
 import lex.Types;
 import lex.Lexer;
+
 
 public class Environment implements Types
 {
