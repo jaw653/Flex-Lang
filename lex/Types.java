@@ -58,4 +58,8 @@ public interface Types
     public static final String TABLE = "TABLE";
     public static final String I = "I";
     public static final String V = "V";
+    public static final String FUNCDEF = "FUNCDEF";
+    public static final String CLASSDEF = "CLASSDEF";
+    public static final String IDLIST = "IDLIST";
+    public static final String STATEMENTS = "STATEMENTS";
 }

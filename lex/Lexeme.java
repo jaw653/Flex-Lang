@@ -134,6 +134,15 @@ public class Lexeme implements Types
     }
 
     /**
+     * Basic getter function for the value of a real Lexeme
+     * @return The value of the rval
+     */
+    public double getReal()
+    {
+        return rval;
+    }
+
+    /**
      * Displays Lexeme type to stdout
      */
     public void display()
