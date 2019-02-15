@@ -28,7 +28,7 @@ public class PrettyPrinter implements Types
 	 */
 	private void printFunction(Lexeme tree)
 	{
-		System.out.print("function ");
+		System.out.print("define function ");
 		prettyPrint(tree.getCar());
 		System.out.print("(");
 		prettyPrint(tree.getCdr().getCar());
@@ -42,7 +42,7 @@ public class PrettyPrinter implements Types
 	 */
 	private void printClass(Lexeme tree)
 	{
-		System.out.print("class ");
+		System.out.print("define class ");
 		prettyPrint(tree.getCar());
 		prettyPrint(tree.getCdr());
 	}
