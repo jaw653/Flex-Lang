@@ -62,4 +62,6 @@ public interface Types
     public static final String CLASSDEF = "CLASSDEF";
     public static final String IDLIST = "IDLIST";
     public static final String STATEMENTS = "STATEMENTS";
+    public static final String GLUE = "GLUE";
+    public static final String EXPRDEF = "EXPRDEF";
 }
