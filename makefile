@@ -10,13 +10,13 @@
 # make sure to have ./ before executable
 
 OPTS = -Xlint
-CLASSES = lex/Types.class lex/Lexeme.class lex/Lexer.class recognize/Recognizer.class recognize/GrammarCheck.class env/Environment.class
+CLASSES = lex/Types.class lex/Lexeme.class lex/Lexer.class recognize/Recognizer.class recognize/GrammarCheck.class env/Environment.class parse/Parser.class prettyPrint/PrettyPrinter.class
 
 all: $(CLASSES)
 
 run: $(CLASSES)
 	@echo "Running test file..."
-	./environment
+	./pp prettyPrint/test.flex
 
 ##### Classes #####
 lex/Types.class: lex/Types.java
@@ -36,6 +36,12 @@ recognize/GrammarCheck.class: recognize/GrammarCheck.java
 
 env/Environment.class: env/Environment.java
 	javac $(OPTS) env/Environment.java
+
+parse/Parser.class: parse/Parser.java
+	javac $(OPTS) parse/Parser.java
+
+prettyPrint/PrettyPrinter.class: prettyPrint/PrettyPrinter.java
+	javac $(OPTS) prettyPrint/PrettyPrinter.java
 
 ##### Test Cases #####
 # test1: $(CLASSES)
@@ -73,3 +79,5 @@ clean:
 	rm recognize/*.class
 	rm lex/*.class
 	rm env/*.class
+	rm parse/*.class
+	rm prettyPrint/*.class
