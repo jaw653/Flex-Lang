@@ -58,6 +58,7 @@ public interface Types
     /***** Parse tree macros *****/
     public static final String PROG = "PROG";
     public static final String DEF = "DEF";
+    public static final String VARDEF = "VARDEF";
     public static final String ENV = "ENV";
     public static final String TABLE = "TABLE";
     public static final String I = "I";
