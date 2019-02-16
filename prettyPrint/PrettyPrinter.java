@@ -390,13 +390,10 @@ public class PrettyPrinter implements Types
 		else if (tree.getType() == EXPRLIST) printExprList(tree);
 		else if (tree.getType() == IDSTART) printIDstart(tree);
 
-
-
 		else if (tree.getType() == STRING) System.out.println("\"" + tree.getName() + "\"");
 		else if (tree.getType() == INTEGER) System.out.println(tree.getInt());
 		else if (tree.getType() == REAL) System.out.println(tree.getReal());
-		else if (tree.getType() == STATEMENTS) printStatements(tree);
-		else if (tree.getType() == IDLIST) printIDlist(tree);
+//		else if (tree.getType() == IDLIST) printIDlist(tree);
 		else if (tree.getType() == ID) System.out.print(tree.getName());
 
 		else if (tree.getType() == GLUE)
