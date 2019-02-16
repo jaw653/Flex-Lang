@@ -54,6 +54,10 @@ public interface Types
     public static final String CLASS = "CLASS";
     public static final String NEW = "NEW";
     public static final String NOT = "NOT";
+
+    /***** Parse tree macros *****/
+    public static final String PROG = "PROG";
+    public static final String DEF = "DEF";
     public static final String ENV = "ENV";
     public static final String TABLE = "TABLE";
     public static final String I = "I";
@@ -64,4 +68,16 @@ public interface Types
     public static final String STATEMENTS = "STATEMENTS";
     public static final String GLUE = "GLUE";
     public static final String EXPRDEF = "EXPRDEF";
+    public static final String PARAMLIST = "PARAMLIST";
+    public static final String BLOCK = "BLOCK";
+    public static final String STATEMENT = "STATEMENT";
+    public static final String IFSTMNT = "IFSTMNT";
+    public static final String ELSEIF = "ELSEIF";
+    public static final String WHILELOOP = "WHILELOOP";
+    public static final String FORLOOP = "FORLOOP";
+    public static final String RETSTMNT = "RETSTMNT";
+    public static final String EXPRLIST = "EXPRLIST";
+    public static final String IDSTART = "IDSTART";
+    public static final String IMPORTDEF = "IMPORTDEF";
+    public static final String UNARY = "UNARY";
 }
