@@ -145,7 +145,7 @@
 
         match(SEMICOLON);
 
-        return cons(VAR, id, expr);
+        return cons(VARDEF, id, expr);
     }
 
     /**
