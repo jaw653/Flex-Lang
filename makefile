@@ -12,11 +12,9 @@ CLASSES = lex/Types.class lex/Lexeme.class lex/Lexer.class recognize/Recognizer.
 all: $(CLASSES)
 
 run: $(CLASSES)
-	@echo "Running test file..."
-	./pp prettyPrint/test1.flex
-	./pp prettyPrint/test2.flex
-	./pp prettyPrint/test3.flex
-
+	make test1
+	make test2
+	make test3
 
 ##### Classes #####
 lex/Types.class: lex/Types.java
