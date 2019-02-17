@@ -64,8 +64,8 @@ public class PrettyPrinter implements Types
 	 */
 	private void printProg(Lexeme tree)
 	{
-		prettyPrint(tree.getCar());
-		prettyPrint(tree.getCdr());
+		if (tree.getCar() != null) prettyPrint(tree.getCar());
+		if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class PrettyPrinter implements Types
 	 */
 	private void printDef(Lexeme tree)
 	{
-		prettyPrint(tree.getCar());
+		if (tree.getCar() != null) prettyPrint(tree.getCar());
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class PrettyPrinter implements Types
 	private void printVarDef(Lexeme tree)
 	{
 		System.out.print("var " + tree.getCar().getName() + " = ");
-		prettyPrint(tree.getCdr());
+		if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 	}
 
 	/**
@@ -102,8 +102,12 @@ public class PrettyPrinter implements Types
 	 */
 	private void printExpr(Lexeme tree)
 	{
-		prettyPrint(tree.getCar());
-		prettyPrint(tree.getCdr());
+		if (tree.getCar() != null) prettyPrint(tree.getCar());
+		if (tree.getCdr() != null)
+		{
+			prettyPrint(tree.getCdr().getCar());
+			prettyPrint(tree.getCdr().getCdr());
+		}
 	}
 
 	/**
@@ -115,9 +119,10 @@ public class PrettyPrinter implements Types
 		System.out.print("var " + tree.getCar().getName());
 
 		if (tree.getCdr() != null)
+		{
 			System.out.print(", ");
-
-		prettyPrint(tree.getCdr());
+			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
+		}
 	}
 
 	/**
@@ -126,10 +131,10 @@ public class PrettyPrinter implements Types
 	 */
 	private void printBlock(Lexeme tree)
 	{
-		System.out.println("{");
-		prettyPrint(tree.getCar());
-		prettyPrint(tree.getCdr());
-		System.out.println("}")
+		System.out.println("\n{");
+		if (tree.getCar() != null) prettyPrint(tree.getCar());
+		if (tree.getCdr() != null) prettyPrint(tree.getCdr());
+		System.out.println("}");
 	}
 
 	/**
@@ -138,8 +143,8 @@ public class PrettyPrinter implements Types
 	 */
 	private void printStatements(Lexeme tree)
 	{
-		prettyPrint(tree.getCar());
-		prettyPrint(tree.getCdr());
+		if (tree.getCar() != null) prettyPrint(tree.getCar());
+		if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 	}
 
 	/**
@@ -148,7 +153,7 @@ public class PrettyPrinter implements Types
 	 */
 	private void printStmnt(Lexeme tree)
 	{
-		prettyPrint(tree.getCar());
+		if (tree.getCar() != null) prettyPrint(tree.getCar());
 	}
 
 	/**
@@ -157,7 +162,8 @@ public class PrettyPrinter implements Types
 	 */
 	private void printRetStatement(Lexeme tree)
 	{
-		System.out.println("return " + prettyPrint(tree.getCar()));
+		System.out.println("return ");
+		if (tree.getCar() != null) prettyPrint(tree.getCar());
 	}
 
 	/**
@@ -168,12 +174,14 @@ public class PrettyPrinter implements Types
 	{
 		if (tree.getCar().getType() == EXPRDEF)
 		{
-			System.out.print("(" + prettyPrint(tree.getCar()) + ")");
+			System.out.print("(");
+			if (tree.getCar() != null) prettyPrint(tree.getCar());
+			System.out.print(")");
 		}
 		else
 		{
-			prettyPrint(tree.getCar());
-			prettyPrint(tree.getCdr());
+			if (tree.getCar() != null) prettyPrint(tree.getCar());
+			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 		}
 	}
 
@@ -183,7 +191,7 @@ public class PrettyPrinter implements Types
 	 */
 	private void printOp(Lexeme tree)
 	{
-		prettyPrint(tree.getCar());
+		if (tree.getCar() != null) prettyPrint(tree.getCar());
 
 		switch (tree.getType())
 		{
@@ -228,7 +236,7 @@ public class PrettyPrinter implements Types
 				break;
 		}
 
-		prettyPrint(tree.getCdr());
+		if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 	}
 
 	/**
@@ -238,9 +246,9 @@ public class PrettyPrinter implements Types
 	private void printIf(Lexeme tree)
 	{
 		System.out.print("if (");
-		prettyPrint(tree.getCar());
+		if (tree.getCar() != null) prettyPrint(tree.getCar());
 		System.out.print(")");
-		prettyPrint(tree.getCdr());
+		if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 	}
 
 	/**
@@ -250,8 +258,8 @@ public class PrettyPrinter implements Types
 	private void printElseIf(Lexeme tree)
 	{
 		System.out.print("else ");
-		prettyPrint(tree.getCar());
-		prettyPrint(tree.getCdr());
+		if (tree.getCar() != null) prettyPrint(tree.getCar());
+		if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 	}
 
 	/**
@@ -261,9 +269,9 @@ public class PrettyPrinter implements Types
 	private void printWhile(Lexeme tree)
 	{
 		System.out.print("while (");
-		prettyPrint(tree.getCar());
+		if (tree.getCar() != null) prettyPrint(tree.getCar());
 		System.out.print(")");
-		prettyPrint(tree.getCdr());
+		if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 	}
 
 	/**													//FIXME: going to need to fix the structure of this guy so that I can correctly print syntactic sugar
@@ -273,8 +281,8 @@ public class PrettyPrinter implements Types
 	private void printFor(Lexeme tree)
 	{
 		System.out.print("for (");
-		prettyPrint(tree.getCar());
-		prettyPrint(tree.getCar());
+		if (tree.getCar() != null) prettyPrint(tree.getCar());
+		if (tree.getCdr() != null) if (tree.getCar() != null) prettyPrint(tree.getCar());
 	}
 
 	/**
@@ -283,11 +291,11 @@ public class PrettyPrinter implements Types
 	 */
 	private void printExprList(Lexeme tree)
 	{
-		prettyPrint(tree.getCar());
-		if (exprList != null)
+		if (tree.getCar() != null) prettyPrint(tree.getCar());
+		if (tree.getCdr() != null)
 		{
 			System.out.print(", ");
-			prettyPrint(tree.getCdr());
+			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 		}
 	}
 
@@ -297,8 +305,8 @@ public class PrettyPrinter implements Types
 	 */
 	private void printIDstart(Lexeme tree)
 	{
-		prettyPrint(tree.getCar());
-		prettyPrint(tree.getCdr());
+		if (tree.getCar() != null) prettyPrint(tree.getCar());
+		if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 	}
 
 	/**
@@ -308,11 +316,11 @@ public class PrettyPrinter implements Types
 	private void printFunction(Lexeme tree)
 	{
 		System.out.print("define function ");
-		prettyPrint(tree.getCar());
+		if (tree.getCar() != null) prettyPrint(tree.getCar());
 		System.out.print("(");
-		prettyPrint(tree.getCdr().getCar());
+		if (tree.getCdr() != null && tree.getCdr().getCar() != null) prettyPrint(tree.getCdr().getCar());
 		System.out.print(")");
-		prettyPrint(tree.getCdr().getCdr());
+		if (tree.getCdr() != null && tree.getCdr().getCdr() != null) prettyPrint(tree.getCdr().getCdr());
 	}
 
 	/**
@@ -322,8 +330,8 @@ public class PrettyPrinter implements Types
 	private void printClass(Lexeme tree)
 	{
 		System.out.print("define class ");
-		prettyPrint(tree.getCar());
-		prettyPrint(tree.getCdr());
+		if (tree.getCar() != null) prettyPrint(tree.getCar());
+		if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 	}
 
 /*
@@ -335,7 +343,7 @@ public class PrettyPrinter implements Types
 	{
 		while (tree != null)
 		{
-			prettyPrint(tree.getCar());
+			if (tree.getCar() != null) prettyPrint(tree.getCar());
 			System.out.println();
 			tree = tree.getCdr();
 		}
@@ -349,7 +357,7 @@ public class PrettyPrinter implements Types
 	{
 		while (tree != null)
 		{
-			prettyPrint(tree.getCar());
+			if (tree.getCar() != null) prettyPrint(tree.getCar());
 			if (tree.getCdr() != null) System.out.print(",");
 			tree = tree.getCdr();
 		}
@@ -358,7 +366,7 @@ public class PrettyPrinter implements Types
 /***** Public Methods *****/
 	public void prettyPrint(Lexeme tree)
 	{
-		System.out.println("tree is of type: " + tree.getType());
+//		System.out.println("tree is of type: " + tree.getType());
 		if (tree.getType() == PROG) printProg(tree);
 		else if (tree.getType() == DEF) printDef(tree);
 		else if (tree.getType() == VARDEF) printVarDef(tree);
@@ -383,7 +391,7 @@ public class PrettyPrinter implements Types
 		{
 			printOp(tree);
 		}
-		else if (tree.getType() == IFSTMNT) printif(tree);
+		else if (tree.getType() == IFSTMNT) printIf(tree);
 		else if (tree.getType() == ELSEIF) printElseIf(tree);
 		else if (tree.getType() == WHILELOOP) printWhile(tree);
 		else if (tree.getType() == FORLOOP) printFor(tree);
@@ -398,8 +406,8 @@ public class PrettyPrinter implements Types
 
 		else if (tree.getType() == GLUE)
 		{
-			prettyPrint(tree.getCar());
-			prettyPrint(tree.getCdr());
+			if (tree.getCar() != null) prettyPrint(tree.getCar());
+			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 		}
 
 /*		FIXME: does this need to be here?
@@ -413,7 +421,7 @@ public class PrettyPrinter implements Types
 		else if (tree.getType() == OPEN_PAREN)
 		{
 			System.out.print("(");
-			prettyPrint(tree.getCdr());
+			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 			System.out.print(")");
 		}
 */
@@ -427,33 +435,33 @@ public class PrettyPrinter implements Types
 /*
 		else if (tree.getType() == PLUS)
 		{
-			prettyPrint(tree.getCar());
+			if (tree.getCar() != null) prettyPrint(tree.getCar());
 			System.out.print(" + ");
-			prettyPrint(tree.getCdr());
+			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 		}
 		else if (tree.getType() == MINUS)
 		{
-			prettyPrint(tree.getCar());
+			if (tree.getCar() != null) prettyPrint(tree.getCar());
 			System.out.print(" - ");
-			prettyPrint(tree.getCdr());
+			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 		}
 		else if (tree.getType() == TIMES)
 		{
-			prettyPrint(tree.getCar());
+			if (tree.getCar() != null) prettyPrint(tree.getCar());
 			System.out.print(" * ");
-			prettyPrint(tree.getCdr());
+			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 		}
 		else if (tree.getType() == DIVIDE)
 		{
-			prettyPrint(tree.getCar());
+			if (tree.getCar() != null) prettyPrint(tree.getCar());
 			System.out.print(" / ");
-			prettyPrint(tree.getCdr());
+			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 		}
 		else if (tree.getType() == MODULO)
 		{
-			prettyPrint(tree.getCar());
+			if (tree.getCar() != null) prettyPrint(tree.getCar());
 			System.out.print(" / ");
-			prettyPrint(tree.getCdr());
+			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 		}
 */
 		// FIXME: should I have a main() here that goes through each lexeme?
