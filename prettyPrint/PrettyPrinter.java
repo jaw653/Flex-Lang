@@ -8,6 +8,7 @@
 
 // going to need to fix for loop tree structure so that you know when to print semicolons
 // might need to fix idStart tree as well so that I can properly print class method call
+// if time fix semicolon printed on next line for vardef()
 
 package prettyPrint;
 
@@ -59,6 +60,19 @@ public class PrettyPrinter implements Types
 	}
 
 	/**
+	 * Display method for parse tree
+	 * @tree The root Lexeme parse tree to display
+	 */
+	private void displayTree(Lexeme tree)
+	{
+		if (tree.getCar() != null)
+		{System.out.print("{Left"); displayTree(tree.getCar()); System.out.print("Left}");}
+		System.out.print("<" + tree.getType() + ">");
+		if (tree.getCdr() != null)
+		{System.out.print("{Right"); displayTree(tree.getCdr()); System.out.print("Right}");}
+	}
+
+	/**
 	 * Pretty print method for overarching program parse tree
 	 * @tree The Lexeme tree to print
 	 */
@@ -83,8 +97,14 @@ public class PrettyPrinter implements Types
 	 */
 	private void printVarDef(Lexeme tree)
 	{
-		System.out.print("var " + tree.getCar().getName() + " = ");
-		if (tree.getCdr() != null) prettyPrint(tree.getCdr());
+		System.out.print("var " + tree.getCar().getName());
+		if (tree.getCdr() != null)
+		{
+			System.out.print(" = ");
+			prettyPrint(tree.getCdr());
+		}
+
+		System.out.print(";\n");
 	}
 
 	/**
@@ -105,6 +125,8 @@ public class PrettyPrinter implements Types
 		if (tree.getCar() != null) prettyPrint(tree.getCar());
 		if (tree.getCdr() != null)
 		{
+//			System.out.println("exprdef car(cdr): " + tree.getCdr().getCar().getType());
+//			System.out.println("exprdef cdr(cdr): " + tree.getCdr().getCdr().getType());
 			prettyPrint(tree.getCdr().getCar());
 			prettyPrint(tree.getCdr().getCdr());
 		}
@@ -134,7 +156,7 @@ public class PrettyPrinter implements Types
 		System.out.println("\n{");
 		if (tree.getCar() != null) prettyPrint(tree.getCar());
 		if (tree.getCdr() != null) prettyPrint(tree.getCdr());
-		System.out.println("}");
+		System.out.println("\n}");
 	}
 
 	/**
@@ -162,8 +184,9 @@ public class PrettyPrinter implements Types
 	 */
 	private void printRetStatement(Lexeme tree)
 	{
-		System.out.println("return ");
+		System.out.print("return ");
 		if (tree.getCar() != null) prettyPrint(tree.getCar());
+		System.out.print(";");
 	}
 
 	/**
@@ -172,17 +195,29 @@ public class PrettyPrinter implements Types
 	 */
 	private void printUnary(Lexeme tree)
 	{
-		if (tree.getCar().getType() == EXPRDEF)
+// System.out.println("enter-----------------------------");
+//		if (tree.getCar() != null) System.out.println("UNARY GOOD!!");
+//		if (tree.getCar().getType() != null) System.out.println("type good!, it's: " + tree.getCar().getType());
+// displayTree(tree);
+		if (tree.getCar() != null)
 		{
-			System.out.print("(");
-			if (tree.getCar() != null) prettyPrint(tree.getCar());
-			System.out.print(")");
+			if (tree.getCar().getType() == EXPRDEF)
+			{
+				System.out.print("(");
+				if (tree.getCar() != null) prettyPrint(tree.getCar());
+				System.out.print(")");
+			}
+			else
+			{
+	// System.out.println("I SHOULD BE PRINTED!!!!!");
+	// System.out.println("car is: " + tree.getCar().getType());
+				if (tree.getCar() != null) prettyPrint(tree.getCar());
+				if (tree.getCdr() != null) prettyPrint(tree.getCdr());
+			}
 		}
-		else
-		{
-			if (tree.getCar() != null) prettyPrint(tree.getCar());
-			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
-		}
+
+
+//System.out.println("exit--------------------------------");
 	}
 
 	/**
@@ -305,8 +340,25 @@ public class PrettyPrinter implements Types
 	 */
 	private void printIDstart(Lexeme tree)
 	{
-		if (tree.getCar() != null) prettyPrint(tree.getCar());
-		if (tree.getCdr() != null) prettyPrint(tree.getCdr());
+		if (tree.getCdr().getCar() != null &&
+			tree.getCdr().getCar().getType() == ID)
+		{
+			if (tree.getCar() != null) prettyPrint(tree.getCar());
+			System.out.print(".");
+			prettyPrint(tree.getCdr().getCar());
+			System.out.print("(");
+			if (tree.getCdr().getCdr() != null) prettyPrint(tree.getCdr().getCdr());
+			System.out.print(")");
+		}
+		else
+		{
+//System.out.println("print IDstart----------------");
+			if (tree.getCar() != null) prettyPrint(tree.getCar());
+			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
+//System.out.println("printIDstart exit---------------");
+		}
+
+		System.out.print(";\n");
 	}
 
 	/**
@@ -366,6 +418,7 @@ public class PrettyPrinter implements Types
 /***** Public Methods *****/
 	public void prettyPrint(Lexeme tree)
 	{
+//		displayTree(tree);
 //		System.out.println("tree is of type: " + tree.getType());
 		if (tree.getType() == PROG) printProg(tree);
 		else if (tree.getType() == DEF) printDef(tree);
@@ -398,9 +451,9 @@ public class PrettyPrinter implements Types
 		else if (tree.getType() == EXPRLIST) printExprList(tree);
 		else if (tree.getType() == IDSTART) printIDstart(tree);
 
-		else if (tree.getType() == STRING) System.out.println("\"" + tree.getName() + "\"");
-		else if (tree.getType() == INTEGER) System.out.println(tree.getInt());
-		else if (tree.getType() == REAL) System.out.println(tree.getReal());
+		else if (tree.getType() == STRING) System.out.print("\"" + tree.getName() + "\"");
+		else if (tree.getType() == INTEGER) System.out.print(tree.getInt());
+		else if (tree.getType() == REAL) System.out.print(tree.getReal());
 //		else if (tree.getType() == IDLIST) printIDlist(tree);
 		else if (tree.getType() == ID) System.out.print(tree.getName());
 
