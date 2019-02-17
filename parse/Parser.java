@@ -206,21 +206,22 @@
      */
     public Lexeme expression() throws IOException
     {
+        Lexeme tree;
         Lexeme unary, op = null, expr = null;
 
-        boolean opPending = false;
-
         unary = unary();
+
         if ( operatorPending() )
         {
             op = operator();
             expr = expression();
+
+            tree = cons(EXPRDEF, unary, cons(GLUE, op, expr));
         }
+        else
+            tree = cons(EXPRDEF, unary, null);
 
-        if (opPending == true)
-            return cons(EXPRDEF, unary, cons(GLUE, op, expr));
-
-        return cons(EXPRDEF, unary, null);
+        return tree;
     }
 
     /**
@@ -436,7 +437,7 @@
      */
     public Lexeme ifStatement() throws IOException
     {
-        Lexeme expr, blck, elif;
+        Lexeme expr, blck, elif = null;
 
         match(IF);
         match(OPEN_PAREN);
@@ -447,7 +448,8 @@
 
         blck = block();
 
-        elif = elseIf();
+        if (check(ELSE))
+            elif = elseIf();
 
         return cons(IFSTMNT, expr, cons(GLUE, blck, elif));
     }
@@ -557,14 +559,14 @@
         Lexeme id, unry = null, exprList = null, mthdName = null;
 
  		id = match(ID);
-
-        if ( check(SEMICOLON) )
+/*
+        if ( check(SEMICOLON) || check(CLOSE_PAREN) )
         {
 //            match(SEMICOLON);
-            tree = cons(UNARY, id, null);
+            tree = cons(IDSTART, id, null);
         }
-
- 		else if ( operatorPending() )
+*/
+ 		if ( operatorPending() )
  		{
  			Lexeme op = operator();
  			unry = unary();
@@ -604,6 +606,8 @@
 
             tree = cons(IDSTART, id, cons(GLUE, mthdName, exprList));
  		}
+        else
+            tree = cons(IDSTART, id, null);
 
         return tree;
  	}
