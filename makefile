@@ -3,14 +3,11 @@
 # The University of Alabama
 #
 # Parent Makefile
-# Does the main rule need to be 'make parser', 'make recognizer',
-#	or does it not matter because I'll have a shell script for executing?
 
-# cat the source code file before running
-# make sure to have ./ before executable
 
 OPTS = -Xlint
 CLASSES = lex/Types.class lex/Lexeme.class lex/Lexer.class recognize/Recognizer.class recognize/GrammarCheck.class env/Environment.class parse/Parser.class prettyPrint/PrettyPrinter.class
+
 
 all: $(CLASSES)
 
@@ -19,6 +16,7 @@ run: $(CLASSES)
 	./pp prettyPrint/test1.flex
 	./pp prettyPrint/test2.flex
 	./pp prettyPrint/test3.flex
+
 
 ##### Classes #####
 lex/Types.class: lex/Types.java
@@ -45,36 +43,41 @@ parse/Parser.class: parse/Parser.java
 prettyPrint/PrettyPrinter.class: prettyPrint/PrettyPrinter.java
 	javac $(OPTS) prettyPrint/PrettyPrinter.java
 
+
 ##### Test Cases #####
-# test1: $(CLASSES)
-#	@echo "Running test1, should fail"
-#	@cat recognize/test1.flex
-#	-./recognizer recognize/test1.flex
-#	@echo "\n=========================\n"
+test1: $(CLASSES)
+	@echo "Original file:"
+	@cat prettyPrint/test1.flex
+	@echo "Pretty Printed version of the original:"
+	@./pp prettyPrint/test1.flex > test1.pp.1
+	@cat test1.pp.1
+	@echo "Pretty Printed version of the pretty printed version:"
+	@./pp test1.pp.1 > test1.pp.2
+	@cat test1.pp.2
+	diff -s -q test1.pp.1 test1.pp.2
 
-#test2: $(CLASSES)
-#	@echo "Running test2, should pass"
-#	@cat recognize/test2.flex
-#	-./recognizer recognize/test2.flex
-#	@echo "\n=========================\n"
+test2: $(CLASSES)
+	@echo "Original file:"
+	@cat prettyPrint/test2.flex
+	@echo "Pretty Printed version of the original:"
+	@./pp prettyPrint/test2.flex > test2.pp.1
+	@cat test2.pp.1
+	@echo "Pretty Printed version of the pretty printed version:"
+	@./pp test2.pp.1 > test2.pp.2
+	@cat test2.pp.2
+	diff -s -q test2.pp.1 test2.pp.2
 
-#test3: $(CLASSES)
-#	@echo "Running test3, should fail"
-#	@cat recognize/test3.flex
-#	-./recognizer recognize/test3.flex
-#	@echo "\n=========================\n"
+test3: $(CLASSES)
+	@echo "Original file:"
+	@cat prettyPrint/test3.flex
+	@echo "Pretty Printed version of the original:"
+	@./pp prettyPrint/test3.flex > test3.pp.1
+	@cat test3.pp.1
+	@echo "Pretty Printed version of the pretty printed version:"
+	@./pp test3.pp.1 > test3.pp.2
+	@cat test3.pp.2
+	diff -s -q test3.pp.1 test3.pp.2 
 
-#test4: $(CLASSES)
-#	@echo "Running test4, should pass"
-#	@cat recognize/test4.flex
-#	-./recognizer recognize/test4.flex
-#	@echo "\n=========================\n"
-
-#test5: $(CLASSES)
-#	@echo "Running test5, should fail"
-#	@cat recognize/test5.flex
-#	-./recognizer recognize/test5.flex
-#	@echo "\n"
 
 ##### Clean Command #####
 clean:
@@ -83,3 +86,5 @@ clean:
 	rm env/*.class
 	rm parse/*.class
 	rm prettyPrint/*.class
+	rm *.1
+	rm *.2
