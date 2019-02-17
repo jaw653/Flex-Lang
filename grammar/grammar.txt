@@ -41,6 +41,7 @@ statement: expression SEMICOLON
          | varDef
 
 expression: unary
+          | unary operator
           | unary operator expression
 
 exprList: expression
@@ -62,14 +63,14 @@ unary: idStart
 idStart: ID
 	   | ID operator unary
 	   | ID OPEN_PAREN optExprList CLOSE_PAREN
-	   | ID INCREMENT
-	   | ID DECREMENT
 	   | ID PERIOD ID OPEN_PAREN optExprList CLOSE_PAREN
 
 operator: PLUS
         | TIMES
         | DIVIDE
         | MINUS
+        | INCREMENT
+        | DECREMENT
         | GREATER_THAN
         | LESS_THAN
         | EQUAL_TO
