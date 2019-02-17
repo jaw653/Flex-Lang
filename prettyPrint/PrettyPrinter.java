@@ -340,15 +340,24 @@ public class PrettyPrinter implements Types
 	 */
 	private void printIDstart(Lexeme tree)
 	{
-		if (tree.getCdr().getCar() != null &&
-			tree.getCdr().getCar().getType() == ID)
+		if (tree.getCdr() != null)
 		{
-			if (tree.getCar() != null) prettyPrint(tree.getCar());
-			System.out.print(".");
-			prettyPrint(tree.getCdr().getCar());
-			System.out.print("(");
-			if (tree.getCdr().getCdr() != null) prettyPrint(tree.getCdr().getCdr());
-			System.out.print(")");
+			if (tree.getCdr().getCar() != null &&
+				tree.getCdr().getCar().getType() == ID)
+			{
+				if (tree.getCar() != null) prettyPrint(tree.getCar());
+				System.out.print(".");
+				prettyPrint(tree.getCdr().getCar());
+				System.out.print("(");
+				if (tree.getCdr().getCdr() != null) prettyPrint(tree.getCdr().getCdr());
+				System.out.print(")");
+			}
+			else if (tree.getCdr() != null && tree.getCdr().getType() == GLUE)
+			{
+				if (tree.getCar() != null) prettyPrint(tree.getCar());
+				if (tree.getCdr() != null && tree.getCdr().getCar() != null) prettyPrint(tree.getCdr().getCar());
+				if (tree.getCdr() != null && tree.getCdr().getCdr() != null) prettyPrint(tree.getCdr().getCdr());
+			}
 		}
 		else
 		{
@@ -358,7 +367,7 @@ public class PrettyPrinter implements Types
 //System.out.println("printIDstart exit---------------");
 		}
 
-		System.out.print(";\n");
+//		System.out.print(";\n");
 	}
 
 	/**
