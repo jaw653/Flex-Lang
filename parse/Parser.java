@@ -39,6 +39,19 @@
      }
 
      /**
+ 	 * Display method for parse tree
+ 	 * @tree The root Lexeme parse tree to display
+ 	 */
+ 	private void displayTree(Lexeme tree)
+ 	{
+ 		if (tree.getCar() != null)
+ 		{System.out.print("\n{Left"); displayTree(tree.getCar()); System.out.print("Left}\n");}
+ 		System.out.print("<" + tree.getType() + ">");
+ 		if (tree.getCdr() != null)
+ 		{System.out.print("\n{Right"); displayTree(tree.getCdr()); System.out.print("Right}\n");}
+ 	}
+
+     /**
       * Sets currLexeme to the next Lexeme in the list
       */
      private void advance() throws IOException
@@ -231,6 +244,8 @@
         Lexeme unary, op = null, expr = null;
 
         unary = unary();
+// System.out.println("unary id is: " + unary.getCar().getCar().getName());
+
 
         if ( operatorPending() )
         {
@@ -368,6 +383,10 @@
             tree = match(DIVIDE);
         else if ( check(MINUS) )
             tree = match(MINUS);
+        else if ( check(INCREMENT) )
+            tree = match(INCREMENT);
+        else if ( check(DECREMENT) )
+            tree = match(DECREMENT);
         else if ( check(GREATER_THAN) )
             tree = match(GREATER_THAN);
         else if ( check(LESS_THAN) )
@@ -396,15 +415,13 @@
      */
     public Lexeme statements() throws IOException
     {
-        boolean pending = false;
-
+        Lexeme tree = null;
         Lexeme stmnt, stmnts = null;
 
         stmnt = statement();
 
         if ( statementsPending() )
         {
-            pending = true;
             stmnts = statements();
         }
 
@@ -522,6 +539,7 @@
      */
     public Lexeme forLoop() throws IOException
     {
+        Lexeme tree;
         Lexeme expr0, expr1, expr2, blck;
 
         match(FOR);
@@ -534,11 +552,21 @@
         match(SEMICOLON);
 
         expr2 = expression();
+/*
+System.out.println("expr2: " + expr2.getType() + ", ");
+System.out.println("expr2car: " + expr2.getCar().getType());
+System.out.println("expr2carcar: " + expr2.getCar().getCar().getType());
+System.out.println("expr2carcar val: " + expr2.getCar().getCar().getName());
+System.out.println("expr2carcdr val: " + expr2.getCar().getCdr().getName());
+*/
+
         match(CLOSE_PAREN);
 
         blck = block();
 
-        return cons(FORLOOP, cons(GLUE, expr0, expr1), cons(GLUE, expr2, blck));
+        tree = cons(FORLOOP, cons(GLUE, expr0, expr1), cons(GLUE, expr2, blck));
+        //displayTree(tree);
+        return tree;
      }
 
     /**
@@ -672,7 +700,7 @@
          return ( check(PLUS) || check(TIMES) || check(DIVIDE) || check(MINUS) ||
              check(GREATER_THAN) || check(LESS_THAN) || check(EQUAL_TO) || check(GT_EQUAL) ||
              check(LT_EQUAL) || check(MODULO) || check(PLUS_EQUAL) || check(MINUS_EQUAL) ||
-             check(ASSIGN) );                                             //FIXME: should asterisk and times both be here?
+             check(ASSIGN) || check(INCREMENT) || check(DECREMENT) );                                             //FIXME: should asterisk and times both be here?
      }
 
      public boolean statementsPending() throws IOException
