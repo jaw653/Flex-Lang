@@ -134,7 +134,8 @@
      */
     public Lexeme varDef() throws IOException
     {
-        Lexeme id, expr = null;
+        Lexeme tree = null;
+        Lexeme id, objId = null, exprList = null, expr = null;
 
         match(VAR);
         id = match(ID);
@@ -142,12 +143,32 @@
         if ( check(ASSIGN) )
         {
             match(ASSIGN);
-            expr = expression();
+
+            if (check(NEW))
+            {
+                match(NEW);
+                match(UNDERSCORE);
+                objId = match(ID);
+                match(OPEN_PAREN);
+                if (exprListPending())
+                {
+                    exprList = exprList();
+                }
+                match(CLOSE_PAREN);
+                match(UNDERSCORE);
+
+                tree = cons(VARDEF, id, cons(GLUE, objId, exprList));
+            }
+            else
+            {
+                expr = expression();
+                tree = cons(VARDEF, id, expr);
+            }
         }
 
         match(SEMICOLON);
 
-        return cons(VARDEF, id, expr);
+        return tree;
     }
 
     /**

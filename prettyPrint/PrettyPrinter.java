@@ -101,7 +101,18 @@ public class PrettyPrinter implements Types
 		if (tree.getCdr() != null)
 		{
 			System.out.print(" = ");
-			prettyPrint(tree.getCdr());
+
+			if (tree.getCdr().getType() != GLUE)
+				prettyPrint(tree.getCdr());			// Pretty print the expression
+			else
+			{
+				/* Pretty print the object instantiation */
+				System.out.print("new _");
+				if (tree.getCdr().getCar() != null) prettyPrint(tree.getCdr().getCar());
+				System.out.print("(");
+				if (tree.getCdr().getCdr() != null) prettyPrint(tree.getCdr().getCdr());
+				System.out.print(")_");
+			}
 		}
 
 		System.out.print(";\n");
@@ -156,7 +167,7 @@ public class PrettyPrinter implements Types
 		System.out.println("\n{");
 		if (tree.getCar() != null) prettyPrint(tree.getCar());
 		if (tree.getCdr() != null) prettyPrint(tree.getCdr());
-		System.out.println("\n}");
+		System.out.println("}\n");
 	}
 
 	/**
@@ -181,7 +192,7 @@ public class PrettyPrinter implements Types
 			if (tree.getCar().getType() == EXPRDEF)
 			{
 				printExpr(tree.getCar());
-				System.out.print(";");
+				System.out.print(";\n");
 			}
 			else
 				prettyPrint(tree.getCar());
@@ -196,7 +207,7 @@ public class PrettyPrinter implements Types
 	{
 		System.out.print("return ");
 		if (tree.getCar() != null) prettyPrint(tree.getCar());
-		System.out.print(";");
+		System.out.print(";\n");
 	}
 
 	/**

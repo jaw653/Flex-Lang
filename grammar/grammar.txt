@@ -7,6 +7,7 @@ def: varDef
 
 varDef: VAR ID ASSIGN expression SEMICOLON
       | VAR ID SEMICOLON
+      | VAR ID ASSIGN unary SEMICOLON
 
 defined: DEFINE FUNCTION ID OPEN_PAREN optParamList CLOSE_PAREN block
        | DEFINE CLASS ID block
