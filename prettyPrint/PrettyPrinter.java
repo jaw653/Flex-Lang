@@ -6,9 +6,6 @@
  * Pretty Printer class
  */
 
-// going to need to fix for loop tree structure so that you know when to print semicolons
-// might need to fix idStart tree as well so that I can properly print class method call
-// if time fix semicolon printed on next line for vardef()
 
 package prettyPrint;
 
@@ -17,6 +14,7 @@ import parse.*;
 import recognize.*;
 
 import java.io.*;
+
 
 public class PrettyPrinter implements Types
 {
@@ -133,14 +131,9 @@ public class PrettyPrinter implements Types
 	 */
 	private void printExpr(Lexeme tree)
 	{
-//		System.out.println("car is: " + tree.getCar().getType());
-//		System.out.println("cdr is: " + tree.getCdr().getType());
-//		System.out.println("tree is: " + tree.getType() + "car is: " + tree.getCar().getType());
 		if (tree.getCar() != null) prettyPrint(tree.getCar());
 		if (tree.getCdr() != null)
 		{
-//			System.out.println("exprdef car(cdr): " + tree.getCdr().getCar().getType());
-//			System.out.println("exprdef cdr(cdr): " + tree.getCdr().getCdr().getType());
 			prettyPrint(tree.getCdr().getCar());
 			prettyPrint(tree.getCdr().getCdr());
 		}
@@ -191,7 +184,6 @@ public class PrettyPrinter implements Types
 	{
 		if (tree.getCar() != null)
 		{
-// System.out.println("printing statement with car type: " + tree.getCar().getType());
 			if (tree.getCar().getType() == EXPRDEF)
 			{
 				printExpr(tree.getCar());
@@ -219,10 +211,6 @@ public class PrettyPrinter implements Types
 	 */
 	private void printUnary(Lexeme tree)
 	{
-// System.out.println("enter-----------------------------");
-//		if (tree.getCar() != null) System.out.println("UNARY GOOD!!");
-//		if (tree.getCar().getType() != null) System.out.println("type good!, it's: " + tree.getCar().getType());
-// displayTree(tree);
 		if (tree.getCar() != null)
 		{
 			if (tree.getCar().getType() == EXPRDEF)
@@ -233,15 +221,10 @@ public class PrettyPrinter implements Types
 			}
 			else
 			{
-	// System.out.println("I SHOULD BE PRINTED!!!!!");
-	// System.out.println("car is: " + tree.getCar().getType());
 				if (tree.getCar() != null) prettyPrint(tree.getCar());
 				if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 			}
 		}
-
-
-//System.out.println("exit--------------------------------");
 	}
 
 	/**
@@ -352,21 +335,12 @@ public class PrettyPrinter implements Types
 
 		prettyPrint(tree.getCar().getCdr());
 		System.out.print("; ");
-/*
-Lexeme testx = tree.getCdr().getCar().getCar().getCar();
 
-System.out.println("x is: " + testx.getType());
-System.out.println("x car is: " + testx.getCar().getName());
-System.out.println("x cdr is: " + testx.getCdr().getType());
-System.out.println("glue car is: " + testx.getCdr().getCar().getType());
-*/
 		prettyPrint(tree.getCdr().getCar().getCar().getCar());
 
 		System.out.print(")");
 
 		prettyPrint(tree.getCdr().getCdr());
-		//if (tree.getCar() != null) prettyPrint(tree.getCar());
-		//if (tree.getCdr() != null) if (tree.getCar() != null) prettyPrint(tree.getCar());
 	}
 
 	/**
@@ -423,10 +397,8 @@ System.out.println("glue car is: " + testx.getCdr().getCar().getType());
 		}
 		else
 		{
-//System.out.println("print IDstart----------------");
 			if (tree.getCar() != null) prettyPrint(tree.getCar());
 			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
-//System.out.println("printIDstart exit---------------");
 		}
 
 //		System.out.print(";\n");
@@ -457,21 +429,6 @@ System.out.println("glue car is: " + testx.getCdr().getCar().getType());
 		if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 	}
 
-/*
-	/**
-	 * Pretty print method for statements
-	 * @tree The Lexeme tree to print
-	 *
-	private void printStatements(Lexeme tree)
-	{
-		while (tree != null)
-		{
-			if (tree.getCar() != null) prettyPrint(tree.getCar());
-			System.out.println();
-			tree = tree.getCdr();
-		}
-	}
-*/
 	/**
 	 * Pretty print method for IDlist
 	 * @tree The Lexeme tree to print
@@ -489,10 +446,6 @@ System.out.println("glue car is: " + testx.getCdr().getCar().getType());
 /***** Public Methods *****/
 	public void prettyPrint(Lexeme tree)
 	{
-//		if (tree.getType() == FORLOOP)
-//			displayTree(tree);
-//		displayTree(tree);
-//		System.out.println("tree is of type: " + tree.getType());
 		if (tree.getType() == PROG) printProg(tree);
 		else if (tree.getType() == DEF) printDef(tree);
 		else if (tree.getType() == VARDEF) printVarDef(tree);
@@ -527,7 +480,6 @@ System.out.println("glue car is: " + testx.getCdr().getCar().getType());
 		else if (tree.getType() == STRING) System.out.print("\"" + tree.getName() + "\"");
 		else if (tree.getType() == INTEGER) System.out.print(tree.getInt());
 		else if (tree.getType() == REAL) System.out.print(tree.getReal());
-//		else if (tree.getType() == IDLIST) printIDlist(tree);
 		else if (tree.getType() == ID) System.out.print(tree.getName());
 
 		else if (tree.getType() == GLUE)
@@ -535,63 +487,6 @@ System.out.println("glue car is: " + testx.getCdr().getCar().getType());
 			if (tree.getCar() != null) prettyPrint(tree.getCar());
 			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
 		}
-
-/*		FIXME: does this need to be here?
-		else if (tree.getType() == VAR)
-		{
-			System.out.print("var " + tree.getCar().getName() + " = " + tree.getCdr().getInt());
-			System.out.print()
-		}
-*/
-/*		FIXME: don't think I need this...
-		else if (tree.getType() == OPEN_PAREN)
-		{
-			System.out.print("(");
-			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
-			System.out.print(")");
-		}
-*/
-/*		FIXME: The below may not be implemented in my language (ie can just create a negative via math rather than assignment)
-		else if (tree.getType() == UMINUS)
-		{
-			System.out.print("-");
-//			System.out.print(tree.getCdr().);		//FIXME: not sure if I need to print int, real, string after this, or just int/real
-		}
-*/
-/*
-		else if (tree.getType() == PLUS)
-		{
-			if (tree.getCar() != null) prettyPrint(tree.getCar());
-			System.out.print(" + ");
-			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
-		}
-		else if (tree.getType() == MINUS)
-		{
-			if (tree.getCar() != null) prettyPrint(tree.getCar());
-			System.out.print(" - ");
-			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
-		}
-		else if (tree.getType() == TIMES)
-		{
-			if (tree.getCar() != null) prettyPrint(tree.getCar());
-			System.out.print(" * ");
-			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
-		}
-		else if (tree.getType() == DIVIDE)
-		{
-			if (tree.getCar() != null) prettyPrint(tree.getCar());
-			System.out.print(" / ");
-			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
-		}
-		else if (tree.getType() == MODULO)
-		{
-			if (tree.getCar() != null) prettyPrint(tree.getCar());
-			System.out.print(" / ");
-			if (tree.getCdr() != null) prettyPrint(tree.getCdr());
-		}
-*/
-		// FIXME: should I have a main() here that goes through each lexeme?
-		// FIXME: where should I be building the trees? In this file?
 	}
 
 	public static void main(String[] args) throws IOException
