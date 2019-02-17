@@ -59,7 +59,7 @@ unary: idStart
      | NEW UNDERSCORE ID OPEN_PAREN optExprList CLOSE_PAREN UNDERSCORE
 
 idStart: ID
-	   | ID ASSIGN unary
+	   | ID operator unary
 	   | ID OPEN_PAREN optExprList CLOSE_PAREN
 	   | ID INCREMENT
 	   | ID DECREMENT
