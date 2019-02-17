@@ -133,6 +133,9 @@ public class PrettyPrinter implements Types
 	 */
 	private void printExpr(Lexeme tree)
 	{
+//		System.out.println("car is: " + tree.getCar().getType());
+//		System.out.println("cdr is: " + tree.getCdr().getType());
+//		System.out.println("tree is: " + tree.getType() + "car is: " + tree.getCar().getType());
 		if (tree.getCar() != null) prettyPrint(tree.getCar());
 		if (tree.getCdr() != null)
 		{
@@ -263,6 +266,12 @@ public class PrettyPrinter implements Types
 			case "DIVIDE":
 				System.out.print(" / ");
 				break;
+			case "INCREMENT":
+				System.out.print("++");
+				break;
+			case "DECREMENT":
+				System.out.print("--");
+				break;
 			case "MODULO":
 				System.out.print(" % ");
 				break;
@@ -337,8 +346,27 @@ public class PrettyPrinter implements Types
 	private void printFor(Lexeme tree)
 	{
 		System.out.print("for (");
-		if (tree.getCar() != null) prettyPrint(tree.getCar());
-		if (tree.getCdr() != null) if (tree.getCar() != null) prettyPrint(tree.getCar());
+
+		prettyPrint(tree.getCar().getCar());
+		System.out.print("; ");
+
+		prettyPrint(tree.getCar().getCdr());
+		System.out.print("; ");
+/*
+Lexeme testx = tree.getCdr().getCar().getCar().getCar();
+
+System.out.println("x is: " + testx.getType());
+System.out.println("x car is: " + testx.getCar().getName());
+System.out.println("x cdr is: " + testx.getCdr().getType());
+System.out.println("glue car is: " + testx.getCdr().getCar().getType());
+*/
+		prettyPrint(tree.getCdr().getCar().getCar().getCar());
+
+		System.out.print(")");
+
+		prettyPrint(tree.getCdr().getCdr());
+		//if (tree.getCar() != null) prettyPrint(tree.getCar());
+		//if (tree.getCdr() != null) if (tree.getCar() != null) prettyPrint(tree.getCar());
 	}
 
 	/**
@@ -363,6 +391,7 @@ public class PrettyPrinter implements Types
 	{
 		if (tree.getCdr() != null)
 		{
+			/* Printing a method call */
 			if (tree.getCdr().getCar() != null &&
 				tree.getCdr().getCar().getType() == ID)
 			{
@@ -376,7 +405,19 @@ public class PrettyPrinter implements Types
 			else if (tree.getCdr() != null && tree.getCdr().getType() == GLUE)
 			{
 				if (tree.getCar() != null) prettyPrint(tree.getCar());
-				if (tree.getCdr() != null && tree.getCdr().getCar() != null) prettyPrint(tree.getCdr().getCar());
+				if (tree.getCdr() != null && tree.getCdr().getCar() != null)
+				{
+					if (tree.getCdr().getCar().getType() == INCREMENT ||
+						tree.getCdr().getCar().getType() == DECREMENT)
+					{
+						if (tree.getCdr().getCar().getType() == INCREMENT)
+							System.out.print("++");
+						else
+							System.out.print("--");
+					}
+
+					prettyPrint(tree.getCdr().getCar());
+				}
 				if (tree.getCdr() != null && tree.getCdr().getCdr() != null) prettyPrint(tree.getCdr().getCdr());
 			}
 		}
@@ -448,6 +489,8 @@ public class PrettyPrinter implements Types
 /***** Public Methods *****/
 	public void prettyPrint(Lexeme tree)
 	{
+//		if (tree.getType() == FORLOOP)
+//			displayTree(tree);
 //		displayTree(tree);
 //		System.out.println("tree is of type: " + tree.getType());
 		if (tree.getType() == PROG) printProg(tree);
