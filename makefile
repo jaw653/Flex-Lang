@@ -16,7 +16,9 @@ all: $(CLASSES)
 
 run: $(CLASSES)
 	@echo "Running test file..."
-	./pp prettyPrint/test.flex
+	./pp prettyPrint/test1.flex
+	./pp prettyPrint/test2.flex
+	./pp prettyPrint/test3.flex
 
 ##### Classes #####
 lex/Types.class: lex/Types.java
