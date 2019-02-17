@@ -26,7 +26,7 @@ define function myFunction()
 
 	if (x == y)
 	{}
-/*
+
 	if (x == y)
 	{
 		while (x == y)
@@ -34,13 +34,16 @@ define function myFunction()
 			x += 1;
 		}
 	}
+
 	else
 	{
-		for (var i = 0; i < 5; i++)
+		var i = 0;
+
+		for (i = 0; i < 5; i++)
 		{
 			x -= 3;
 		}
 	}
-*/
+
 }
 
