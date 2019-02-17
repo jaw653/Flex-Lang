@@ -175,7 +175,17 @@ public class PrettyPrinter implements Types
 	 */
 	private void printStmnt(Lexeme tree)
 	{
-		if (tree.getCar() != null) prettyPrint(tree.getCar());
+		if (tree.getCar() != null)
+		{
+// System.out.println("printing statement with car type: " + tree.getCar().getType());
+			if (tree.getCar().getType() == EXPRDEF)
+			{
+				printExpr(tree.getCar());
+				System.out.print(";");
+			}
+			else
+				prettyPrint(tree.getCar());
+		}
 	}
 
 	/**

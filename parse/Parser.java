@@ -399,13 +399,15 @@
 
         if ( expressionPending() )
         {
+            tmp = expression();
+/*
             if (idStartPending())
                 tmp = idStart();
             else
             {
                 tmp = expression();
             }
-
+*/
             match(SEMICOLON);
         }
         else if ( ifStatementPending() )
