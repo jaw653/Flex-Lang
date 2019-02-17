@@ -34,6 +34,7 @@
       */
      private boolean check(String type)
      {
+// System.out.println("currLexeme is: " + currLexeme.getType() + ", should be: " + type);
          return currLexeme.getType() == type;
      }
 
@@ -67,9 +68,10 @@
       */
      private Lexeme match(String type) throws IOException
      {
+        Lexeme save = currLexeme;
         matchNoAdvance(type);
         advance();
-        return currLexeme;
+        return save;
      }
 
     /**
@@ -252,7 +254,9 @@
 
         if ( statementsPending() )
         {
+// System.out.println("flag1111");
             stmnts = statements();
+// System.out.println("flag2222");
         }
 
         if ( returnStatementPending() )
@@ -261,7 +265,7 @@
         }
 
         match(CLOSE_BRACE);
-
+// System.out.println("flag3333");
         return cons(BLOCK, stmnts, ret);
     }
 
@@ -273,7 +277,9 @@
         Lexeme tmp = null, tmp1 = null, tree = null;
 
         if ( check(ID) )
+        {
             tree = cons(UNARY, idStart(), null);        //FIXME: should the cdr be null?
+        }
         else if ( check(INTEGER) )
             tree = cons(UNARY, match(INTEGER), null);
         else if ( check(REAL) )
@@ -392,7 +398,13 @@
 
         if ( expressionPending() )
         {
-            tmp = expression();
+            if (idStartPending())
+                tmp = idStart();
+            else
+            {
+                tmp = expression();
+            }
+
             match(SEMICOLON);
         }
         else if ( ifStatementPending() )
@@ -546,12 +558,19 @@
 
  		id = match(ID);
 
- 		if ( check(ASSIGN) )
- 		{
- 			match(ASSIGN);
- 			unry = unary();
+        if ( check(SEMICOLON) )
+        {
+//            match(SEMICOLON);
+            tree = cons(UNARY, id, null);
+        }
 
-            tree = cons(IDSTART, id, unry);
+ 		else if ( operatorPending() )
+ 		{
+ 			Lexeme op = operator();
+ 			unry = unary();
+//System.out.println("id is: " + id.getName());
+//System.out.println("|-> assigned to: "); unry.display();
+            tree = cons(IDSTART, id, cons(GLUE, op, unry));
  		}
  		else if ( check(OPEN_PAREN) )
  		{
