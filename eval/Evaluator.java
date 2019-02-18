@@ -154,7 +154,8 @@ public class Evaluator implements Types
 	 */
 	private Lexeme evalFuncDef(Lexeme tree, Environment env)
 	{
-		return env.insertEnv(tree.getCar(), cons(CLOSURE, env.getEnv(), tree));
+		Lexeme closure = cons(CLOSURE, env, tree);
+		return env.insertEnv(tree.getCar(), closure);
 	}
 
 	/**
@@ -215,8 +216,6 @@ public class Evaluator implements Types
 				return new Lexeme(operandType, a0+=a1);
 			else if (operatorType == MINUS_EQUAL)
 				return new Lexeme(operandType, a0-=a1);
-			else if (operatorType == ASSIGN)
-				return new Lexeme(operandType, a1);		//FIXME: for both int & real, is this correct?
 			else
 				return new Lexeme(UNKNOWN);
 		}
@@ -253,8 +252,6 @@ public class Evaluator implements Types
 				return new Lexeme(operandType, a0+=a1);
 			else if (operatorType == MINUS_EQUAL)
 				return new Lexeme(operandType, a0-=a1);
-			else if (operatorType == ASSIGN)
-				return new Lexeme(operandType, a1);
 			else
 				return new Lexeme(UNKNOWN);
 		}
@@ -289,6 +286,11 @@ public class Evaluator implements Types
 		if (closure.getType() == OCLOSURE)
 			return evalConstructor(closure, env);
 //		else if (closure.getType() == BUILTIN)
+		else
+		{
+			Lexeme args = tree.getCdr();
+			Lexeme params = 
+		}
 
 		return null;		//FIXME: Placeholder to get rid of error
 	}
