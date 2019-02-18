@@ -56,6 +56,7 @@ public interface Types
     public static final String NOT = "NOT";
 
     /***** Parse tree macros *****/
+	public static final String CLOSURE = "CLOSURE";
     public static final String PROG = "PROG";
     public static final String DEF = "DEF";
     public static final String VARDEF = "VARDEF";
