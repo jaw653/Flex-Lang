@@ -100,7 +100,6 @@ public class Evaluator implements Types
 			case MODULO:
 			case PLUS_EQUAL:
 			case MINUS_EQUAL:
-			case ASSIGN:
 				return true;
 		}
 
@@ -180,83 +179,87 @@ public class Evaluator implements Types
 		String operandType = tree.getCar().getType();
 		String operatorType = tree.getCdr().getCar().getType();
 
-		Lexeme arg0 = eval(tree.getCar());
-		Lexeme arg1 = eval(tree.getCdr().getCdr());
+		Lexeme arg0 = eval(tree.getCar(), env);
+		Lexeme arg1 = eval(tree.getCdr().getCdr(), env);
 
-		switch (operandType)
+		if (operandType == INTEGER)
 		{
-			case INTEGER:
-				int a0 = arg0.getInt();
-				int a1 = arg1.getInt();
+			int a0 = arg0.getInt();
+			int a1 = arg1.getInt();
 
-				if (operatorType == PLUS)
-					return new Lexeme(operandType, a0+a1);
-				else if (operatorType == MINUS)
-					return new Lexeme(operandType, a0-a1);
-				else if (operatorType == TIMES)
-					return new Lexeme(operandType, a0*a1);
-				else if (operatorType == DIVIDE)
-					return new Lexeme(operandType, a0/a1);
-				else if (operatorType == INCREMENT)
-					return new Lexeme (operandType, a0+1);
-				else if (operatorType == DECREMENT)
-					return new Lexeme(operandType, a0-1);
-				else if (opeatorType == GREATER_THAN)
-					return new Lexeme(operandType, a0>a1);		// Returns 0 or 1 based on bool
-				else if (operatorType == LESS_THAN)
-					return new Lexeme(operandType, a0<a1);
-				else if (operatorType == EQUAL_TO)
-					return new Lexeme(operandType, a0 == a1);
-				else if (operatorType == GT_EQUAL)
-					return new Lexeme(operandType, a0>=a1);
-				else if (operatorType == LT_EQUAL)
-					return new Lexeme(operandType, a0<=a1);
-				else if (operatorType == MODULO)
-					return new Lexeme(operandType, a0%a1);
-				else if (operatorType == PLUS_EQUAL)
-					return new Lexeme(operandType, a0+=a1);
-				else if (operatorType == MINUS_EQUAL)
-					return new Lexeme(operandType, a0-=a1);
-				else if (operatorType == ASSIGN)
-					return new Lexeme(operandType, a1);		//FIXME: for both int & real, is this correct?
+			if (operatorType == PLUS)
+				return new Lexeme(operandType, a0+a1);
+			else if (operatorType == MINUS)
+				return new Lexeme(operandType, a0-a1);
+			else if (operatorType == TIMES)
+				return new Lexeme(operandType, a0*a1);
+			else if (operatorType == DIVIDE)
+				return new Lexeme(operandType, a0/a1);
+			else if (operatorType == INCREMENT)
+				return new Lexeme (operandType, a0+1);
+			else if (operatorType == DECREMENT)
+				return new Lexeme(operandType, a0-1);
+			else if (operatorType == GREATER_THAN)
+				return new Lexeme(operandType, a0>a1);		// Returns 0 or 1 based on bool
+			else if (operatorType == LESS_THAN)
+				return new Lexeme(operandType, a0<a1);
+			else if (operatorType == EQUAL_TO)
+				return new Lexeme(operandType, a0 == a1);
+			else if (operatorType == GT_EQUAL)
+				return new Lexeme(operandType, a0>=a1);
+			else if (operatorType == LT_EQUAL)
+				return new Lexeme(operandType, a0<=a1);
+			else if (operatorType == MODULO)
+				return new Lexeme(operandType, a0%a1);
+			else if (operatorType == PLUS_EQUAL)
+				return new Lexeme(operandType, a0+=a1);
+			else if (operatorType == MINUS_EQUAL)
+				return new Lexeme(operandType, a0-=a1);
+			else if (operatorType == ASSIGN)
+				return new Lexeme(operandType, a1);		//FIXME: for both int & real, is this correct?
+			else
+				return new Lexeme(UNKNOWN);
+		}
+		else if (operandType == REAL)
+		{
+			double a0 = arg0.getReal();
+			double a1 = arg1.getReal();
 
-
-			case REAL:
-				double = arg0.getReal();
-				double = arg1.getReal();
-
-				if (operatorType == PLUS)
-					return new Lexeme(operandType, a0+a1);
-				else if (operatorType == MINUS)
-					return new Lexeme(operandType, a0-a1);
-				else if (operatorType == TIMES)
-					return new Lexeme(operandType, a0*a1);
-				else if (operatorType == DIVIDE)
-					return new Lexeme(operandType, a0/a1);
-				else if (operatorType == INCREMENT)
-					return new Lexeme (operandType, a0+1);
-				else if (operatorType == DECREMENT)
-					return new Lexeme(operandType, a0-1);
-				else if (opeatorType == GREATER_THAN)
-					return new Lexeme(operandType, a0>a1);		// Returns 0 or 1 based on bool
-				else if (operatorType == LESS_THAN)
-					return new Lexeme(operandType, a0<a1);
-				else if (operatorType == EQUAL_TO)
-					return new Lexeme(operandType, a0 == a1);
-				else if (operatorType == GT_EQUAL)
-					return new Lexeme(operandType, a0>=a1);
-				else if (operatorType == LT_EQUAL)
-					return new Lexeme(operandType, a0<=a1);
-				else if (operatorType == MODULO)
-					return new Lexeme(operandType, a0%a1);
-				else if (operatorType == PLUS_EQUAL)
-					return new Lexeme(operandType, a0+=a1);
-				else if (operatorType == MINUS_EQUAL)
-					return new Lexeme(operandType, a0-=a1);
-				else if (operatorType == ASSIGN)
-					return new Lexeme(operandType, a1);
+			if (operatorType == PLUS)
+				return new Lexeme(operandType, a0+a1);
+			else if (operatorType == MINUS)
+				return new Lexeme(operandType, a0-a1);
+			else if (operatorType == TIMES)
+				return new Lexeme(operandType, a0*a1);
+			else if (operatorType == DIVIDE)
+				return new Lexeme(operandType, a0/a1);
+			else if (operatorType == INCREMENT)
+				return new Lexeme (operandType, a0+1);
+			else if (operatorType == DECREMENT)
+				return new Lexeme(operandType, a0-1);
+			else if (operatorType == GREATER_THAN)
+				return new Lexeme(operandType, a0>a1);		// Returns 0 or 1 based on bool
+			else if (operatorType == LESS_THAN)
+				return new Lexeme(operandType, a0<a1);
+			else if (operatorType == EQUAL_TO)
+				return new Lexeme(operandType, a0 == a1);
+			else if (operatorType == GT_EQUAL)
+				return new Lexeme(operandType, a0>=a1);
+			else if (operatorType == LT_EQUAL)
+				return new Lexeme(operandType, a0<=a1);
+			else if (operatorType == MODULO)
+				return new Lexeme(operandType, a0%a1);
+			else if (operatorType == PLUS_EQUAL)
+				return new Lexeme(operandType, a0+=a1);
+			else if (operatorType == MINUS_EQUAL)
+				return new Lexeme(operandType, a0-=a1);
+			else if (operatorType == ASSIGN)
+				return new Lexeme(operandType, a1);
+			else
+				return new Lexeme(UNKNOWN);
 		}
 
+		return null;				// This was placed here to circumvent error. If time replace all those returns with assignments and finish with one return
 	}
 
 	/**
@@ -286,6 +289,8 @@ public class Evaluator implements Types
 		if (closure.getType() == OCLOSURE)
 			return evalConstructor(closure, env);
 //		else if (closure.getType() == BUILTIN)
+
+		return null;		//FIXME: Placeholder to get rid of error
 	}
 /*
 	private Lexeme evalMethodCall(Lexeme tree, Environment env)
@@ -316,11 +321,19 @@ public class Evaluator implements Types
 			case EXPRDEF:
 				if (tree.getCdr() != null)
 				{
-					if (isOperator(tree.getCdr().getCar().getType()))
+					if (tree.getCdr().getCar().getType() == ASSIGN)
+					{
+						Lexeme name = tree.getCar();
+						Lexeme val = eval(tree.getCdr().getCdr(), env);
+						env.updateVal(name, val);
+						return val;
+					}
+					else if (isOperator(tree.getCdr().getCar()))
 						return evalOp(tree, env);
 				}
 				else
-					return eval(tree.getCar());
+					return eval(tree.getCar(), env);
+				break;							//In reality, this will never hit. It's here to surpress javac warning
 			case UNARY:
 				if (tree.getCdr() != null)
 				{
@@ -328,7 +341,8 @@ public class Evaluator implements Types
 //					eval(tree.getCdr());
 				}
 				else
-					return eval(tree.getCar());
+					return eval(tree.getCar(), env);
+				return null;					//FIXME: placeholder null return
 
 /*
 			case IDSTART:
@@ -344,6 +358,8 @@ public class Evaluator implements Types
 				return ret;
 */				
 		}
+
+		return null;							//FIXME: placeholder null return
 	}
 
 
