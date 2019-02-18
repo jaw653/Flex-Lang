@@ -154,7 +154,7 @@ public class Evaluator implements Types
 	 */
 	private Lexeme evalFuncDef(Lexeme tree, Environment env)
 	{
-		Lexeme closure = cons(CLOSURE, env, tree);
+		Lexeme closure = cons(CLOSURE, env.getEnv(), tree);
 		return env.insertEnv(tree.getCar(), closure);
 	}
 
@@ -289,7 +289,7 @@ public class Evaluator implements Types
 		else
 		{
 			Lexeme args = tree.getCdr();
-			Lexeme params = 
+//			Lexeme params = 
 		}
 
 		return null;		//FIXME: Placeholder to get rid of error

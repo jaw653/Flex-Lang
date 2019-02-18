@@ -24,7 +24,6 @@ public class Environment implements Types
      */
     public Environment()
     {
-        System.out.println("Creating a new environment");
         env = cons(ENV, cons(TABLE, null, null), null);
     }
 
