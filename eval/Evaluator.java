@@ -76,6 +76,36 @@ public class Evaluator implements Types
 
 		return file;
 	}
+
+	/**
+	 * Discerns whether or not the given lexeme is an operator type
+	 * @l Lexeme to check
+	 * @return True if l is an operator
+	 */
+	private static boolean isOperator(Lexeme l)
+	{
+		switch (l.getType())
+		{
+			case PLUS:
+			case MINUS:
+			case TIMES:
+			case DIVIDE:
+			case INCREMENT:
+			case DECREMENT:
+			case GREATER_THAN:
+			case LESS_THAN:
+			case EQUAL_TO:
+			case GT_EQUAL:
+			case LT_EQUAL:
+			case MODULO:
+			case PLUS_EQUAL:
+			case MINUS_EQUAL:
+			case ASSIGN:
+				return true;
+		}
+
+		return false;
+	}
 	
 	/**
 	 * Discerns if the given Lexeme tree holds a function call
@@ -140,6 +170,96 @@ public class Evaluator implements Types
 	}
 
 	/**
+	 * Evaluates an operation between unaries and/or expressions
+	 * @tree Root of the EXPRDEF
+	 * @env The corresponding environment
+	 * @return A new Lexeme with the value of the result of the op
+	 */
+	private Lexeme evalOp(Lexeme tree, Environment env)
+	{
+		String operandType = tree.getCar().getType();
+		String operatorType = tree.getCdr().getCar().getType();
+
+		Lexeme arg0 = eval(tree.getCar());
+		Lexeme arg1 = eval(tree.getCdr().getCdr());
+
+		switch (operandType)
+		{
+			case INTEGER:
+				int a0 = arg0.getInt();
+				int a1 = arg1.getInt();
+
+				if (operatorType == PLUS)
+					return new Lexeme(operandType, a0+a1);
+				else if (operatorType == MINUS)
+					return new Lexeme(operandType, a0-a1);
+				else if (operatorType == TIMES)
+					return new Lexeme(operandType, a0*a1);
+				else if (operatorType == DIVIDE)
+					return new Lexeme(operandType, a0/a1);
+				else if (operatorType == INCREMENT)
+					return new Lexeme (operandType, a0+1);
+				else if (operatorType == DECREMENT)
+					return new Lexeme(operandType, a0-1);
+				else if (opeatorType == GREATER_THAN)
+					return new Lexeme(operandType, a0>a1);		// Returns 0 or 1 based on bool
+				else if (operatorType == LESS_THAN)
+					return new Lexeme(operandType, a0<a1);
+				else if (operatorType == EQUAL_TO)
+					return new Lexeme(operandType, a0 == a1);
+				else if (operatorType == GT_EQUAL)
+					return new Lexeme(operandType, a0>=a1);
+				else if (operatorType == LT_EQUAL)
+					return new Lexeme(operandType, a0<=a1);
+				else if (operatorType == MODULO)
+					return new Lexeme(operandType, a0%a1);
+				else if (operatorType == PLUS_EQUAL)
+					return new Lexeme(operandType, a0+=a1);
+				else if (operatorType == MINUS_EQUAL)
+					return new Lexeme(operandType, a0-=a1);
+				else if (operatorType == ASSIGN)
+					return new Lexeme(operandType, a1);		//FIXME: for both int & real, is this correct?
+
+
+			case REAL:
+				double = arg0.getReal();
+				double = arg1.getReal();
+
+				if (operatorType == PLUS)
+					return new Lexeme(operandType, a0+a1);
+				else if (operatorType == MINUS)
+					return new Lexeme(operandType, a0-a1);
+				else if (operatorType == TIMES)
+					return new Lexeme(operandType, a0*a1);
+				else if (operatorType == DIVIDE)
+					return new Lexeme(operandType, a0/a1);
+				else if (operatorType == INCREMENT)
+					return new Lexeme (operandType, a0+1);
+				else if (operatorType == DECREMENT)
+					return new Lexeme(operandType, a0-1);
+				else if (opeatorType == GREATER_THAN)
+					return new Lexeme(operandType, a0>a1);		// Returns 0 or 1 based on bool
+				else if (operatorType == LESS_THAN)
+					return new Lexeme(operandType, a0<a1);
+				else if (operatorType == EQUAL_TO)
+					return new Lexeme(operandType, a0 == a1);
+				else if (operatorType == GT_EQUAL)
+					return new Lexeme(operandType, a0>=a1);
+				else if (operatorType == LT_EQUAL)
+					return new Lexeme(operandType, a0<=a1);
+				else if (operatorType == MODULO)
+					return new Lexeme(operandType, a0%a1);
+				else if (operatorType == PLUS_EQUAL)
+					return new Lexeme(operandType, a0+=a1);
+				else if (operatorType == MINUS_EQUAL)
+					return new Lexeme(operandType, a0-=a1);
+				else if (operatorType == ASSIGN)
+					return new Lexeme(operandType, a1);
+		}
+
+	}
+
+	/**
 	 * Evaluates the constructor of a function/method call			FIXME: I think...?
 	 * @closure Parent closure of the constructor
 	 * @env Corresponding environment
@@ -167,7 +287,12 @@ public class Evaluator implements Types
 			return evalConstructor(closure, env);
 //		else if (closure.getType() == BUILTIN)
 	}
-
+/*
+	private Lexeme evalMethodCall(Lexeme tree, Environment env)
+	{
+		Lexeme closure = eval(tree.getCar(), env);
+	}
+*/
 	/**
 	 * Main evaluator method
 	 * @tree Root of the tree to be evaluated
@@ -178,11 +303,9 @@ public class Evaluator implements Types
 	{
 		switch (tree.getType())
 		{
-			case INTEGER:
-				return tree;
-			case STRING:
-				return tree;
+			case INTEGER://FIXME: continue to edit these as the trees that can simply return the root lexeme become more clear
 			case REAL:
+			case STRING:
 				return tree;
 			case ID:
 				return lookup(tree, env);
@@ -190,6 +313,24 @@ public class Evaluator implements Types
 				return evalFuncDef(tree, env);
 			case CLASSDEF:
 				return evalClassDef(tree, env);
+			case EXPRDEF:
+				if (tree.getCdr() != null)
+				{
+					if (isOperator(tree.getCdr().getCar().getType()))
+						return evalOp(tree, env);
+				}
+				else
+					return eval(tree.getCar());
+			case UNARY:
+				if (tree.getCdr() != null)
+				{
+//					eval(tree.getCar());		//FIXME: Implement these two calls
+//					eval(tree.getCdr());
+				}
+				else
+					return eval(tree.getCar());
+
+/*
 			case IDSTART:
 				Lexeme ret = null;
 
@@ -201,6 +342,7 @@ public class Evaluator implements Types
 					ret = evalIDstart(tree, env);
 				
 				return ret;
+*/				
 		}
 	}
 
