@@ -17,6 +17,9 @@ import lex.*;
 import parse.*;
 import env.*;
 
+import java.io.*;
+
+
 
 public class Evaluator implements Types
 {
@@ -41,6 +44,37 @@ public class Evaluator implements Types
 		ret.setCdr(r);
 
 		return ret;
+	}
+
+	/**
+	 * Checks to make sure there is a correct number of command line args
+	 * @args String array of command line args
+	 */
+	private static void checkCmdArgs(String[] args)
+	{
+		if (args.length != 1)
+		{
+			System.out.println("Incorrect number of command line args");
+			System.exit(-1);
+		}
+	}
+
+	/**
+	 * Safe method for opening file
+	 * @filename The name of the file to be opened
+	 * @return The pointer to the opened file object
+	 */
+	private static File openFile(String filename) throws IOException
+	{
+		File file = new File(filename);
+
+		if ( !file.exists() )
+		{
+			System.out.println("File does not exist");
+			System.exit(-1);
+		}
+
+		return file;
 	}
 	
 	/**
@@ -91,7 +125,7 @@ public class Evaluator implements Types
 	 */
 	private Lexeme evalFuncDef(Lexeme tree, Environment env)
 	{
-		return env.insertEnv(tree.getCar(), cons(CLOSURE, env, tree));
+		return env.insertEnv(tree.getCar(), cons(CLOSURE, env.getEnv(), tree));
 	}
 
 	/**
@@ -102,7 +136,7 @@ public class Evaluator implements Types
 	 */
 	private Lexeme evalClassDef(Lexeme tree, Environment env)
 	{
-		return env.insertEnv(tree.getCar(), cons(OCLOSURE, env, tree));
+		return env.insertEnv(tree.getCar(), cons(OCLOSURE, env.getEnv(), tree));
 	}
 
 	/**
@@ -113,11 +147,11 @@ public class Evaluator implements Types
 	 */
 	private Lexeme evalConstructor(Lexeme closure, Environment env)
 	{
-		Lexeme senv = closure.getCar();
-		Lexeme xenv = extendEnv(senv, null, null);
+		Environment senv = new Environment(closure.getCar());
+		Environment xenv = new Environment(senv.extendEnv(null, null));
 		Lexeme body = closure.getCdr().getCdr();
 		eval(body, xenv);
-		return xenv;
+		return xenv.getEnv();
 	}
 
 	/**
@@ -162,7 +196,7 @@ public class Evaluator implements Types
 				if (isFunctionCall(tree))
 					ret = evalFunctionCall(tree, env);
 				else if (isMethodCall(tree))
-					ret = evalMethodCall(tre, env);
+					ret = evalMethodCall(tree, env);
 				else
 					ret = evalIDstart(tree, env);
 				
@@ -179,6 +213,8 @@ public class Evaluator implements Types
 		File file = openFile(args[0]);
 		PushbackInputStream stream = new PushbackInputStream(new FileInputStream(file));
 
+		Evaluator e = new Evaluator();
+
 		Lexer i = new Lexer(stream);
 		Lexeme curr = i.lex();
 
@@ -187,7 +223,7 @@ public class Evaluator implements Types
 
 		Environment env = new Environment();
 		Lexeme tree = p.program();
-		eval(tree, env);
+		e.eval(tree, env);
 
 
 		stream.close();
