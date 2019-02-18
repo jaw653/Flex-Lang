@@ -1,3 +1,5 @@
+![Flex Logo](IMG_5594.jpg)
+
 # FLEX Programming Language
 
 FLEX is a dynamically typed programming language developed with the principals of RISC in mind. The idea is that every type of definition will follow the same format so as to minimize confusion and maximize consistency.
