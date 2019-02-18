@@ -1,5 +1,5 @@
 <p align="center">
-	<img width="460" height="300" src="IMG_5594.jpg">
+	<img width="460" height="460" src="IMG_5594.jpg">
 </p>
 
 # FLEX Programming Language
