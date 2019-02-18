@@ -6,6 +6,10 @@
  * Evaluator class
  */
 
+// Need to write evalMethodCall() and evalIDCall(), as well as add BUILTIN to types
+
+// Should evalFuncDef/evalClassDef/etc. be returning values?
+// isFunctionCall() may be incorrect if there is an empty (ie null) exprlist to the cdr
 
 package eval;
 
@@ -23,7 +27,7 @@ public class Evaluator implements Types
 	{
 	}
 
-/***** Private Methods *****/
+/***** Helper Methods *****/
 	/**
 	 * Construct method for binding together Lexemes
 	 * @type The type of the new Lexeme
@@ -38,7 +42,36 @@ public class Evaluator implements Types
 
 		return ret;
 	}
+	
+	/**
+	 * Discerns if the given Lexeme tree holds a function call
+	 * @tree Root of tree to test
+	 * @return If the given tree represents a function call
+	 */
+	private boolean isFunctionCall(Lexeme tree)
+	{
+		if (tree.getCdr().getType() == EXPRLIST)
+			return true;
+		return false;
+	}
 
+	/**
+	 * Discerns if the given Lexeme tree holds a method call
+	 * @tree Root of the tree to test
+	 * @return If the given tree represents a method call
+	 */
+	private boolean isMethodCall(Lexeme tree)
+	{
+		if (tree.getCdr().getType() == GLUE)
+		{
+			if (tree.getCdr().getCar().getType() == ID)
+				return true;
+		}
+		return false;
+	}
+
+
+/***** Private Methods *****/
 	/**
 	 * Gets the value of the ID at tree root from the environment
 	 * @tree Lexeme for which to search environment
@@ -54,10 +87,51 @@ public class Evaluator implements Types
 	 * Adds function variables to its scope
 	 * @tree Root of FUNCDEF tree to use for environment insertion
 	 * @env The environment into which the newly created tree will be inserted
+	 * @return The inserted Lexeme
 	 */
-	private void evalFuncDef(Lexeme tree, Environment env)
+	private Lexeme evalFuncDef(Lexeme tree, Environment env)
 	{
-		env.insertEnv(tree.getCar(), cons(CLOSURE, env, tree));
+		return env.insertEnv(tree.getCar(), cons(CLOSURE, env, tree));
+	}
+
+	/**
+	 * Adds class variables to its scope
+	 * @tree Root of CLASSDEF tree to use for environmenet insertion
+	 * @env The environment into which the newly created tree will be inserted
+	 * @return The inserted Lexeme
+	 */
+	private Lexeme evalClassDef(Lexeme tree, Environment env)
+	{
+		return env.insertEnv(tree.getCar(), cons(OCLOSURE, env, tree));
+	}
+
+	/**
+	 * Evaluates the constructor of a function/method call			FIXME: I think...?
+	 * @closure Parent closure of the constructor
+	 * @env Corresponding environment
+	 * @return The extended environment
+	 */
+	private Lexeme evalConstructor(Lexeme closure, Environment env)
+	{
+		Lexeme senv = closure.getCar();
+		Lexeme xenv = extendEnv(senv, null, null);
+		Lexeme body = closure.getCdr().getCdr();
+		eval(body, xenv);
+		return xenv;
+	}
+
+	/**
+	 * Evaluates the actual use of a functioncall
+	 * @tree Root of function tree to use for evaluation
+	 * @env Environment corresponding to the function call in tree
+	 * @return Root Lexeme
+	 */
+	private Lexeme evalFunctionCall(Lexeme tree, Environment env)
+	{
+		Lexeme closure = eval(tree.getCar(), env);
+		if (closure.getType() == OCLOSURE)
+			return evalConstructor(closure, env);
+//		else if (closure.getType() == BUILTIN)
 	}
 
 	/**
@@ -79,7 +153,20 @@ public class Evaluator implements Types
 			case ID:
 				return lookup(tree, env);
 			case FUNCDEF:
-				return evalFuncDef(tree, env):
+				return evalFuncDef(tree, env);
+			case CLASSDEF:
+				return evalClassDef(tree, env);
+			case IDSTART:
+				Lexeme ret = null;
+
+				if (isFunctionCall(tree))
+					ret = evalFunctionCall(tree, env);
+				else if (isMethodCall(tree))
+					ret = evalMethodCall(tre, env);
+				else
+					ret = evalIDstart(tree, env);
+				
+				return ret;
 		}
 	}
 
