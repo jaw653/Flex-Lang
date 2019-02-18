@@ -70,6 +70,19 @@ public class Lexeme implements Types
         this.cval = cval;
     }
 
+	/**
+	 * Overloaded constructor, allows for booleans to be passed as ints
+	 * @type The type of the new Lexeme
+	 * @b The boolean to be converted to int
+	 */
+	public Lexeme(String type, boolean b)
+	{
+		if (b == true)
+			this.ival = 1;
+		else
+			this.ival = 0;
+	}
+
     /**
      * Left getter method for linked list
      * @return The Lexeme to the left
