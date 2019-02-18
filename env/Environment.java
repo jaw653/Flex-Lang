@@ -28,6 +28,15 @@ public class Environment implements Types
         env = cons(ENV, cons(TABLE, null, null), null);
     }
 
+	/**
+	 * Overloaded constructor
+	 * @env The root of the premade tree to become env
+	 */
+	public Environment(Lexeme env)
+	{
+		this.env = env;
+	}
+
 /********** Private Methods **********/
     /**
      * Construct method for binding together Lexemes
