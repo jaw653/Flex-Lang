@@ -6,15 +6,13 @@
 
 
 OPTS = -Xlint
-CLASSES = lex/Types.class lex/Lexeme.class lex/Lexer.class recognize/Recognizer.class recognize/GrammarCheck.class env/Environment.class parse/Parser.class prettyPrint/PrettyPrinter.class
+CLASSES = lex/Types.class lex/Lexeme.class lex/Lexer.class recognize/Recognizer.class recognize/GrammarCheck.class env/Environment.class parse/Parser.class prettyPrint/PrettyPrinter.class eval/Evaluator.class
 
 
 all: $(CLASSES)
 
 run: $(CLASSES)
 	make test1
-	make test2
-	make test3
 
 ##### Classes #####
 lex/Types.class: lex/Types.java
@@ -41,41 +39,13 @@ parse/Parser.class: parse/Parser.java
 prettyPrint/PrettyPrinter.class: prettyPrint/PrettyPrinter.java
 	javac $(OPTS) prettyPrint/PrettyPrinter.java
 
+eval/Evaluator.class: eval/Evaluator.java
+	javac $(OPTS) eval/Evaluator.java
+
 
 ##### Test Cases #####
 test1: $(CLASSES)
-	@echo "Original file:"
-	@cat prettyPrint/test1.flex
-	@echo "Pretty Printed version of the original:"
-	@./pp prettyPrint/test1.flex > test1.pp.1
-	@cat test1.pp.1
-	@echo "Pretty Printed version of the pretty printed version:"
-	@./pp test1.pp.1 > test1.pp.2
-	@cat test1.pp.2
-	diff -s -q test1.pp.1 test1.pp.2
-
-test2: $(CLASSES)
-	@echo "Original file:"
-	@cat prettyPrint/test2.flex
-	@echo "Pretty Printed version of the original:"
-	@./pp prettyPrint/test2.flex > test2.pp.1
-	@cat test2.pp.1
-	@echo "Pretty Printed version of the pretty printed version:"
-	@./pp test2.pp.1 > test2.pp.2
-	@cat test2.pp.2
-	diff -s -q test2.pp.1 test2.pp.2
-
-test3: $(CLASSES)
-	@echo "Original file:"
-	@cat prettyPrint/test3.flex
-	@echo "Pretty Printed version of the original:"
-	@./pp prettyPrint/test3.flex > test3.pp.1
-	@cat test3.pp.1
-	@echo "Pretty Printed version of the pretty printed version:"
-	@./pp test3.pp.1 > test3.pp.2
-	@cat test3.pp.2
-	diff -s -q test3.pp.1 test3.pp.2 
-
+	flex eval/test1.flex
 
 ##### Clean Command #####
 clean:
@@ -86,3 +56,4 @@ clean:
 	rm prettyPrint/*.class
 	rm *.1
 	rm *.2
+	rm eval/*.class
