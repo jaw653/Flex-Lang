@@ -147,6 +147,14 @@ public class Evaluator implements Types
 	}
 
 	/**
+	 * Adds variable value to its scope
+	 */													//FIXME: come back!!!!!!!!!!!!!!!!!!!!!!!!!
+	private Lexeme evalVarDef(Lexeme tree, Environment env)
+	{
+		return null;
+	}
+
+	/**
 	 * Adds function variables to its scope
 	 * @tree Root of FUNCDEF tree to use for environment insertion
 	 * @env The environment into which the newly created tree will be inserted
@@ -155,7 +163,20 @@ public class Evaluator implements Types
 	private Lexeme evalFuncDef(Lexeme tree, Environment env)
 	{
 		Lexeme closure = cons(CLOSURE, env.getEnv(), tree);
-		return env.insertEnv(tree.getCar(), closure);
+		env.insertEnv(tree.getCar(), closure);
+		return eval(tree.getCdr().getCdr(), env);		//Recurs to the block
+	}
+
+	/**
+	 * Evaluates a block parse tree
+	 * @tree Root of the BLOCK tree to use for evaluation
+	 * @env Corresponding environment
+	 * @return The evaluated result of the block in Lexeme form
+	 */
+	private void evalBlock(Lexeme tree, Environment env)
+	{
+		if (tree.getCar() != null) eval(tree.getCar(), env);
+		if (tree.getCdr() != null) eval(tree.getCdr(), env);
 	}
 
 	/**
@@ -308,16 +329,24 @@ public class Evaluator implements Types
 	 */
 	private Lexeme eval(Lexeme tree, Environment env)
 	{
+// System.out.println("flag");
 		switch (tree.getType())
 		{
+			case PROG:
+			case DEF:
+				return eval(tree.getCar(), env);
 			case INTEGER://FIXME: continue to edit these as the trees that can simply return the root lexeme become more clear
 			case REAL:
 			case STRING:
 				return tree;
 			case ID:
 				return lookup(tree, env);
+//			case VARDEF:
+//				return evalVarDef(tree, env);
 			case FUNCDEF:
 				return evalFuncDef(tree, env);
+			case BLOCK:
+				return evalBlock(tree, env);
 			case CLASSDEF:
 				return evalClassDef(tree, env);
 			case EXPRDEF:
@@ -384,6 +413,27 @@ public class Evaluator implements Types
 		Environment env = new Environment();
 		Lexeme tree = p.program();
 		e.eval(tree, env);
+
+
+		tree.display();
+		tree.getCar().display();
+		tree.getCar().getCar().display();
+		tree.getCar().getCar().getCar().display();
+		tree.getCar().getCar().getCdr().display();
+		tree.getCar().getCar().getCdr().getCdr().display();	//block
+		tree.getCar().getCar().getCdr().getCdr().getCar().display();	//statements
+//		tree.getCar().getCar().getCdr().getCdr().getCar().getCar().display();
+		Lexeme statement = tree.getCar().getCar().getCdr().getCdr().getCar().getCar();
+		statement.display();
+		statement.getCar().display();
+		statement.getCar().getCar().display();
+		statement.getCar().getCdr().display();
+		Lexeme un = statement.getCar().getCdr().getCar();
+		un.display();
+		un.getCar().display();
+//		tree.getCar().getCar().getCdr().getCar().getCar().getCar().getCar().display();
+//		tree.getCar().getCar().getCdr().getCar().getCar().getCar().getCar().getCar().display();
+//		env.displayEnv(1);
 
 
 		stream.close();
