@@ -7,9 +7,9 @@
  */
 
 // Need to write evalMethodCall() and evalIDCall(), as well as add BUILTIN to types
-
-// Should evalFuncDef/evalClassDef/etc. be returning values?
 // isFunctionCall() may be incorrect if there is an empty (ie null) exprlist to the cdr
+
+// lookup should be returning the closure correct? so is there another env method I need?
 
 package eval;
 
@@ -75,6 +75,27 @@ public class Evaluator implements Types
 		}
 
 		return file;
+	}
+
+
+	/**
+	 * Gets the parameters from the function definition
+	 * @closure The closure from which to get the params
+	 * @return The root of the paramList
+	 */
+	private Lexeme getParams(Lexeme closure)
+	{
+		return closure.getCdr().getCdr().getCar();
+	}
+
+	/**
+	 * Gets the body from the function definition
+	 * @closure The closure from which to get the body
+	 * @return The root of the body/block
+	 */
+	private Lexeme getBody(Lexeme closure)
+	{
+		return closure.getCdr().getCdr().getCdr();
 	}
 
 	/**
@@ -176,7 +197,7 @@ public class Evaluator implements Types
 	{
 		Lexeme closure = cons(CLOSURE, env.getEnv(), tree);
 		env.insertEnv(tree.getCar(), closure);
-		return eval(tree.getCdr().getCdr(), env);		//Recurs to the block
+		return closure;
 	}
 
 	/**
@@ -198,7 +219,7 @@ public class Evaluator implements Types
 	 */
 	private Lexeme evalClassDef(Lexeme tree, Environment env)
 	{
-		return env.insertEnv(tree.getCar(), cons(OCLOSURE, env.getEnv(), tree));
+		return env.insertEnv(tree.getCar(), cons(OCLOSURE, env.getEnv(), tree));	//FIXME: is this needed/does it need to be fixed?
 	}
 
 	/**
@@ -307,6 +328,20 @@ public class Evaluator implements Types
 	}
 
 	/**
+	 * Evaluates the arguments as a helper to evalFunctionCall
+	 * @args Root of args to be evaluated
+	 * @env The corresponding environment
+	 * @return Root of new tree with args and their corresponding params		//FIXME: this might be wrong
+	 */
+	private Lexeme evalArgs(Lexeme args, Environment env)
+	{
+		if (args == null)
+			return null;
+		else
+			return cons(GLUE, eval(args.getCar(), env), evalArgs(args.getCdr(), env));
+	}
+
+	/**
 	 * Evaluates the actual use of a functioncall
 	 * @tree Root of function tree to use for evaluation
 	 * @env Environment corresponding to the function call in tree
@@ -314,16 +349,15 @@ public class Evaluator implements Types
 	 */
 	private Lexeme evalFunctionCall(Lexeme tree, Environment env)
 	{
-		Lexeme closure = lookup(tree.getCar(), env);
-//		Lexeme args = evalArgs(tree.getCdr(), env);		//FIXME: need to write evalArgs()
-//		if (isBuiltIn(closure)) return evalBuiltIn(closure, args);	//FIXME: uncomment
-		Lexeme senv = closure.getCar();
-//		Lexeme params = getParams(closure);				//FIXME: need to write getParams()
-//		Lexeme lenv = senv.extendEnv(params, args);
-//		Lexeme body = getBody(closure);					//FIXME: need to write getBody()
+		Lexeme closure = lookup(tree.getCar(), env);		//FIXME: eval may be returning a value in the closure env, I believe it should return the closure itself
+		Lexeme args = evalArgs(tree.getCdr(), env);
+//		if (isBuiltIn(closure)) return evalBuiltIn(closure, args);	//FIXME: uncomment, need to write ebuiltin
+		Environment senv = new Environment(closure.getCar());
+		Lexeme params = getParams(closure);
+		Environment lenv = new Environment(senv.extendEnv(params, args));
+		Lexeme body = getBody(closure);
 
-//		return eval(body, lenv);
-		return null;									//FIXME: placeholder
+		return eval(body, lenv);
 	}
 /*
 	private Lexeme evalMethodCall(Lexeme tree, Environment env)
@@ -385,19 +419,17 @@ public class Evaluator implements Types
 					return eval(tree.getCar(), env);
 				return null;					//FIXME: placeholder null return
 
-/*
 			case IDSTART:
 				Lexeme ret = null;
 
 				if (isFunctionCall(tree))
 					ret = evalFunctionCall(tree, env);
-				else if (isMethodCall(tree))
-					ret = evalMethodCall(tree, env);
-				else
-					ret = evalIDstart(tree, env);
+//				else if (isMethodCall(tree))
+//					ret = evalMethodCall(tree, env);
+//				else
+//					ret = evalIDstart(tree, env);
 				
 				return ret;
-*/				
 		}
 
 		return null;							//FIXME: placeholder null return
@@ -424,7 +456,7 @@ public class Evaluator implements Types
 		Lexeme tree = p.program();
 		e.eval(tree, env);
 
-
+/*
 		tree.display();
 		tree.getCar().display();
 		tree.getCar().getCar().display();
@@ -444,7 +476,7 @@ public class Evaluator implements Types
 //		tree.getCar().getCar().getCdr().getCar().getCar().getCar().getCar().display();
 //		tree.getCar().getCar().getCdr().getCar().getCar().getCar().getCar().getCar().display();
 //		env.displayEnv(1);
-
+*/
 
 		stream.close();
 	}
