@@ -73,7 +73,17 @@ public class Environment implements Types
         Lexeme car = env.getCar();
         car.setCar( cons(I, id, car.getCar()) );
         car.setCdr( cons(V, val, car.getCdr()) );
-
+/*
+System.out.println("inserting: ");
+id.display();
+val.display();
+val.getCar().display();
+val.getCar().getCar().display();
+val.getCar().getCar().getCar().display();
+val.getCar().getCar().getCar().getCar().display();
+val.getCar().getCar().getCdr().display();
+val.getCar().getCar().getCdr().getCar().display();
+*/
 		return val;
     }
 
@@ -184,7 +194,7 @@ public class Environment implements Types
 //                System.out.println("comparing " + id.getName() + " to " + vars.getCar().getName());
                 System.out.print("<" + vars.getCar().getName() + "-");
 				vals.getCar().display();
-				System.out.print(">");
+				System.out.print(">\n");
 
                 vars = vars.getCdr();
                 vals = vals.getCdr();
