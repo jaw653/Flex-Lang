@@ -456,6 +456,8 @@ public class Evaluator implements Types
 		Lexeme tree = p.program();
 		e.eval(tree, env);
 
+		env.displayEnv(1);
+
 /*
 		tree.display();
 		tree.getCar().display();
