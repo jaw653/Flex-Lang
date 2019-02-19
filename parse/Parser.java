@@ -636,7 +636,7 @@ System.out.println("expr2carcdr val: " + expr2.getCar().getCdr().getName());
 
  			match(CLOSE_PAREN);
 
-            tree = cons(IDSTART, id, exprList);
+            tree = cons(FUNCCALL, id, exprList);
  		}
  		else if ( check(INCREMENT) )
  			tree = cons(IDSTART, id, match(INCREMENT));
