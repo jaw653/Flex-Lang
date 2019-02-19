@@ -176,6 +176,12 @@ public class Evaluator implements Types
 	 */
 	private Lexeme lookup(Lexeme tree, Environment env)
 	{
+// System.out.println("looking up: "); tree.display();
+		if (env.getVal(tree) != null)
+		{
+// System.out.println("id found! id is: ");
+			env.getVal(tree).getName();
+		}
 		return env.getVal(tree);
 	}
 
@@ -197,7 +203,7 @@ public class Evaluator implements Types
 	{
 		Lexeme closure = cons(CLOSURE, env.getEnv(), tree);
 		env.insertEnv(tree.getCar(), closure);
-		return closure;
+		return eval(tree.getCdr().getCdr(), env);
 	}
 
 	/**
@@ -206,11 +212,38 @@ public class Evaluator implements Types
 	 * @env Corresponding environment
 	 * @return The evaluated result of the block in Lexeme form
 	 */
-	private void evalBlock(Lexeme tree, Environment env)
+	private Lexeme evalBlock(Lexeme tree, Environment env)
 	{
-		if (tree.getCar() != null) eval(tree.getCar(), env);		//FIXME: need to figure this out
+		Lexeme statements = null, retStmt = null;
+		if (tree.getCar() != null) statements = eval(tree.getCar(), env);
+		if (tree.getCdr() != null) retStmt = eval(tree.getCdr(), env);
+		return statements;
 	}
 
+	/**
+	 * Evaluates statements parse tree
+	 * @tree Root of statements tree
+	 * @env Corresponding environment
+	 * @return statement or car(); this is somewhat the base case
+	 */
+	private Lexeme evalStatements(Lexeme tree, Environment env)
+	{
+		Lexeme statement = null, statements = null;
+		if (tree.getCar() != null) statement = eval(tree.getCar(), env);
+		if (tree.getCdr() != null) statements = eval(tree.getCdr(), env);
+		return statement;
+	}
+
+	/**
+	 * Evaluates the statement parse tree
+	 * @tree Root of the statement tree
+	 * @env Corresponding environment
+	 * @return The eval() of an expr, loop, or definition
+	 */
+	private Lexeme evalStatement(Lexeme tree, Environment env)
+	{
+		return eval(tree.getCar(), env);
+	}
 	/**
 	 * Adds class variables to its scope
 	 * @tree Root of CLASSDEF tree to use for environmenet insertion
@@ -389,7 +422,7 @@ public class Evaluator implements Types
 	 */
 	private Lexeme eval(Lexeme tree, Environment env)
 	{
-// System.out.println("flag");
+System.out.println("tree is of type: " + tree.getType());		
 		switch (tree.getType())
 		{
 			case PROG:
@@ -406,7 +439,11 @@ public class Evaluator implements Types
 			case FUNCDEF:
 				return evalFuncDef(tree, env);
 			case BLOCK:
-//				return evalBlock(tree, env);			//FIXME: implement evalBlock() and uncomment
+				return evalBlock(tree, env);			//FIXME: implement evalBlock() and uncomment
+			case STATEMENTS:
+				return evalStatements(tree, env);
+			case STATEMENT:
+				return evalStatement(tree, env);
 			case CLASSDEF:
 				return evalClassDef(tree, env);
 			case EXPRDEF:
@@ -437,7 +474,6 @@ public class Evaluator implements Types
 
 			case IDSTART:
 				Lexeme ret = null;
-
 				if (isFunctionCall(tree) || isMethodCall(tree))		//FIXME: these are both function calls, correct?
 					ret = evalFunctionCall(tree, env);
 //				else if (isMethodCall(tree))
@@ -472,7 +508,7 @@ public class Evaluator implements Types
 		Lexeme tree = p.program();
 		e.eval(tree, env);
 
-		env.displayEnv(1);
+		env.displayEnv(1);									//FIXME: this line for testing purposes only
 
 /*
 		tree.display();
