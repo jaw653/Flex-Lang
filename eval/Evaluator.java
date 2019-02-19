@@ -471,17 +471,11 @@ System.out.println("tree is of type: " + tree.getType());
 				else
 					return eval(tree.getCar(), env);
 				return null;					//FIXME: placeholder null return
-
+			case FUNCCALL:
+				return evalFunctionCall(tree, env);
 			case IDSTART:
-				Lexeme ret = null;
-				if (isFunctionCall(tree) || isMethodCall(tree))		//FIXME: these are both function calls, correct?
-					ret = evalFunctionCall(tree, env);
-//				else if (isMethodCall(tree))
-//					ret = evalMethodCall(tree, env);
-				else
-					ret = evalIDstart(tree, env);
+				return evalIDstart(tree, env);
 				
-				return ret;
 		}
 
 		return null;							//FIXME: placeholder null return
