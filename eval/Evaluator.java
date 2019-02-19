@@ -187,7 +187,7 @@ public class Evaluator implements Types
 	 */
 	private void evalBlock(Lexeme tree, Environment env)
 	{
-		if (tree.getCar() != null) eval(tree.getCar();		//FIXME: need to figure this out
+		if (tree.getCar() != null) eval(tree.getCar(), env);		//FIXME: need to figure this out
 	}
 
 	/**
@@ -314,15 +314,16 @@ public class Evaluator implements Types
 	 */
 	private Lexeme evalFunctionCall(Lexeme tree, Environment env)
 	{
-		Lexeme closure = lookup(env, tree.getCar());
-		Lexeme args = evalArgs(tree.getCdr(), env);
-		if (isBuiltIn(closure)) return evalBuiltIn(closure, args);
+		Lexeme closure = lookup(tree.getCar(), env);
+//		Lexeme args = evalArgs(tree.getCdr(), env);		//FIXME: need to write evalArgs()
+//		if (isBuiltIn(closure)) return evalBuiltIn(closure, args);	//FIXME: uncomment
 		Lexeme senv = closure.getCar();
-//		Lexeme params = getParams(closure);
+//		Lexeme params = getParams(closure);				//FIXME: need to write getParams()
 //		Lexeme lenv = senv.extendEnv(params, args);
-		Lexeme body = getBody(closure);
+//		Lexeme body = getBody(closure);					//FIXME: need to write getBody()
 
-		return eval(body, lenv);
+//		return eval(body, lenv);
+		return null;									//FIXME: placeholder
 	}
 /*
 	private Lexeme evalMethodCall(Lexeme tree, Environment env)
@@ -355,7 +356,7 @@ public class Evaluator implements Types
 			case FUNCDEF:
 				return evalFuncDef(tree, env);
 			case BLOCK:
-				return evalBlock(tree, env);
+//				return evalBlock(tree, env);			//FIXME: implement evalBlock() and uncomment
 			case CLASSDEF:
 				return evalClassDef(tree, env);
 			case EXPRDEF:
