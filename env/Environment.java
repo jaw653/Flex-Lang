@@ -182,7 +182,9 @@ public class Environment implements Types
 			while (vars != null)
             {
 //                System.out.println("comparing " + id.getName() + " to " + vars.getCar().getName());
-                System.out.println("<" + vars.getCar().getName() + "-" + vals.getCar().getInt() + ">");
+                System.out.print("<" + vars.getCar().getName() + "-");
+				vals.getCar().display();
+				System.out.print(">");
 
                 vars = vars.getCdr();
                 vals = vals.getCdr();
