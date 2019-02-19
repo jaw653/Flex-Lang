@@ -181,6 +181,6 @@ public class Lexeme implements Types
 			System.out.println(this.type + " " + this.sval);
 		}
         else
-            System.out.println(this.type);
+            System.out.print(this.type);
     }
 }
