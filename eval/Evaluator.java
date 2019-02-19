@@ -133,6 +133,18 @@ public class Evaluator implements Types
 		return false;
 	}
 
+	/**
+	 * Determines if the function Lexeme is a built-in function
+	 * @function The function in question
+	 * @return True if the function is built-in
+	 */
+	private boolean isBuiltIn(Lexeme function)
+	{
+		if (function.getName() != "print" && function.getName() != "destroy")
+			return false;
+		return true;
+	}
+
 
 /***** Private Methods *****/
 	/**
@@ -175,8 +187,7 @@ public class Evaluator implements Types
 	 */
 	private void evalBlock(Lexeme tree, Environment env)
 	{
-		if (tree.getCar() != null) eval(tree.getCar(), env);
-		if (tree.getCdr() != null) eval(tree.getCdr(), env);
+		if (tree.getCar() != null) eval(tree.getCar();		//FIXME: need to figure this out
 	}
 
 	/**
@@ -303,17 +314,15 @@ public class Evaluator implements Types
 	 */
 	private Lexeme evalFunctionCall(Lexeme tree, Environment env)
 	{
-		Lexeme closure = eval(tree.getCar(), env);
-		if (closure.getType() == OCLOSURE)
-			return evalConstructor(closure, env);
-//		else if (closure.getType() == BUILTIN)
-		else
-		{
-			Lexeme args = tree.getCdr();
-//			Lexeme params = 
-		}
+		Lexeme closure = lookup(env, tree.getCar());
+		Lexeme args = evalArgs(tree.getCdr(), env);
+		if (isBuiltIn(closure)) return evalBuiltIn(closure, args);
+		Lexeme senv = closure.getCar();
+//		Lexeme params = getParams(closure);
+//		Lexeme lenv = senv.extendEnv(params, args);
+		Lexeme body = getBody(closure);
 
-		return null;		//FIXME: Placeholder to get rid of error
+		return eval(body, lenv);
 	}
 /*
 	private Lexeme evalMethodCall(Lexeme tree, Environment env)
