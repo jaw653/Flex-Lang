@@ -45,7 +45,7 @@ eval/Evaluator.class: eval/Evaluator.java
 
 ##### Test Cases #####
 test1: $(CLASSES)
-	flex eval/test1.flex
+	./flex eval/test1.flex
 
 ##### Clean Command #####
 clean:
