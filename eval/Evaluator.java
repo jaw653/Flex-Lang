@@ -219,7 +219,9 @@ public class Evaluator implements Types
 	 */
 	private Lexeme evalClassDef(Lexeme tree, Environment env)
 	{
-		return env.insertEnv(tree.getCar(), cons(OCLOSURE, env.getEnv(), tree));	//FIXME: is this needed/does it need to be fixed?
+		Lexeme closure = cons(CLOSURE, env.getEnv(), tree);
+		env.insertEnv(tree.getCar(), closure);					//FIXME: should this be OCLOSURE?
+		return closure;
 	}
 
 	/**
@@ -365,6 +367,20 @@ public class Evaluator implements Types
 		Lexeme closure = eval(tree.getCar(), env);
 	}
 */
+	private Lexeme evalIDstart(Lexeme tree, Environment env)
+	{
+		Lexeme id = eval(tree.getCar(), env);
+
+		if (tree.getCdr() != null)
+		{
+			if (tree.getCdr().getType() == INCREMENT || tree.getCdr().getType() == DECREMENT)
+				return evalOp(tree, env);
+			else
+				return eval(tree.getCdr(), env);
+		}
+
+		return id;
+	}
 	/**
 	 * Main evaluator method
 	 * @tree Root of the tree to be evaluated
@@ -422,12 +438,12 @@ public class Evaluator implements Types
 			case IDSTART:
 				Lexeme ret = null;
 
-				if (isFunctionCall(tree))
+				if (isFunctionCall(tree) || isMethodCall(tree))		//FIXME: these are both function calls, correct?
 					ret = evalFunctionCall(tree, env);
 //				else if (isMethodCall(tree))
 //					ret = evalMethodCall(tree, env);
-//				else
-//					ret = evalIDstart(tree, env);
+				else
+					ret = evalIDstart(tree, env);
 				
 				return ret;
 		}
