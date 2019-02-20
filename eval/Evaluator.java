@@ -266,7 +266,7 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 		Lexeme statements = null, retStmt = null;
 		if (tree.getCar() != null) statements = eval(tree.getCar(), env);
 		if (tree.getCdr() != null) retStmt = eval(tree.getCdr(), env);
-		return statements;
+		return retStmt;
 	}
 
 	/**
@@ -336,7 +336,7 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 			expr = eval(tree.getCdr().getCdr(), env);
 		}
 
-		return unary;
+		return evalOp(tree, env);
 	}
 
 	/**
