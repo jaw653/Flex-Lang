@@ -186,6 +186,22 @@ public class Evaluator implements Types
 	}
 
 	/**
+	 * Eval method for overarching program
+	 * @tree Root of the PROG tree
+	 * @env Corresponding environment
+	 * @return the eval of the def
+	 */
+	private Lexeme evalProg(Lexeme tree, Environment env)
+	{
+		Lexeme def = null, prog = null;
+		
+		def = eval(tree.getCar(), env);
+		if (tree.getCdr() != null)
+			prog = eval(tree.getCdr(), env);
+		
+		return def;
+	}
+	/**
 	 * Adds variable value to its scope
 	 * @tree Root of the VARDEF tree
 	 * @env Corresponding environment
@@ -475,6 +491,7 @@ tree.display();System.out.println();
 		switch (tree.getType())
 		{
 			case PROG:
+				return evalProg(tree, env);
 			case DEF:
 				return eval(tree.getCar(), env);
 			case INTEGER://FIXME: continue to edit these as the trees that can simply return the root lexeme become more clear
