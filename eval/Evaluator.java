@@ -194,9 +194,9 @@ public class Evaluator implements Types
 	private Lexeme evalVarDef(Lexeme tree, Environment env)
 	{
 		Lexeme id = null, val = null;
-System.out.println("flag");
+	
 		id = eval(tree.getCar(), env);
-System.out.println("flag2");
+		
 		if (tree.getCdr() != null)
 			val = eval(tree.getCdr().getCar(), env);
 	
@@ -400,18 +400,12 @@ System.out.println("flag2");
 	 */
 	private Lexeme evalFunctionCall(Lexeme tree, Environment env)
 	{
-System.out.println("flag");
 		Lexeme closure = lookup(tree.getCar(), env);		//FIXME: eval may be returning a value in the closure env, I believe it should return the closure itself
-System.out.println("flag1.9");
 		Lexeme args = evalArgs(tree.getCdr(), env);
 //		if (isBuiltIn(closure)) return evalBuiltIn(closure, args);	//FIXME: uncomment, need to write ebuiltin
-System.out.println("flag2.0");
 		Environment senv = new Environment(closure.getCar());
-System.out.println("flag2.1");
 		Lexeme params = getParams(closure);
-System.out.println("flag2");
 		Environment lenv = new Environment(senv.extendEnv(params, args));
-System.out.println("flag3");
 		Lexeme body = getBody(closure);
 
 		return eval(body, lenv);
