@@ -166,7 +166,7 @@ public class Lexeme implements Types
         }
         else if (this.type == INTEGER)
         {
-            System.out.println(this.type + " " + this.ival);
+            System.out.print(this.type + " " + this.ival);
         }
         else if (this.type == REAL)
         {
