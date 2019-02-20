@@ -244,8 +244,6 @@
         Lexeme unary, op = null, expr = null;
 
         unary = unary();
-// System.out.println("unary id is: " + unary.getCar().getCar().getName());
-
 
         if ( operatorPending() )
         {
@@ -438,15 +436,8 @@
         if ( expressionPending() )
         {
             tmp = expression();
-/*
-            if (idStartPending())
-                tmp = idStart();
-            else
-            {
-                tmp = expression();
-            }
-*/
-            match(SEMICOLON);
+            
+			match(SEMICOLON);
         }
         else if ( ifStatementPending() )
         {
@@ -610,20 +601,13 @@ System.out.println("expr2carcdr val: " + expr2.getCar().getCdr().getName());
         Lexeme id, unry = null, exprList = null, mthdName = null;
 
  		id = match(ID);
-/*
-        if ( check(SEMICOLON) || check(CLOSE_PAREN) )
-        {
-//            match(SEMICOLON);
-            tree = cons(IDSTART, id, null);
-        }
-*/
- 		if ( operatorPending() )
+ 		
+		if ( operatorPending() )
  		{
  			Lexeme op = operator();
  			unry = unary();
-//System.out.println("id is: " + id.getName());
-//System.out.println("|-> assigned to: "); unry.display();
-            tree = cons(IDSTART, id, cons(GLUE, op, unry));
+            
+			tree = cons(IDSTART, id, cons(GLUE, op, unry));
  		}
  		else if ( check(OPEN_PAREN) )
  		{
