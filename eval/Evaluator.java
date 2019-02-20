@@ -269,9 +269,42 @@ public class Evaluator implements Types
 		return closure;
 	}
 
+	/**
+	 * Evaluates an EXPRDEF
+	 * @tree Root of the EXPRDEF tree
+	 * @env Corresponding environment
+	 * @return ...		//FIXME: when you know
+	 */
 	private Lexeme evalExprDef(Lexeme tree, Environment env)
 	{
-		return null;
+		Lexeme unary = null, operator = null, expr = null;
+
+		unary = eval(tree.getCar(), env);
+		
+		if (tree.getCdr() != null)
+		{
+			operator = tree.getCdr().getCar();
+			expr = tree.getCdr().getCdr();
+		}
+
+		return unary;
+	}
+
+	/**
+	 * Evaluates a unary
+	 * @tree Root of the unary to eval
+	 * @env Corresponding environment
+	 * @return eval() of children
+	 */
+	private Lexeme evalUnary(Lexeme tree, Environment env)
+	{
+		Lexeme ret = null;
+
+		if (tree.getCdr() == null)
+			ret = eval(tree.getCar(), env);
+		else
+			ret = null;//FIXME: this is a class instantiation, I think it might need its own type and corresponding eval method(s)
+		return ret;
 	}
 	/**
 	 * Evaluates an operation between unaries and/or expressions
@@ -484,14 +517,7 @@ tree.display();System.out.println();
 				break;							//In reality, this will never hit. It's here to surpress javac warning
 */
 			case UNARY:
-				if (tree.getCdr() != null)
-				{
-//					eval(tree.getCar());		//FIXME: Implement these two calls
-//					eval(tree.getCdr());
-				}
-				else
-					return eval(tree.getCar(), env);
-				return null;					//FIXME: placeholder null return
+				return evalUnary(tree, env);
 			case FUNCCALL:
 				return evalFunctionCall(tree, env);
 			case IDSTART:
@@ -523,6 +549,7 @@ tree.display();System.out.println();
 		Lexeme tree = p.program();
 		e.eval(tree, env);
 
+		System.out.println();
 		env.displayEnv(1);									//FIXME: this line for testing purposes only
 
 /*
