@@ -498,12 +498,13 @@
         {
             ifStmnt = ifStatement();
         }
+/*
         else
         {
             blck = block();
-        }
-
-        return cons(ELSEIF, ifStmnt, blck);
+       	}
+*/
+        return cons(ELSEIF, ifStmnt, null);
     }
 
     /**
