@@ -14,7 +14,7 @@
 // does it matter what evalexprdef() returns?
 
 // evalImportDef doesn't add anything to the env; should it?
-
+// still need to write evalmethodcall() ??
 
 package eval;
 
@@ -282,6 +282,18 @@ public class Evaluator implements Types
 	{
 		return eval(tree.getCar(), env);
 	}
+
+	/**
+	 * Eval method for while loop
+	 * @tree Root of the while loop parse tree
+	 * @env Corresponding environment
+	 * @return The block of the while loop
+	 */
+	private Lexeme evalRetStmt(Lexeme tree, Environment env)
+	{
+		return eval(tree.getCar(), env);
+	}
+
 	/**
 	 * Adds class variables to its scope
 	 * @tree Root of CLASSDEF tree to use for environmenet insertion
@@ -520,6 +532,86 @@ public class Evaluator implements Types
 	}
 
 	/**
+	 * Eval method for if statement
+	 * @tree Root of the if statement
+	 * @env Corresponding environment
+	 * @return The correct block
+	 */
+	private Lexeme evalIf(Lexeme tree, Environment env)
+	{
+		Lexeme expr = null, block = null, elif = null;
+
+		expr = eval(tree.getCar(), env);
+		
+		/* If expr is true */
+		if (expr.getInt() == 1)
+			block = eval(tree.getCdr().getCar(), env);
+		else
+		{
+			if (tree.getCdr().getCdr() != null)
+				block = eval(tree.getCdr().getCdr(), env);
+		}
+		
+		return block;
+	}
+
+	/**
+	 * Eval method for else if statement
+	 * @tree Root of the elif
+	 * @env Corresponding environment
+	 * @return The correct block
+	 */
+	private Lexeme evalElseIf(Lexeme tree, Environment env)
+	{
+		Lexeme ifstmt = null, block = null;
+
+		return eval(tree.getCar(), env);
+	}
+
+	/**
+	 * Eval method for while loop
+	 * @tree Root of the while loop parse tree
+	 * @env Corresponding environment
+	 * @return The block of the while loop
+	 */
+	private Lexeme evalWhile(Lexeme tree, Environment env)
+	{
+		Lexeme expr = null, block = null;
+
+		expr = eval(tree.getCar(), env);
+
+		if (expr.getInt() == 1)
+			block = eval(tree.getCdr(), env);
+		else
+			return null;
+
+		return eval(tree, env);
+	}
+
+	/**
+	 * Eval method for for loop
+	 * @tree Root of the for loop parse tree
+	 * @env Corresponding environment
+	 * @return The block of the for loop
+	 */
+	private Lexeme evalFor(Lexeme tree, Environment env)
+	{
+		Lexeme expr = null, expr1 = null, expr2 = null, block = null;
+
+		expr = eval(tree.getCar().getCar(), env);
+		expr1 = eval(tree.getCar().getCdr(), env);
+		expr2 = eval(tree.getCdr().getCar(), env);
+
+		/* If expression is true */
+		if (expr1.getInt() == 1)
+			block = eval(tree.getCdr().getCdr(), env);
+		else
+			return null;
+
+		return eval(tree, env);
+	}
+
+	/**
 	 * Main evaluator method
 	 * @tree Root of the tree to be evaluated
 	 * @env Corresponding environment to tree
@@ -549,6 +641,8 @@ tree.display();System.out.println();
 				return evalStatements(tree, env);
 			case STATEMENT:
 				return evalStatement(tree, env);
+			case RETSTMNT:
+				return evalRetStmt(tree, env);
 			case CLASSDEF:
 				return evalClassDef(tree, env);
 			case EXPRDEF:
@@ -563,6 +657,14 @@ tree.display();System.out.println();
 				return evalImport(tree, env);
 			case PARAMLIST:
 				return evalParamList(tree, env);
+			case IFSTMNT:
+				return evalIf(tree, env);
+			case ELSEIF:
+				return evalElseIf(tree, env);
+			case WHILELOOP:
+				return evalWhile(tree, env);
+			case FORLOOP:
+				return evalFor(tree, env);
 				
 		}
 
