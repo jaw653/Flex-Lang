@@ -16,6 +16,8 @@
 // evalImportDef doesn't add anything to the env; should it?
 // still need to write evalmethodcall() ??
 
+// need to run eval on main() or something to actually run the file
+
 package eval;
 
 import lex.*;
@@ -489,12 +491,24 @@ public class Evaluator implements Types
 */
 	private Lexeme evalIDstart(Lexeme tree, Environment env)
 	{
-		Lexeme id = eval(tree.getCar(), env);
+		Lexeme id = null, operator = null, unary = null;
+
+		id = eval(tree.getCar(), env);
 
 		if (tree.getCdr() != null)
 		{
 			if (tree.getCdr().getType() == INCREMENT || tree.getCdr().getType() == DECREMENT)
 				return evalOp(tree, env);
+			else if (tree.getCdr().getType() == GLUE)
+			{
+				/* Means that there is an id op unary */
+				if (isOperator(tree.getCdr().getCar()))
+				{
+					operator = eval(tree.getCdr().getCar(), env);
+					unary = eval(tree.getCdr().getCdr(), env);
+				}
+				
+			}
 			else
 				return eval(tree.getCdr(), env);
 		}
