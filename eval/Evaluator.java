@@ -11,6 +11,11 @@
 
 // lookup should be returning the closure correct? so is there another env method I need?
 
+// does it matter what evalexprdef() returns?
+
+// evalImportDef doesn't add anything to the env; should it?
+
+
 package eval;
 
 import lex.*;
@@ -18,7 +23,6 @@ import parse.*;
 import env.*;
 
 import java.io.*;
-
 
 
 public class Evaluator implements Types
@@ -229,9 +233,15 @@ public class Evaluator implements Types
 	 */
 	private Lexeme evalFuncDef(Lexeme tree, Environment env)
 	{
-		Lexeme closure = cons(CLOSURE, env.getEnv(), tree);
+		Lexeme closure = null, paramList = null, block = null;
+
+		closure = cons(CLOSURE, env.getEnv(), tree);
 		env.insertEnv(tree.getCar(), closure);
-		return eval(tree.getCdr().getCdr(), env);
+		
+		if (tree.getCdr().getCar() != null) paramList = eval(tree.getCdr().getCar(), env);
+		block = eval(tree.getCdr().getCdr(), env);
+		
+		return block;
 	}
 
 	/**
@@ -289,7 +299,7 @@ public class Evaluator implements Types
 	 * Evaluates an EXPRDEF
 	 * @tree Root of the EXPRDEF tree
 	 * @env Corresponding environment
-	 * @return ...		//FIXME: when you know
+	 * @return The value of the unary at the bottom of the expression
 	 */
 	private Lexeme evalExprDef(Lexeme tree, Environment env)
 	{
@@ -299,8 +309,8 @@ public class Evaluator implements Types
 		
 		if (tree.getCdr() != null)
 		{
-			operator = tree.getCdr().getCar();
-			expr = tree.getCdr().getCdr();
+			operator = eval(tree.getCdr().getCar(), env);
+			expr = eval(tree.getCdr().getCdr(), env);
 		}
 
 		return unary;
@@ -449,7 +459,7 @@ public class Evaluator implements Types
 	 */
 	private Lexeme evalFunctionCall(Lexeme tree, Environment env)
 	{
-		Lexeme closure = lookup(tree.getCar(), env);		//FIXME: eval may be returning a value in the closure env, I believe it should return the closure itself
+		Lexeme closure = lookup(tree.getCar(), env);
 		Lexeme args = evalArgs(tree.getCdr(), env);
 //		if (isBuiltIn(closure)) return evalBuiltIn(closure, args);	//FIXME: uncomment, need to write ebuiltin
 		Environment senv = new Environment(closure.getCar());
@@ -479,6 +489,36 @@ public class Evaluator implements Types
 
 		return id;
 	}
+
+	/**
+	 * Eval method for an import definition
+	 * @tree Root of the importdef
+	 * @env Corresponding environment
+	 * @return eval of the ID lexeme to the left
+	 */
+	private Lexeme evalImport(Lexeme tree, Environment env)
+	{
+		return eval(tree.getCar(), env);
+	}
+
+	/**
+	 * Eval method for a parameter list
+	 * @tree Root of the paramList
+	 * @env Corresponding environment
+	 * @return id held in the paramList
+	 */
+	private Lexeme evalParamList(Lexeme tree, Environment env)
+	{
+		Lexeme id = null, plist = null;
+
+		id = eval(tree.getCar(), env);
+
+		if (tree.getCdr() != null)
+			return evalParamList(tree.getCdr(), env);
+
+		return id;
+	}
+
 	/**
 	 * Main evaluator method
 	 * @tree Root of the tree to be evaluated
@@ -519,6 +559,10 @@ tree.display();System.out.println();
 				return evalFunctionCall(tree, env);
 			case IDSTART:
 				return evalIDstart(tree, env);
+			case IMPORTDEF:
+				return evalImport(tree, env);
+			case PARAMLIST:
+				return evalParamList(tree, env);
 				
 		}
 
