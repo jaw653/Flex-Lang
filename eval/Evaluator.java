@@ -87,21 +87,30 @@ public class Evaluator implements Types
 	/**
 	 * Gets the parameters from the function definition
 	 * @closure The closure from which to get the params
+	 * @env Corresponding environment
 	 * @return The root of the paramList
 	 */
-	private Lexeme getParams(Lexeme closure)
+	private Lexeme getParams(Lexeme closure, Environment env)
 	{
-		return closure.getCdr().getCdr().getCar();
+		return eval(closure.getCdr().getCdr().getCar(), env);
 	}
 
 	/**
 	 * Gets the body from the function definition
 	 * @closure The closure from which to get the body
+	 * @env Corresponding environment
 	 * @return The root of the body/block
 	 */
-	private Lexeme getBody(Lexeme closure)
+	private Lexeme getBody(Lexeme closure, Environment env)
 	{
-		return closure.getCdr().getCdr().getCdr();
+/*
+System.out.println("getbody:");
+System.out.println("closure type is: " + closure.getType());
+System.out.println("cdr is: " + closure.getCdr().getType());
+System.out.println("cddr is: " + closure.getCdr().getCdr().getType());
+System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
+*/
+		return eval(closure.getCdr().getCdr().getCdr(), env);
 	}
 
 	/**
@@ -455,14 +464,15 @@ public class Evaluator implements Types
 	 * Evaluates the arguments as a helper to evalFunctionCall
 	 * @args Root of args to be evaluated
 	 * @env The corresponding environment
-	 * @return Root of new tree with args and their corresponding params		//FIXME: this might be wrong
+	 * @return Root of the list of expressions 
 	 */
 	private Lexeme evalArgs(Lexeme args, Environment env)
 	{
 		if (args == null)
 			return null;
 		else
-			return cons(GLUE, eval(args.getCar(), env), evalArgs(args.getCdr(), env));
+			return eval(args, env);		//returns the expression list of the function call
+//			return cons(GLUE, eval(args.getCar(), env), evalArgs(args.getCdr(), env)); //FIXME: this guy was in the else statement
 	}
 
 	/**
@@ -477,10 +487,11 @@ public class Evaluator implements Types
 		Lexeme args = evalArgs(tree.getCdr(), env);
 //		if (isBuiltIn(closure)) return evalBuiltIn(closure, args);	//FIXME: uncomment, need to write ebuiltin
 		Environment senv = new Environment(closure.getCar());
-		Lexeme params = getParams(closure);
+		Lexeme params = getParams(closure, env);
 		Environment lenv = new Environment(senv.extendEnv(params, args));
-		Lexeme body = getBody(closure);
-
+		Lexeme body = getBody(closure, env);
+if (body == null) System.out.println("body is null....");
+else System.out.println("body is not null!!!");
 		return eval(body, lenv);
 	}
 /*
@@ -545,6 +556,23 @@ public class Evaluator implements Types
 		return id;
 	}
 
+	/**
+	 * Eval method for expression list
+	 * @tree Root of the expression list
+	 * @env Corresponding environment
+	 * @return first evaluated expression
+	 */
+	private Lexeme evalExprList(Lexeme tree, Environment env)
+	{
+		Lexeme expr = null, elist = null;
+
+		expr = eval(tree.getCar(), env);
+		if (tree.getCdr() != null)
+			elist = eval(tree.getCdr(), env);
+
+		return expr;
+	}
+	
 	/**
 	 * Eval method for if statement
 	 * @tree Root of the if statement
@@ -671,6 +699,8 @@ tree.display();System.out.println();
 				return evalImport(tree, env);
 			case PARAMLIST:
 				return evalParamList(tree, env);
+			case EXPRLIST:
+				return evalExprList(tree, env);
 			case IFSTMNT:
 				return evalIf(tree, env);
 			case ELSEIF:
