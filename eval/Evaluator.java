@@ -187,10 +187,22 @@ public class Evaluator implements Types
 
 	/**
 	 * Adds variable value to its scope
-	 */													//FIXME: come back!!!!!!!!!!!!!!!!!!!!!!!!!
+	 * @tree Root of the VARDEF tree
+	 * @env Corresponding environment
+	 * @return The value of the expression
+	 */			//FIXME: is this guy returning the right thing?
 	private Lexeme evalVarDef(Lexeme tree, Environment env)
 	{
-		return null;
+		Lexeme id = null, val = null;
+System.out.println("flag");
+		id = eval(tree.getCar(), env);
+System.out.println("flag2");
+		if (tree.getCdr() != null)
+			val = eval(tree.getCdr().getCar(), env);
+	
+		env.insertEnv(id, val);
+// env.displayEnv(1);
+		return val;
 	}
 
 	/**
@@ -229,7 +241,7 @@ public class Evaluator implements Types
 	private Lexeme evalStatements(Lexeme tree, Environment env)
 	{
 		Lexeme statement = null, statements = null;
-		if (tree.getCar() != null) statement = eval(tree.getCar(), env);
+		statement = eval(tree.getCar(), env);
 		if (tree.getCdr() != null) statements = eval(tree.getCdr(), env);
 		return statement;
 	}
@@ -257,6 +269,10 @@ public class Evaluator implements Types
 		return closure;
 	}
 
+	private Lexeme evalExprDef(Lexeme tree, Environment env)
+	{
+		return null;
+	}
 	/**
 	 * Evaluates an operation between unaries and/or expressions
 	 * @tree Root of the EXPRDEF
@@ -384,12 +400,18 @@ public class Evaluator implements Types
 	 */
 	private Lexeme evalFunctionCall(Lexeme tree, Environment env)
 	{
+System.out.println("flag");
 		Lexeme closure = lookup(tree.getCar(), env);		//FIXME: eval may be returning a value in the closure env, I believe it should return the closure itself
+System.out.println("flag1.9");
 		Lexeme args = evalArgs(tree.getCdr(), env);
 //		if (isBuiltIn(closure)) return evalBuiltIn(closure, args);	//FIXME: uncomment, need to write ebuiltin
+System.out.println("flag2.0");
 		Environment senv = new Environment(closure.getCar());
+System.out.println("flag2.1");
 		Lexeme params = getParams(closure);
+System.out.println("flag2");
 		Environment lenv = new Environment(senv.extendEnv(params, args));
+System.out.println("flag3");
 		Lexeme body = getBody(closure);
 
 		return eval(body, lenv);
@@ -422,7 +444,7 @@ public class Evaluator implements Types
 	 */
 	private Lexeme eval(Lexeme tree, Environment env)
 	{
-System.out.println("tree is of type: " + tree.getType());		
+tree.display();System.out.println();
 		switch (tree.getType())
 		{
 			case PROG:
@@ -431,11 +453,10 @@ System.out.println("tree is of type: " + tree.getType());
 			case INTEGER://FIXME: continue to edit these as the trees that can simply return the root lexeme become more clear
 			case REAL:
 			case STRING:
-				return tree;
 			case ID:
-				return lookup(tree, env);
-//			case VARDEF:
-//				return evalVarDef(tree, env);
+				return tree;
+			case VARDEF:
+				return evalVarDef(tree, env);
 			case FUNCDEF:
 				return evalFuncDef(tree, env);
 			case BLOCK:
@@ -447,11 +468,14 @@ System.out.println("tree is of type: " + tree.getType());
 			case CLASSDEF:
 				return evalClassDef(tree, env);
 			case EXPRDEF:
-				if (tree.getCdr() != null)
+				return evalExprDef(tree, env);
+/*				if (tree.getCdr() != null)
 				{
+					/* Not nul w/ a cadr of ASSIGN means assignment *
+
 					if (tree.getCdr().getCar().getType() == ASSIGN)
 					{
-						Lexeme name = tree.getCar();
+						Lexeme name = tree.getCar().getCar();
 						Lexeme val = eval(tree.getCdr().getCdr(), env);
 						env.updateVal(name, val);
 						return val;
@@ -459,9 +483,12 @@ System.out.println("tree is of type: " + tree.getType());
 					else if (isOperator(tree.getCdr().getCar()))
 						return evalOp(tree, env);
 				}
+				/* If no cdr, it's a unary *
 				else
 					return eval(tree.getCar(), env);
+
 				break;							//In reality, this will never hit. It's here to surpress javac warning
+*/
 			case UNARY:
 				if (tree.getCdr() != null)
 				{
