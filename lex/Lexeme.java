@@ -178,7 +178,7 @@ public class Lexeme implements Types
         }
 		else if (this.type == ID)
 		{
-			System.out.println(this.type + " " + this.sval);
+			System.out.print(this.type + " " + this.sval);
 		}
         else
             System.out.print(this.type);
