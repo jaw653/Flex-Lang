@@ -494,7 +494,7 @@ tree.display();System.out.println();
 				return evalProg(tree, env);
 			case DEF:
 				return eval(tree.getCar(), env);
-			case INTEGER://FIXME: continue to edit these as the trees that can simply return the root lexeme become more clear
+			case INTEGER:
 			case REAL:
 			case STRING:
 			case ID:
@@ -504,7 +504,7 @@ tree.display();System.out.println();
 			case FUNCDEF:
 				return evalFuncDef(tree, env);
 			case BLOCK:
-				return evalBlock(tree, env);			//FIXME: implement evalBlock() and uncomment
+				return evalBlock(tree, env);
 			case STATEMENTS:
 				return evalStatements(tree, env);
 			case STATEMENT:
@@ -513,26 +513,6 @@ tree.display();System.out.println();
 				return evalClassDef(tree, env);
 			case EXPRDEF:
 				return evalExprDef(tree, env);
-/*				if (tree.getCdr() != null)
-				{
-					/* Not nul w/ a cadr of ASSIGN means assignment *
-
-					if (tree.getCdr().getCar().getType() == ASSIGN)
-					{
-						Lexeme name = tree.getCar().getCar();
-						Lexeme val = eval(tree.getCdr().getCdr(), env);
-						env.updateVal(name, val);
-						return val;
-					}
-					else if (isOperator(tree.getCdr().getCar()))
-						return evalOp(tree, env);
-				}
-				/* If no cdr, it's a unary *
-				else
-					return eval(tree.getCar(), env);
-
-				break;							//In reality, this will never hit. It's here to surpress javac warning
-*/
 			case UNARY:
 				return evalUnary(tree, env);
 			case FUNCCALL:
