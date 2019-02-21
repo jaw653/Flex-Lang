@@ -18,6 +18,7 @@
 
 // need to run eval on main() or something to actually run the file
 
+// CONTINUE WORKING ON LINE 339
 package eval;
 
 import lex.*;
@@ -83,25 +84,32 @@ public class Evaluator implements Types
 		return file;
 	}
 
+	/**
+	 * Gets the evaluated arguments of a function
+	 * @tree Root of the function for which to get args
+	 * @return A list of the evaluated args for insertion into an environment
+	 */
+	private Lexeme getArgs(Lexeme tree)
+	{
+		return tree.getCdr();
+	}
 
 	/**
 	 * Gets the parameters from the function definition
 	 * @closure The closure from which to get the params
-	 * @env Corresponding environment
 	 * @return The root of the paramList
 	 */
-	private Lexeme getParams(Lexeme closure, Environment env)
+	private Lexeme getParams(Lexeme closure)
 	{
-		return eval(closure.getCdr().getCdr().getCar(), env);
+		return closure.getCdr().getCdr().getCar();
 	}
 
 	/**
 	 * Gets the body from the function definition
 	 * @closure The closure from which to get the body
-	 * @env Corresponding environment
 	 * @return The root of the body/block
 	 */
-	private Lexeme getBody(Lexeme closure, Environment env)
+	private Lexeme getBody(Lexeme closure)
 	{
 /*
 System.out.println("getbody:");
@@ -110,7 +118,7 @@ System.out.println("cdr is: " + closure.getCdr().getType());
 System.out.println("cddr is: " + closure.getCdr().getCdr().getType());
 System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 */
-		return eval(closure.getCdr().getCdr().getCdr(), env);
+		return closure.getCdr().getCdr().getCdr();
 	}
 
 	/**
@@ -329,14 +337,16 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 		Lexeme unary = null, operator = null, expr = null;
 
 		unary = eval(tree.getCar(), env);
-		
+
+/*	
 		if (tree.getCdr() != null)
 		{
 			operator = eval(tree.getCdr().getCar(), env);
 			expr = eval(tree.getCdr().getCdr(), env);
 		}
-
-		return evalOp(tree, env);
+*/
+//		return evalOp(tree.getCar(), env);
+		return unary;
 	}
 
 	/**
@@ -355,6 +365,7 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 			ret = null;//FIXME: this is a class instantiation, I think it might need its own type and corresponding eval method(s)
 		return ret;
 	}
+
 	/**
 	 * Evaluates an operation between unaries and/or expressions
 	 * @tree Root of the EXPRDEF
@@ -363,12 +374,12 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 	 */
 	private Lexeme evalOp(Lexeme tree, Environment env)
 	{
-		String operandType = tree.getCar().getType();
-		String operatorType = tree.getCdr().getCar().getType();
-
+		String operandType = tree.getType();
+		String operatorType = tree.getCdr().getType();
+		
 		Lexeme arg0 = eval(tree.getCar(), env);
-		Lexeme arg1 = eval(tree.getCdr().getCdr(), env);
-
+		Lexeme arg1 = eval(tree.getCdr(), env);
+		
 		if (operandType == INTEGER)
 		{
 			int a0 = arg0.getInt();
@@ -459,13 +470,13 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 		eval(body, xenv);
 		return xenv.getEnv();
 	}
-
+/*
 	/**
 	 * Evaluates the arguments as a helper to evalFunctionCall
 	 * @args Root of args to be evaluated
 	 * @env The corresponding environment
 	 * @return Root of the list of expressions 
-	 */
+	 *
 	private Lexeme evalArgs(Lexeme args, Environment env)
 	{
 		if (args == null)
@@ -474,6 +485,7 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 			return eval(args, env);		//returns the expression list of the function call
 //			return cons(GLUE, eval(args.getCar(), env), evalArgs(args.getCdr(), env)); //FIXME: this guy was in the else statement
 	}
+*/
 
 	/**
 	 * Evaluates the actual use of a functioncall
@@ -483,15 +495,18 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 	 */
 	private Lexeme evalFunctionCall(Lexeme tree, Environment env)
 	{
+System.out.print("at beginning of function call, ");
+env.displayEnv(1);
 		Lexeme closure = lookup(tree.getCar(), env);
-		Lexeme args = evalArgs(tree.getCdr(), env);
+		Lexeme args = getArgs(tree);
 //		if (isBuiltIn(closure)) return evalBuiltIn(closure, args);	//FIXME: uncomment, need to write ebuiltin
 		Environment senv = new Environment(closure.getCar());
-		Lexeme params = getParams(closure, env);
+		Lexeme params = getParams(closure);
 		Environment lenv = new Environment(senv.extendEnv(params, args));
-		Lexeme body = getBody(closure, env);
-if (body == null) System.out.println("body is null....");
-else System.out.println("body is not null!!!");
+		Lexeme body = getBody(closure);
+System.out.println("lenv is: "); lenv.displayEnv(1); System.out.println("flag2");
+if (body == null) System.out.println("body null");
+if (lenv == null) System.out.println("env null");
 		return eval(body, lenv);
 	}
 /*
@@ -502,7 +517,7 @@ else System.out.println("body is not null!!!");
 */
 	private Lexeme evalIDstart(Lexeme tree, Environment env)
 	{
-		Lexeme id = null, operator = null, unary = null;
+		Lexeme id = null;
 
 		id = eval(tree.getCar(), env);
 
@@ -514,11 +529,7 @@ else System.out.println("body is not null!!!");
 			{
 				/* Means that there is an id op unary */
 				if (isOperator(tree.getCdr().getCar()))
-				{
-					operator = eval(tree.getCdr().getCar(), env);
-					unary = eval(tree.getCdr().getCdr(), env);
-				}
-				
+					return eval(tree.getCdr().getCar(), env);
 			}
 			else
 				return eval(tree.getCdr(), env);
@@ -709,6 +720,12 @@ tree.display();System.out.println();
 				return evalWhile(tree, env);
 			case FORLOOP:
 				return evalFor(tree, env);
+			case PLUS:
+			case MINUS:
+			case TIMES:
+			case DIVIDE:
+			case MODULO:
+				return evalOp(tree, env);
 				
 		}
 
