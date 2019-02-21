@@ -198,8 +198,8 @@ val.getCar().getCar().getCdr().getCar().display();
                 System.out.print("<" + vars.getCar().getName() + "-");
 				vals.getCar().display();
 				System.out.print(">\n");
-
-                vars = vars.getCdr();
+                
+				vars = vars.getCdr();
                 vals = vals.getCdr();
             }
 
