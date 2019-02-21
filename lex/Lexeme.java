@@ -180,6 +180,8 @@ public class Lexeme implements Types
 		{
 			System.out.print(this.type + " " + this.sval);
 		}
+		else if (this.type == null)
+			System.out.println("null");
         else
             System.out.print(this.type);
     }
