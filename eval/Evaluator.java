@@ -85,13 +85,36 @@ public class Evaluator implements Types
 	}
 
 	/**
+	 * Converts an expression list to a val list for insertion to env table
+	 * @head Root of the expression list to be converted
+	 * @env Corresponding environment (only needed so I can call eval
+	 * @return The newly created value list
+	 */
+	private Lexeme exprListToValList(Lexeme head, Environment env)
+	{
+		Lexeme tree = null, val = null, next = null;
+
+		if (head != null)
+		{
+			val = eval(head.getCar(), env);	
+			next = exprListToValList(head.getCdr(), env);
+			tree = cons(V, val, next);
+		}
+		else tree = null;
+
+		return tree;
+	}
+
+
+	/**
 	 * Gets the evaluated arguments of a function
 	 * @tree Root of the function for which to get args
+	 * @env Corresponding environment
 	 * @return A list of the evaluated args for insertion into an environment
 	 */
-	private Lexeme getArgs(Lexeme tree)
+	private Lexeme getArgs(Lexeme tree, Environment env)
 	{
-		return tree.getCdr();
+		return exprListToValList(tree.getCdr(), env);
 	}
 
 	/**
@@ -375,13 +398,15 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 	private Lexeme evalOp(Lexeme tree, Environment env)
 	{
 		Lexeme arg1 = eval(tree.getCar(), env);
-//		if (arg1.getType() != INTEGER && arg1.getType() != REAL)
-//			arg1 = env.getVal(arg1);
 		Lexeme arg2 = eval(tree.getCdr(), env);
-		System.out.println("arg1 is : ");
-	   	arg1.display();
-		System.out.println(" and arg2 is: "); arg2.display();
-		
+
+System.out.print("arg1 is : "); arg1.display(); System.out.println();
+System.out.print(" and arg2 is: "); arg2.display(); System.out.println();
+System.out.print("env given to evalOp() "); env.displayEnv(1);
+
+		if (arg1.getType() != INTEGER && arg1.getType() != REAL)
+			arg1 = env.getVal(arg1);
+		return new Lexeme(INTEGER, 8);		
 /*
 		String operandType = tree.getType();
 		String operatorType = tree.getCdr().getType();
@@ -464,7 +489,6 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 
 		return null;				// This was placed here to circumvent error. If time replace all those returns with assignments and finish with one return
 */
-	return null;		//FIXME: placeholder
 	}
 
 	/**
@@ -509,20 +533,21 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 System.out.print("at beginning of function call, ");
 env.displayEnv(1);
 		Lexeme closure = lookup(tree.getCar(), env);
-		Lexeme args = getArgs(tree);
-System.out.println("===args are: "); args.getCar().getCar().getCar().display(); System.out.println();
-System.out.println("while eval(args, env) is: ");
-eval(args, env).display();
+		Lexeme args = getArgs(tree, env);
+// System.out.println("+++args are of type: " + args.getType());
+//System.out.println("===args are: "); args.getCar().getCar().getCar().display(); System.out.println();
+// System.out.println("while eval(args, env) is: ");
+// eval(args, env).display();
 //		if (isBuiltIn(closure)) return evalBuiltIn(closure, args);	//FIXME: uncomment, need to write ebuiltin
 		Environment senv = new Environment(closure.getCar());
 		Lexeme params = getParams(closure);
-System.out.println("params are: ");
-params.getCar().display();
-System.out.println("args are of type: ");
-args.display();
+// System.out.println("params are: ");
+// params.getCar().display();
+// System.out.println("args are of type: ");
+// args.display();
 		Environment lenv = new Environment(senv.extendEnv(params, args));
 		Lexeme body = getBody(closure);
-System.out.print("lenv is: "); lenv.displayEnv(1);	
+// System.out.print("lenv is: "); lenv.displayEnv(1);	
 		return eval(body, lenv);
 	}
 /*
