@@ -397,31 +397,58 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 	 */
 	private Lexeme evalOp(Lexeme tree, Environment env)
 	{
-//		Lexeme arg1 = eval(tree.getCar(), env);
-//		Lexeme arg2 = eval(tree.getCdr(), env);
-env.displayEnv(1);
-//env.getVal(new Lexeme(ID, "a"));
+		Lexeme arg1 = null, arg2 = null;
+		Lexeme resolvedArg1 = null, resolvedArg2 = null;
+
+		arg1 = eval(tree.getCar(), env);
+		arg2 = eval(tree.getCdr(), env);
+
+		if (arg1.getType() != INTEGER && arg1.getType() != REAL)
+			resolvedArg1 = env.getVal(arg1);
+
+		if (arg2.getType() != INTEGER && arg2.getType() != REAL)
+			resolvedArg2 = env.getVal(arg2);
+
+		/* Resolved arg will either == the value held by its ID,
+		 * or it will be null if arg1 was already in its final resolved
+		 * form, or it will be unknown if it's a var whose val couldn't be
+		 * found
+		 */
+		if (resolvedArg1 != null)
+		{
+			if (resolvedArg1.getType() == UNKNOWN)	// If its a var expr, return the tree
+				return tree;
+		}
+
+		if (resolvedArg2 != null)
+		{
+			if (resolvedArg2.getType() == UNKNOWN)
+				return tree;
+		}
+// System.out.println("tree is: ");
+// tree.display(); System.out.println();
+// tree.getCar().display(); System.out.println();
+// tree.getCdr().display(); System.out.println();
+// System.out.println("env prior to getVal() "); env.displayEnv(1);
+// env.getVal(new Lexeme(ID, "a"));
 //System.out.print("arg1 is : "); arg1.display(); System.out.println();
 //System.out.print(" and arg2 is: "); arg2.display(); System.out.println();
 //System.out.print("env given to evalOp() "); env.displayEnv(1);
 // System.out.println("value of a is: " + env.getVal(new Lexeme(ID, "a")).getInt());		
-		Lexeme resolvedArg = null;
 
-//		if (arg1.getType() != INTEGER && arg1.getType() != REAL)
-//			resolvedArg = env.getVal(arg1);
-// System.out.println("resolvedArg is: "); resolvedArg.display(); System.out.println();
-		return new Lexeme(INTEGER, 8);		
-/*
-		String operandType = tree.getType();
-		String operatorType = tree.getCdr().getType();
+		String operandType = null;
+		if (resolvedArg1 != null) operandType = resolvedArg1.getType();
+		String operatorType = tree.getType();
 		
-		Lexeme arg0 = eval(tree.getCar(), env);
-		Lexeme arg1 = eval(tree.getCdr(), env);
-		
+		if (resolvedArg1 != null)
+			arg1 = resolvedArg1;
+		if (resolvedArg2 != null)
+			arg2 = resolvedArg2;
+
 		if (operandType == INTEGER)
 		{
-			int a0 = arg0.getInt();
-			int a1 = arg1.getInt();
+			int a0 = arg1.getInt();
+			int a1 = arg2.getInt();
 
 			if (operatorType == PLUS)
 				return new Lexeme(operandType, a0+a1);
@@ -456,8 +483,8 @@ env.displayEnv(1);
 		}
 		else if (operandType == REAL)
 		{
-			double a0 = arg0.getReal();
-			double a1 = arg1.getReal();
+			double a0 = arg1.getReal();
+			double a1 = arg2.getReal();
 
 			if (operatorType == PLUS)
 				return new Lexeme(operandType, a0+a1);
@@ -492,7 +519,7 @@ env.displayEnv(1);
 		}
 
 		return null;				// This was placed here to circumvent error. If time replace all those returns with assignments and finish with one return
-*/
+
 	}
 
 	/**
