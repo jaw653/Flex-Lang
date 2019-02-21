@@ -397,13 +397,14 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 	 */
 	private Lexeme evalOp(Lexeme tree, Environment env)
 	{
-		Lexeme arg1 = eval(tree.getCar(), env);
-		Lexeme arg2 = eval(tree.getCdr(), env);
-
-System.out.print("arg1 is : "); arg1.display(); System.out.println();
-System.out.print(" and arg2 is: "); arg2.display(); System.out.println();
-System.out.print("env given to evalOp() "); env.displayEnv(1);
-		
+//		Lexeme arg1 = eval(tree.getCar(), env);
+//		Lexeme arg2 = eval(tree.getCdr(), env);
+env.displayEnv(1);
+//env.getVal(new Lexeme(ID, "a"));
+//System.out.print("arg1 is : "); arg1.display(); System.out.println();
+//System.out.print(" and arg2 is: "); arg2.display(); System.out.println();
+//System.out.print("env given to evalOp() "); env.displayEnv(1);
+// System.out.println("value of a is: " + env.getVal(new Lexeme(ID, "a")).getInt());		
 		Lexeme resolvedArg = null;
 
 //		if (arg1.getType() != INTEGER && arg1.getType() != REAL)
@@ -551,6 +552,7 @@ env.displayEnv(1);
 		Environment lenv = new Environment(senv.extendEnv(params, args));
 		Lexeme body = getBody(closure);
 // System.out.print("lenv is: "); lenv.displayEnv(1);	
+//  lenv.getVal(new Lexeme(ID, "a")).display();
 		return eval(body, lenv);
 	}
 /*
