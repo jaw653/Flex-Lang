@@ -403,9 +403,12 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 System.out.print("arg1 is : "); arg1.display(); System.out.println();
 System.out.print(" and arg2 is: "); arg2.display(); System.out.println();
 System.out.print("env given to evalOp() "); env.displayEnv(1);
+		
+		Lexeme resolvedArg = null;
 
-		if (arg1.getType() != INTEGER && arg1.getType() != REAL)
-			arg1 = env.getVal(arg1);
+//		if (arg1.getType() != INTEGER && arg1.getType() != REAL)
+//			resolvedArg = env.getVal(arg1);
+// System.out.println("resolvedArg is: "); resolvedArg.display(); System.out.println();
 		return new Lexeme(INTEGER, 8);		
 /*
 		String operandType = tree.getType();
