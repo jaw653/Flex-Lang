@@ -608,7 +608,7 @@ System.out.println("expr2carcdr val: " + expr2.getCar().getCdr().getName());
  			Lexeme op = operator();
  			unry = unary();
             
-			tree = cons(IDSTART, id, cons(GLUE, op, unry));
+			tree = cons(op.getType(), id, unry);
  		}
  		else if ( check(OPEN_PAREN) )
  		{
