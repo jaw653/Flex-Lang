@@ -191,7 +191,7 @@ val.getCar().getCar().getCdr().getCar().display();
         {
             vars = (env.getCar()).getCar();
             vals = (env.getCar()).getCdr();
-            
+			
 			while (vars != null)
             {
 //                System.out.println("comparing " + id.getName() + " to " + vars.getCar().getName());
@@ -243,7 +243,7 @@ val.getCar().getCar().getCdr().getCar().display();
             var = String.valueOf(tmp);
 
             /* Set the value Lexeme and then increase for next set */
-            value = new Lexeme(V, val++);
+            value = new Lexeme(INTEGER, val++);
 
             /* Insert id, value pair to env */
             env.insertEnv(id, value);
@@ -271,13 +271,13 @@ val.getCar().getCar().getCdr().getCar().display();
 
         System.out.println("\nTesting updateVal()...");
         System.out.println("Updating variable a to have value 50");
-        env.updateVal(new Lexeme(I, "a"), new Lexeme(V, 50));
+        env.updateVal(new Lexeme(I, "a"), new Lexeme(INTEGER, 50));
         System.out.println("New val of Lexeme with ID a is: " + env.getVal(new Lexeme(I, "a")).getInt() );
 
         env.displayEnv(0);
 
         System.out.println("\nUpdating variable c to have value 35");
-        env.updateVal(new Lexeme(I, "c"), new Lexeme(V, 35));
+        env.updateVal(new Lexeme(I, "c"), new Lexeme(INTEGER, 35));
         System.out.println("New val of Lexeme with ID c is: " + env.getVal(new Lexeme(I, "c")).getInt() );
 
         env.displayEnv(0);
@@ -285,14 +285,27 @@ val.getCar().getCar().getCdr().getCar().display();
         /* Building a list of vars and vals inside of env1 so I don't have to do it by hand */
         System.out.println("\nTesting extend()...");
         Environment env1 = new Environment();
-        env1.insertEnv(new Lexeme(I, "var0"), new Lexeme(V, 81));
-        env1.insertEnv(new Lexeme(I, "var1"), new Lexeme(V, 82));
-        env1.insertEnv(new Lexeme(I, "var2"), new Lexeme(V, 83));
-        Lexeme vars = env1.getEnv().getCar().getCar();
+        env1.insertEnv(new Lexeme(I, "var0"), new Lexeme(INTEGER, 81));
+        env1.insertEnv(new Lexeme(I, "var1"), new Lexeme(INTEGER, 82));
+		env1.insertEnv(new Lexeme(I, "var2"), new Lexeme(INTEGER, 83));
         Lexeme vals = env1.getEnv().getCar().getCdr();
-
+		Lexeme vars = env1.getEnv().getCar().getCar();
 		/* Actual testing of the extendEnv() method comes here */
         env.extendEnv(vars, vals);
         env.displayEnv(1);
+
+		System.out.println("trying to get val of var0");
+		Lexeme v = env.getVal(new Lexeme(I, "var0"));
+		System.out.println("var0 has val: " + v.getInt());
+
+		v = env.getVal(new Lexeme(I, "b"));
+		System.out.println("b has val: " + v.getInt());
+
+		System.out.println("/* Starting new test to mimic error in dpl */\n");
+		Environment myEnv = new Environment();
+		myEnv.insertEnv(new Lexeme(ID, "tester"), new Lexeme(CLOSURE));
+		myEnv.insertEnv(new Lexeme(ID, "main"), new Lexeme(CLOSURE));
+		System.out.print("myEnv ");
+		myEnv.displayEnv(1);
     }
 }
