@@ -613,25 +613,13 @@ System.out.print("id is: "); id.display(); System.out.println();
 	 */
 	private Lexeme evalFunctionCall(Lexeme tree, Environment env)
 	{
-// System.out.print("at beginning of function call, ");
-// env.displayEnv(1);
 		Lexeme closure = lookup(tree.getCar(), env);
 		Lexeme args = getArgs(tree, env);
-// System.out.println("+++args are of type: " + args.getType());
-//System.out.println("===args are: "); args.getCar().getCar().getCar().display(); System.out.println();
-// System.out.println("while eval(args, env) is: ");
-// eval(args, env).display();
-//		if (isBuiltIn(closure)) return evalBuiltIn(closure, args);	//FIXME: uncomment, need to write ebuiltin
 		Environment senv = new Environment(closure.getCar());
 		Lexeme params = getParams(closure);
-// System.out.println("params are: ");
-// params.getCar().display();
-// System.out.println("args are of type: ");
-// args.display();
 		Environment lenv = new Environment(senv.extendEnv(params, args));
 		Lexeme body = getBody(closure);
-// System.out.print("lenv is: "); lenv.displayEnv(1);	
-//  lenv.getVal(new Lexeme(ID, "a")).display();
+		
 		return eval(body, lenv);
 	}
 /*
