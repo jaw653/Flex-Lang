@@ -288,6 +288,27 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 	}
 
 	/**
+	 * Evaluates the block of the run function; the equivalent of c main
+	 * @tree Root of the run function parse tree
+	 * @env Corresponding environment
+	 * @return The value of the evaluated block
+	 */
+	private Lexeme evalRunDef(Lexeme tree, Environment env)
+	{
+		Lexeme closure = null, paramList = null, block = null;
+
+		closure = cons(CLOSURE, env.getEnv(), tree);
+		env.insertEnv(tree.getCar(), closure);
+
+		if (tree.getCdr().getCar() != null)
+			paramList = eval(tree.getCdr().getCar(), env);
+
+		block = eval(tree.getCdr().getCdr(), env);
+
+		return block;
+	}
+
+	/**
 	 * Evaluates a block parse tree
 	 * @tree Root of the BLOCK tree to use for evaluation
 	 * @env Corresponding environment
@@ -746,7 +767,7 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 	 */
 	private Lexeme eval(Lexeme tree, Environment env)
 	{
-// tree.display();System.out.println();
+ tree.display();System.out.println();
 		switch (tree.getType())
 		{
 			case PROG:
@@ -778,6 +799,8 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 				return evalUnary(tree, env);
 			case FUNCCALL:
 				return evalFunctionCall(tree, env);
+			case RUNDEF:
+				return evalRunDef(tree, env);
 			case IDSTART:
 				return evalIDstart(tree, env);
 			case IMPORTDEF:
