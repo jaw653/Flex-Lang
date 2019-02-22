@@ -203,7 +203,7 @@
                 paramList = paramList();
 
             match(CLOSE_PAREN);
-System.out.println("name is: " + id.getName());
+			
 			block = block();
 
 			if (!id.getName().equals("run"))

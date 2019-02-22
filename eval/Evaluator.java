@@ -811,7 +811,7 @@ System.out.print("id is: "); id.display(); System.out.println();
 	 */
 	private Lexeme eval(Lexeme tree, Environment env)
 	{
- tree.display();System.out.println();
+// tree.display();System.out.println();
 		switch (tree.getType())
 		{
 			case PROG:
@@ -901,7 +901,7 @@ System.out.print("id is: "); id.display(); System.out.println();
 		e.eval(tree, env);
 
 		System.out.println();
-		env.displayEnv(1);									//FIXME: this line for testing purposes only
+//		env.displayEnv(1);									//FIXME: this line for testing purposes only
 
 /*
 		tree.display();
