@@ -726,7 +726,7 @@ System.out.print("id is: "); id.display(); System.out.println();
 		else
 		{
 			if (tree.getCdr().getCdr() != null)
-				block = eval(tree.getCdr().getCdr(), env);
+				elif = eval(tree.getCdr().getCdr(), env);	//Eval else if
 		}
 		
 		return block;
@@ -741,7 +741,6 @@ System.out.print("id is: "); id.display(); System.out.println();
 	private Lexeme evalElseIf(Lexeme tree, Environment env)
 	{
 		Lexeme ifstmt = null, block = null;
-
 		return eval(tree.getCar(), env);
 	}
 
