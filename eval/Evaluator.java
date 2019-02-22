@@ -282,9 +282,9 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 		env.insertEnv(tree.getCar(), closure);
 		
 		if (tree.getCdr().getCar() != null) paramList = eval(tree.getCdr().getCar(), env);
-		block = eval(tree.getCdr().getCdr(), env);
+//		block = eval(tree.getCdr().getCdr(), env);
 		
-		return block;
+		return closure;
 	}
 
 	/**
@@ -746,7 +746,7 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 	 */
 	private Lexeme eval(Lexeme tree, Environment env)
 	{
- tree.display();System.out.println();
+// tree.display();System.out.println();
 		switch (tree.getType())
 		{
 			case PROG:
