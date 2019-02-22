@@ -120,10 +120,10 @@ val.getCar().getCar().getCdr().getCar().display();
             env = env.getCdr();
         }
 
-        System.out.println("Undefined variable error");
-		System.out.println("Undefined var is: ");
-		if (vars != null) vars.display();
-		else System.out.println("null");
+    //    System.out.println("Undefined variable error");
+	//	System.out.println("Undefined var is: ");
+	//	if (vars != null) vars.display();
+	//	else System.out.println("null");
     
 		return new Lexeme(UNKNOWN);
     }
