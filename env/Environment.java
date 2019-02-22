@@ -307,5 +307,7 @@ val.getCar().getCar().getCdr().getCar().display();
 		myEnv.insertEnv(new Lexeme(ID, "main"), new Lexeme(CLOSURE));
 		System.out.print("myEnv ");
 		myEnv.displayEnv(1);
+
+
     }
 }
