@@ -77,6 +77,8 @@ public class Lexeme implements Types
 	 */
 	public Lexeme(String type, boolean b)
 	{
+		this.type = type;
+		
 		if (b == true)
 			this.ival = 1;
 		else
