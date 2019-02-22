@@ -613,14 +613,40 @@ System.out.print("id is: "); id.display(); System.out.println();
 	 */
 	private Lexeme evalFunctionCall(Lexeme tree, Environment env)
 	{
-		Lexeme closure = lookup(tree.getCar(), env);
 		Lexeme args = getArgs(tree, env);
+
+		if (tree.getCar().getName().equals("print"))
+			return evalPrint(args);
+		
+		Lexeme closure = lookup(tree.getCar(), env);
 		Environment senv = new Environment(closure.getCar());
 		Lexeme params = getParams(closure);
 		Environment lenv = new Environment(senv.extendEnv(params, args));
 		Lexeme body = getBody(closure);
 		
 		return eval(body, lenv);
+	}
+
+	private Lexeme evalPrint(Lexeme args)
+	{
+		Lexeme toPrint = args.getCar();
+		
+		switch(toPrint.getType())
+		{
+			case STRING:
+				System.out.println(toPrint.getName());
+				break;
+			case INTEGER:
+				System.out.println(toPrint.getInt());
+				break;
+			case REAL:
+				System.out.println(toPrint.getReal());
+				break;
+			default:
+				System.out.println("Cannot print type " + toPrint.getType());
+		}
+		
+		return null;
 	}
 /*
 	private Lexeme evalMethodCall(Lexeme tree, Environment env)
