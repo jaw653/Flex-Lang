@@ -51,6 +51,7 @@ test1: $(CLASSES)
 
 test2: $(CLASSES)
 	./flex eval/test2.flex
+
 test3: $(CLASSES)
 	./flex eval/test3.flex
 
