@@ -379,9 +379,22 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 	 */
 	private Lexeme evalExprDef(Lexeme tree, Environment env)
 	{
-		Lexeme unary = null, operator = null, expr = null;
+		Lexeme unary = null, operator = null, expr = null, opTree = null;
 
 		unary = eval(tree.getCar(), env);
+
+		if (tree.getCdr() != null)
+		{
+System.out.println("flag0");
+			/* Make a new operation tree to eval with evalOp */
+			opTree = new Lexeme(tree.getCdr().getCar().getType());
+			opTree.setCar(unary);
+			opTree.setCdr(eval(tree.getCdr().getCdr(), env));
+System.out.println("flag");
+//System.out.println("the eval of optree is: ");
+//eval(opTree, env).display(); System.out.println();
+			return eval(opTree, env);
+		}
 
 /*	
 		if (tree.getCdr() != null)
@@ -419,6 +432,7 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 	 */
 	private Lexeme evalOp(Lexeme tree, Environment env)
 	{
+System.out.println("evalop ran!");
 		Lexeme arg1 = null, arg2 = null;
 		Lexeme resolvedArg1 = null, resolvedArg2 = null;
 
@@ -430,7 +444,17 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 
 		if (arg2.getType() != INTEGER && arg2.getType() != REAL)
 			resolvedArg2 = env.getVal(arg2);
+/*
+System.out.println("arg1 is: ");
+arg1.display(); System.out.println();
+System.out.println("arg2 is: ");
+arg2.display(); System.out.println();
 
+System.out.println("resolvedArg1 is: ");
+resolvedArg1.display(); System.out.println();
+System.out.println("resolvedArg2 is: ");
+resolvedArg2.display(); System.out.println();
+*/
 		/* Resolved arg will either == the value held by its ID,
 		 * or it will be null if arg1 was already in its final resolved
 		 * form, or it will be unknown if it's a var whose val couldn't be
@@ -458,14 +482,17 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 //System.out.print("env given to evalOp() "); env.displayEnv(1);
 // System.out.println("value of a is: " + env.getVal(new Lexeme(ID, "a")).getInt());		
 
-		String operandType = null;
-		if (resolvedArg1 != null) operandType = resolvedArg1.getType();
-		String operatorType = tree.getType();
+
+//		if (resolvedArg1 != null) operandType = resolvedArg1.getType();
+		
 		
 		if (resolvedArg1 != null)
 			arg1 = resolvedArg1;
 		if (resolvedArg2 != null)
 			arg2 = resolvedArg2;
+
+		String operatorType = tree.getType();
+		String operandType = arg1.getType();
 
 		if (operandType == INTEGER)
 		{
@@ -693,7 +720,10 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 		
 		/* If expr is true */
 		if (expr.getInt() == 1)
+		{
+			System.out.println("block 1 ran!!");
 			block = eval(tree.getCdr().getCar(), env);
+		}
 		else
 		{
 			if (tree.getCdr().getCdr() != null)
@@ -822,6 +852,11 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 			case TIMES:
 			case DIVIDE:
 			case MODULO:
+			case LESS_THAN:
+			case GREATER_THAN:
+			case LT_EQUAL:
+			case GT_EQUAL:
+			case EQUAL_TO:
 				return evalOp(tree, env);
 				
 		}
