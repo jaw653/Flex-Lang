@@ -13,6 +13,8 @@ all: $(CLASSES)
 
 run: $(CLASSES)
 	make test1
+	make test2
+
 
 ##### Classes #####
 lex/Types.class: lex/Types.java
@@ -46,6 +48,12 @@ eval/Evaluator.class: eval/Evaluator.java
 ##### Test Cases #####
 test1: $(CLASSES)
 	./flex eval/test1.flex
+
+test2: $(CLASSES)
+	./flex eval/test2.flex
+test3: $(CLASSES)
+	./flex eval/test3.flex
+
 
 ##### Clean Command #####
 clean:

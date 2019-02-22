@@ -95,18 +95,22 @@ val.getCar().getCar().getCdr().getCar().display();
      */
     public Lexeme getVal(Lexeme id)
     {
-        Lexeme env = this.env;
+// System.out.println("env that getVal is dealing w is: ");
+// this.displayEnv(1);
+		Lexeme env = this.env;
         Lexeme vars = null;
         Lexeme vals = null;
 
         while (env != null)
         {
-            vars = (env.getCar()).getCar();
+// System.out.println("loop");
+			vars = (env.getCar()).getCar();
             vals = (env.getCar()).getCdr();
 
             while (vars != null)
             {
-                if ( id.getName().equals(vars.getCar().getName()) )
+// System.out.println("loop1");
+				if ( id.getName().equals(vars.getCar().getName()) )
                     return vals.getCar();
 
                 vars = vars.getCdr();
@@ -116,13 +120,12 @@ val.getCar().getCar().getCdr().getCar().display();
             env = env.getCdr();
         }
 
-        System.out.println("Undefined variable error");
-		System.out.println("Undefined var is: ");
-		if (vars != null) vars.display();
-		else System.out.println("null");
-        System.exit(-1);
-
-        return null;    // This was just added to surpress the no return error
+    //    System.out.println("Undefined variable error");
+	//	System.out.println("Undefined var is: ");
+	//	if (vars != null) vars.display();
+	//	else System.out.println("null");
+    
+		return new Lexeme(UNKNOWN);
     }
 
     /**
