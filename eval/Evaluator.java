@@ -19,6 +19,7 @@
 // need to run eval on main() or something to actually run the file
 
 // currently a variable defined inside an if loop will belong to the overarching function
+// currently do not allow for negative numbers
 
 package eval;
 
@@ -756,12 +757,13 @@ System.out.print("id is: "); id.display(); System.out.println();
 
 		expr = eval(tree.getCar(), env);
 
-		if (expr.getInt() == 1)
+		while (expr.getInt() == 1)
+		{
 			block = eval(tree.getCdr(), env);
-		else
-			return null;
-
-		return eval(tree, env);
+			expr = eval(tree.getCar(), env);
+		}
+		
+		return expr;
 	}
 
 	/**
