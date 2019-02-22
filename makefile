@@ -55,6 +55,9 @@ test2: $(CLASSES)
 test3: $(CLASSES)
 	./flex eval/test3.flex
 
+test4: $(CLASSES)
+	./flex eval/test4.flex
+
 
 ##### Clean Command #####
 clean:
