@@ -18,7 +18,7 @@
 
 // need to run eval on main() or something to actually run the file
 
-// currently getVal() will not be fatal so the program could keep running even if an arg is not resolved to its value
+// currently a variable defined inside an if loop will belong to the overarching function
 
 package eval;
 
@@ -261,7 +261,7 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 		id = eval(tree.getCar(), env);
 		
 		if (tree.getCdr() != null)
-			val = eval(tree.getCdr().getCar(), env);
+			val = eval(tree.getCdr(), env);
 	
 		env.insertEnv(id, val);
 // env.displayEnv(1);
@@ -385,14 +385,10 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 
 		if (tree.getCdr() != null)
 		{
-System.out.println("flag0");
 			/* Make a new operation tree to eval with evalOp */
 			opTree = new Lexeme(tree.getCdr().getCar().getType());
 			opTree.setCar(unary);
 			opTree.setCdr(eval(tree.getCdr().getCdr(), env));
-System.out.println("flag");
-//System.out.println("the eval of optree is: ");
-//eval(opTree, env).display(); System.out.println();
 			return eval(opTree, env);
 		}
 
@@ -432,17 +428,17 @@ System.out.println("flag");
 	 */
 	private Lexeme evalOp(Lexeme tree, Environment env)
 	{
-System.out.println("evalop ran!");
 		Lexeme arg1 = null, arg2 = null;
 		Lexeme resolvedArg1 = null, resolvedArg2 = null;
 
 		arg1 = eval(tree.getCar(), env);
 		arg2 = eval(tree.getCdr(), env);
 
-		if (arg1.getType() != INTEGER && arg1.getType() != REAL)
+		/* Don't want to resolve the value of a var if we're assigning */
+		if (arg1.getType() != INTEGER && arg1.getType() != REAL && tree.getType() != ASSIGN)
 			resolvedArg1 = env.getVal(arg1);
 
-		if (arg2.getType() != INTEGER && arg2.getType() != REAL)
+		if (arg2.getType() != INTEGER && arg2.getType() != REAL && tree.getType() != ASSIGN)
 			resolvedArg2 = env.getVal(arg2);
 /*
 System.out.println("arg1 is: ");
@@ -493,7 +489,7 @@ resolvedArg2.display(); System.out.println();
 
 		String operatorType = tree.getType();
 		String operandType = arg1.getType();
-
+System.out.println("operand type is: " + operandType);
 		if (operandType == INTEGER)
 		{
 			int a0 = arg1.getInt();
@@ -565,6 +561,12 @@ resolvedArg2.display(); System.out.println();
 				return new Lexeme(operandType, a0-=a1);
 			else
 				return new Lexeme(UNKNOWN);
+		}
+		else if (operandType == ID)
+		{
+			Lexeme id = eval(tree.getCar(), env);
+System.out.print("id is: "); id.display(); System.out.println();
+			env.updateVal(id, eval(tree.getCdr(), env));
 		}
 
 		return null;				// This was placed here to circumvent error. If time replace all those returns with assignments and finish with one return
@@ -720,10 +722,7 @@ resolvedArg2.display(); System.out.println();
 		
 		/* If expr is true */
 		if (expr.getInt() == 1)
-		{
-			System.out.println("block 1 ran!!");
 			block = eval(tree.getCdr().getCar(), env);
-		}
 		else
 		{
 			if (tree.getCdr().getCdr() != null)
@@ -857,6 +856,7 @@ resolvedArg2.display(); System.out.println();
 			case LT_EQUAL:
 			case GT_EQUAL:
 			case EQUAL_TO:
+			case ASSIGN:
 				return evalOp(tree, env);
 				
 		}
