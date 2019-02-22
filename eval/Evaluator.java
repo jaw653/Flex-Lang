@@ -18,7 +18,8 @@
 
 // need to run eval on main() or something to actually run the file
 
-// CONTINUE WORKING ON LINE 339
+// currently getVal() will not be fatal so the program could keep running even if an arg is not resolved to its value
+
 package eval;
 
 import lex.*;
@@ -561,8 +562,8 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 	 */
 	private Lexeme evalFunctionCall(Lexeme tree, Environment env)
 	{
-System.out.print("at beginning of function call, ");
-env.displayEnv(1);
+// System.out.print("at beginning of function call, ");
+// env.displayEnv(1);
 		Lexeme closure = lookup(tree.getCar(), env);
 		Lexeme args = getArgs(tree, env);
 // System.out.println("+++args are of type: " + args.getType());
@@ -745,7 +746,7 @@ env.displayEnv(1);
 	 */
 	private Lexeme eval(Lexeme tree, Environment env)
 	{
-tree.display();System.out.println();
+ tree.display();System.out.println();
 		switch (tree.getType())
 		{
 			case PROG:
