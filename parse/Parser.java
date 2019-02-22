@@ -189,16 +189,12 @@
      */
     public Lexeme defined() throws IOException
     {
-        boolean isFunction = false;
-
-        Lexeme id, paramList = null, block;
-
-        match(DEFINE);
+        Lexeme id, paramList = null, block = null, ret = null;
+        
+		match(DEFINE);
 
         if ( check(FUNCTION) )
         {
-            isFunction = true;
-
             match(FUNCTION);
             id = match(ID);
             match(OPEN_PAREN);
@@ -207,19 +203,27 @@
                 paramList = paramList();
 
             match(CLOSE_PAREN);
+System.out.println("name is: " + id.getName());
+			block = block();
+
+			if (!id.getName().equals("run"))
+				ret = cons(FUNCDEF, id, cons(GLUE, paramList, block));
+			else
+				ret = cons(RUNDEF, id, cons(GLUE, paramList, block));
         }
         else
         {
             match(CLASS);
             id = match(ID);
+			
+			block = block();
+
+			ret = cons(CLASSDEF, id, block);
         }
 
-        block = block();
+//        block = block();
 
-        if (isFunction == true)
-            return cons(FUNCDEF, id, cons(GLUE, paramList, block));
-
-        return cons(CLASSDEF, id, block);
+        return ret;
     }
 
     /**
