@@ -109,7 +109,6 @@ val.getCar().getCar().getCdr().getCar().display();
 
             while (vars != null)
             {
-// System.out.println("loop1");
 				if ( id.getName().equals(vars.getCar().getName()) )
                     return vals.getCar();
 
