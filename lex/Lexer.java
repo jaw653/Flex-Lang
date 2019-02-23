@@ -300,6 +300,13 @@ public class Lexer implements Types
                 return new Lexeme(MODULO);
             case '_':
                 return new Lexeme(UNDERSCORE);
+			case '!':
+				ch = Character.valueOf( (char)stream.read() );
+
+				if (ch == '=')
+					return new Lexeme(NOT_EQUAL);
+				stream.unread(ch);
+				return new Lexeme(NEGATE);
             case '\'':
                 return new Lexeme(SINGLE_QUOTE);
             case '{':
@@ -308,8 +315,8 @@ public class Lexer implements Types
                 return new Lexeme(CLOSE_BRACE);
             case '.':
                 return new Lexeme(PERIOD);
-            case '!':
-                return new Lexeme(NOT);
+//            case '!':
+//                return new Lexeme(NOT);
             default:
                 if ( Character.isDigit(ch) )
                 {

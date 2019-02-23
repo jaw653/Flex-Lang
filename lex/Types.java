@@ -38,6 +38,8 @@ public interface Types
     public static final String LT_EQUAL = "LT_EQUAL";
     public static final String GT_EQUAL = "GT_EQUAL";
     public static final String EQUAL_TO = "EQUAL_TO";
+	public static final String NOT_EQUAL = "NOT_EQUAL";
+	public static final String NEGATE = "NEGATE";
     public static final String ASSIGN = "ASSIGN";
     public static final String SEMICOLON = "SEMICOLON";
     public static final String MODULO = "MODULO";
@@ -54,6 +56,7 @@ public interface Types
     public static final String CLASS = "CLASS";
     public static final String NEW = "NEW";
     public static final String NOT = "NOT";
+	public static final String CLASS_INSTANTIATION = "CLASS_INSTANTIATION";
 
     /***** Parse tree macros *****/
 	public static final String RUNDEF = "RUNDEF";
