@@ -170,7 +170,7 @@
                 match(CLOSE_PAREN);
                 match(UNDERSCORE);
 
-                tree = cons(VARDEF, id, cons(GLUE, objId, exprList));
+                tree = cons(CLASS_INSTANTIATION, id, cons(GLUE, objId, exprList));
             }
             else
             {
@@ -364,7 +364,7 @@
             match(CLOSE_PAREN);
             match(UNDERSCORE);
 
-            tree = cons(UNARY, tmp, tmp1);
+            tree = cons(CLASS_INSTANTIATION, tmp, tmp1);
         }
 
         return tree;
@@ -395,6 +395,10 @@
             tree = match(LESS_THAN);
         else if ( check(EQUAL_TO) )
             tree = match(EQUAL_TO);
+		else if ( check(NOT_EQUAL) )
+			tree = match(NOT_EQUAL);
+		else if ( check(NEGATE) )
+			tree = match(NEGATE);
         else if ( check(GT_EQUAL) )
             tree = match(GT_EQUAL);
         else if ( check(LT_EQUAL) )
