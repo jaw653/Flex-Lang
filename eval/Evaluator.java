@@ -262,8 +262,18 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 		id = eval(tree.getCar(), env);
 		
 		if (tree.getCdr() != null)
-			val = eval(tree.getCdr(), env);
-	
+		{
+			/* If not an object variable */
+			//if (tree.getCdr().getType() != GLUE)
+				val = eval(tree.getCdr(), env);
+			//else
+			//{
+				
+				// Call the instantiation method of the obj with id cdr()car()
+				// do the above with optexprlist at cdr()cdr()
+			//}
+		}
+
 		env.insertEnv(id, val);
 // env.displayEnv(1);
 		return val;
@@ -367,9 +377,21 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 	 */
 	private Lexeme evalClassDef(Lexeme tree, Environment env)
 	{
-		Lexeme closure = cons(CLOSURE, env.getEnv(), tree);
-		env.insertEnv(tree.getCar(), closure);					//FIXME: should this be OCLOSURE?
-		return closure;
+		Lexeme oclosure = cons(OCLOSURE, env.getEnv(), tree);
+		env.insertEnv(tree.getCar(), oclosure);					//FIXME: should this be OCLOSURE?
+		return oclosure;
+	}
+
+	/**
+	 * Evaluator for class instantiation
+	 * @tree Root of the class inst. parse tree
+	 * @env Corresponding environment
+	 * @return ...
+	 */
+	private Lexeme evalClassInst(Lexeme tree, Environment env)
+	{
+		Lexeme oclosure = lookup(tree.getCdr().getCar(), env);
+		return null;
 	}
 
 	/**
@@ -490,7 +512,7 @@ resolvedArg2.display(); System.out.println();
 
 		String operatorType = tree.getType();
 		String operandType = arg1.getType();
-System.out.println("operand type is: " + operandType);
+// System.out.println("operand type is: " + operandType);
 		if (operandType == INTEGER)
 		{
 			int a0 = arg1.getInt();
@@ -505,7 +527,7 @@ System.out.println("operand type is: " + operandType);
 			else if (operatorType == DIVIDE)
 				return new Lexeme(operandType, a0/a1);
 			else if (operatorType == INCREMENT)
-				return new Lexeme (operandType, a0+1);
+				return new Lexeme(operandType, a0+1);
 			else if (operatorType == DECREMENT)
 				return new Lexeme(operandType, a0-1);
 			else if (operatorType == GREATER_THAN)
@@ -514,6 +536,8 @@ System.out.println("operand type is: " + operandType);
 				return new Lexeme(operandType, a0<a1);
 			else if (operatorType == EQUAL_TO)
 				return new Lexeme(operandType, a0 == a1);
+			else if (operatorType == NOT_EQUAL)
+				return new Lexeme(operandType, a0 != a1);
 			else if (operatorType == GT_EQUAL)
 				return new Lexeme(operandType, a0>=a1);
 			else if (operatorType == LT_EQUAL)
@@ -541,7 +565,7 @@ System.out.println("operand type is: " + operandType);
 			else if (operatorType == DIVIDE)
 				return new Lexeme(operandType, a0/a1);
 			else if (operatorType == INCREMENT)
-				return new Lexeme (operandType, a0+1);
+				return new Lexeme(operandType, a0+1);
 			else if (operatorType == DECREMENT)
 				return new Lexeme(operandType, a0-1);
 			else if (operatorType == GREATER_THAN)
@@ -550,6 +574,8 @@ System.out.println("operand type is: " + operandType);
 				return new Lexeme(operandType, a0<a1);
 			else if (operatorType == EQUAL_TO)
 				return new Lexeme(operandType, a0 == a1);
+			else if (operatorType == NOT_EQUAL)
+				return new Lexeme(operandType, a0 != a1);
 			else if (operatorType == GT_EQUAL)
 				return new Lexeme(operandType, a0>=a1);
 			else if (operatorType == LT_EQUAL)
@@ -566,7 +592,7 @@ System.out.println("operand type is: " + operandType);
 		else if (operandType == ID)
 		{
 			Lexeme id = eval(tree.getCar(), env);
-System.out.print("id is: "); id.display(); System.out.println();
+// System.out.print("id is: "); id.display(); System.out.println();
 			env.updateVal(id, eval(tree.getCdr(), env));
 		}
 
@@ -623,6 +649,9 @@ System.out.print("id is: "); id.display(); System.out.println();
 		Lexeme params = getParams(closure);
 		Environment lenv = new Environment(senv.extendEnv(params, args));
 		Lexeme body = getBody(closure);
+
+		/* Insert variable that points to the local environment */
+		lenv.insertEnv(new Lexeme(ID, "this"), lenv.getEnv());
 		
 		return eval(body, lenv);
 	}
@@ -811,7 +840,7 @@ System.out.print("id is: "); id.display(); System.out.println();
 	 */
 	private Lexeme eval(Lexeme tree, Environment env)
 	{
-// tree.display();System.out.println();
+ tree.display();System.out.println();
 		switch (tree.getType())
 		{
 			case PROG:
@@ -837,6 +866,8 @@ System.out.print("id is: "); id.display(); System.out.println();
 				return evalRetStmt(tree, env);
 			case CLASSDEF:
 				return evalClassDef(tree, env);
+			case CLASS_INSTANTIATION:
+				return evalClassInst(tree, env);
 			case EXPRDEF:
 				return evalExprDef(tree, env);
 			case UNARY:
@@ -901,7 +932,7 @@ System.out.print("id is: "); id.display(); System.out.println();
 		e.eval(tree, env);
 
 		System.out.println();
-//		env.displayEnv(1);									//FIXME: this line for testing purposes only
+		env.displayEnv(1);									//FIXME: this line for testing purposes only
 
 /*
 		tree.display();
