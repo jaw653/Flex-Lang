@@ -57,6 +57,7 @@ public interface Types
     public static final String NEW = "NEW";
     public static final String NOT = "NOT";
 	public static final String CLASS_INSTANTIATION = "CLASS_INSTANTIATION";
+	public static final String OBJMEM = "OBJMEM";
 
     /***** Parse tree macros *****/
 	public static final String RUNDEF = "RUNDEF";
