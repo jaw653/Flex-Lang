@@ -174,8 +174,8 @@ val.getCar().getCar().getCdr().getCar().display();
      */
     public Lexeme extendEnv(Lexeme vars, Lexeme vals)
     {
-        env = cons(ENV, cons(TABLE, vars, vals), env);
-		return env;
+        Lexeme nenv = cons(ENV, cons(TABLE, vars, vals), env);
+		return nenv;
     }
 
     /**
