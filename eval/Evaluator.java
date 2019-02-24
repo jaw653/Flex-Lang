@@ -407,7 +407,7 @@ env.displayEnv(1);
 		Lexeme body = oclosure.getCdr().getCdr();
 
 		lenv.insertEnv(new Lexeme(ID, "this"), lenv.getEnv());
-
+System.out.println("lenv is: "); lenv.displayEnv(1);
 		return oclosure;
 //		Lexeme constructor = getConstructor(tree.getCdr().getCar(), env);
 //System.out.println("constructor is: "); constructor.display(); System.out.println();
@@ -430,6 +430,11 @@ env.displayEnv(1);
 		
 //		return eval(body, lenv);
 */
+	}
+
+	private Lexeme evalObjMem(Lexeme tree, Environment env)
+	{
+		return null;
 	}
 
 	/**
@@ -627,12 +632,14 @@ resolvedArg2.display(); System.out.println();
 			else
 				return new Lexeme(UNKNOWN);
 		}
+/*
 		else if (operandType == ID)
 		{
 			Lexeme id = eval(tree.getCar(), env);
 // System.out.print("id is: "); id.display(); System.out.println();
 			env.updateVal(id, eval(tree.getCdr(), env));
 		}
+*/
 
 		return null;				// This was placed here to circumvent error. If time replace all those returns with assignments and finish with one return
 
@@ -640,6 +647,8 @@ resolvedArg2.display(); System.out.println();
 
 	private Lexeme evalAssign(Lexeme tree, Environment env)
 	{
+		Lexeme id = eval(tree.getCar(), env);
+		env.updateVal(id, eval(tree.getCdr(), env));
 /*
 		Lexeme result = eval(tree.getCdr(), env);
 		
@@ -923,6 +932,8 @@ resolvedArg2.display(); System.out.println();
 				return evalClassDef(tree, env);
 			case CLASS_INSTANTIATION:
 				return evalClassInst(tree, env);
+//			case OBJMEM:
+//				return evalObjMem(tree, env);
 			case EXPRDEF:
 				return evalExprDef(tree, env);
 			case UNARY:
@@ -957,10 +968,9 @@ resolvedArg2.display(); System.out.println();
 			case LT_EQUAL:
 			case GT_EQUAL:
 			case EQUAL_TO:
-			case ASSIGN:
 				return evalOp(tree, env);
-//			case ASSIGN:
-//				return evalAssign(tree, env);
+			case ASSIGN:
+				return evalAssign(tree, env);
 				
 		}
 
