@@ -174,10 +174,15 @@
             }
             else
             {
-                expr = expression();
+				if (expressionPending())
+	                expr = expression();
                 tree = cons(VARDEF, id, expr);
             }
         }
+		else
+		{
+			tree = cons(VARDEF, id, expr);
+		}
 
         match(SEMICOLON);
 
@@ -293,9 +298,7 @@
 
         if ( statementsPending() )
         {
-// System.out.println("flag1111");
             stmnts = statements();
-// System.out.println("flag2222");
         }
 
         if ( returnStatementPending() )
@@ -304,8 +307,8 @@
         }
 
         match(CLOSE_BRACE);
-// System.out.println("flag3333");
-        return cons(BLOCK, stmnts, ret);
+        
+		return cons(BLOCK, stmnts, ret);
     }
 
     /**
@@ -443,6 +446,7 @@
 
         if ( expressionPending() )
         {
+System.out.println("expression pending");
             tmp = expression();
             
 			match(SEMICOLON);
@@ -467,7 +471,8 @@
         {
             tmp = varDef();
         }
-        
+		else
+			System.out.println("tmp not assigned");	
 		return cons(STATEMENT, tmp, null);
     }
 
@@ -654,7 +659,7 @@ System.out.println("expr2carcdr val: " + expr2.getCar().getCdr().getName());
             	tree = cons(IDSTART, id, cons(GLUE, mthdName, exprList));
 			}
 			else
-				tree = cons(IDSTART, id, mthdName);		// A dot access such as obj.a
+				tree = cons(OBJMEM, id, mthdName);		// A dot access such as obj.a
  		}
         else
             tree = cons(IDSTART, id, null);
@@ -751,8 +756,10 @@ System.out.println("expr2carcdr val: " + expr2.getCar().getCdr().getName());
 
  	public boolean unaryPending()
  	{
+System.out.println("running unaryPending(), ");
+if (check(OBJMEM) == true) System.out.println("OBJMEM pending");
  		return ( idStartPending() || check(INTEGER) || check(REAL) || check(STRING) ||
- 			check(NOT) || check(OPEN_PAREN) || check(MINUS) || check(NEW) );
+ 			check(NOT) || check(OPEN_PAREN) || check(MINUS) || check(NEW) || check(OBJMEM) );
  	}
 
  	public boolean idStartPending()
