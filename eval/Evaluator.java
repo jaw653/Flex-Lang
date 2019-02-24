@@ -265,7 +265,7 @@ public class Evaluator implements Types
 		Lexeme id = null, val = null;
 	
 		id = eval(tree.getCar(), env);
-		
+System.out.println("evalVardef of id: " + id.getName());		
 		if (tree.getCdr() != null)
 		{
 			/* If not an object variable */
@@ -431,6 +431,18 @@ env.displayEnv(1);
 		
 //		return eval(body, lenv);
 */
+	}
+
+	private Lexeme evalObjMem(Lexeme tree, Environment env)
+	{
+		/* Gets the oclosure of the obj with id at car of objmem lexeme */
+		Lexeme oclosure = lookup(tree.getCar(), env);
+System.out.println("total env"); env.displayEnv(1);
+		/* Local env from which to get the value of the member */
+		Environment lenv = new Environment(oclosure.getCar());
+System.out.println("lenv is: "); lenv.displayEnv(1);
+System.out.println("searching lenv for: "); tree.getCdr().display(); System.out.println();
+		return lookup(tree.getCdr() , lenv);
 	}
 
 	/**
@@ -651,6 +663,8 @@ resolvedArg2.display(); System.out.println();
 //		Lexeme id = eval(tree.getCar(), env);
 		Lexeme result = eval(tree.getCdr(), env);
 
+System.out.println("car is: "); tree.getCar().display(); System.out.println();
+/*
 		if (tree.getCar().getType() != OBJMEM)
 		{
 			Lexeme id = eval(tree.getCar(), env);
@@ -667,7 +681,7 @@ resolvedArg2.display(); System.out.println();
 			System.out.println("Bad assignment");
 			System.exit(-1);
 		}
-		
+*/		
 		return result;
 	}
 
@@ -945,6 +959,8 @@ resolvedArg2.display(); System.out.println();
 				return evalClassDef(tree, env);
 			case CLASS_INSTANTIATION:
 				return evalClassInst(tree, env);
+			case OBJMEM:
+				return evalObjMem(tree, env);
 			case EXPRDEF:
 				return evalExprDef(tree, env);
 			case UNARY:
