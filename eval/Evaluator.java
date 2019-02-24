@@ -136,13 +136,6 @@ public class Evaluator implements Types
 	 */
 	private Lexeme getBody(Lexeme closure)
 	{
-/*
-System.out.println("getbody:");
-System.out.println("closure type is: " + closure.getType());
-System.out.println("cdr is: " + closure.getCdr().getType());
-System.out.println("cddr is: " + closure.getCdr().getCdr().getType());
-System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
-*/
 		return closure.getCdr().getCdr().getCdr();
 	}
 
@@ -212,6 +205,18 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 		if (function.getName() != "print" && function.getName() != "destroy")
 			return false;
 		return true;
+	}
+
+	/**
+	 * Gets the constructor for a given class
+	 * @id Name of the class, and therefore the constructor
+	 * @env Corresponding environment
+	 * @return Constructor function
+	 */
+	private Lexeme getConstructor(Lexeme id, Environment env)
+	{
+		System.out.println("searching env: "); env.displayEnv(1);
+		return env.getVal(id);
 	}
 
 
@@ -290,6 +295,7 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 		Lexeme closure = null, paramList = null, block = null;
 
 		closure = cons(CLOSURE, env.getEnv(), tree);
+// System.out.println("funcdef being inserted: " + tree.getCar().getName());
 		env.insertEnv(tree.getCar(), closure);
 		
 		if (tree.getCdr().getCar() != null) paramList = eval(tree.getCdr().getCar(), env);
@@ -377,8 +383,13 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 	 */
 	private Lexeme evalClassDef(Lexeme tree, Environment env)
 	{
-		Lexeme oclosure = cons(OCLOSURE, env.getEnv(), tree);
-		env.insertEnv(tree.getCar(), oclosure);					//FIXME: should this be OCLOSURE?
+		Environment classEnv = new Environment(env.extendEnv(null, null));
+		Lexeme oclosure = cons(OCLOSURE, classEnv.getEnv(), tree);
+		Lexeme classBody = eval(tree.getCdr(), classEnv);			//Adds all vars and funcdefs to env
+		classEnv.insertEnv(tree.getCar(), oclosure);
+env.displayEnv(1);
+//		Environment classEnv = new Environment(env.extendEnv(classBody, null));
+//		classEnv.insertEnv(tree.getCar(), oclosure);					//FIXME: should this be OCLOSURE?
 		return oclosure;
 	}
 
@@ -391,7 +402,34 @@ System.out.println("cdddr is: " + closure.getCdr().getCdr().getCdr().getType());
 	private Lexeme evalClassInst(Lexeme tree, Environment env)
 	{
 		Lexeme oclosure = lookup(tree.getCdr().getCar(), env);
-		return null;
+		Environment senv = new Environment(oclosure.getCar());
+		Environment lenv = new Environment(senv.extendEnv(null, null));
+		Lexeme body = oclosure.getCdr().getCdr();
+
+		lenv.insertEnv(new Lexeme(ID, "this"), lenv.getEnv());
+
+		return oclosure;
+//		Lexeme constructor = getConstructor(tree.getCdr().getCar(), env);
+//System.out.println("constructor is: "); constructor.display(); System.out.println();
+//		return null;
+
+/*
+		Lexeme args = getArgs(tree, env);
+
+		if (tree.getCar().getName().equals("print"))
+			return evalPrint(args);
+		
+		Lexeme closure = lookup(tree.getCar(), env);
+		Environment senv = new Environment(closure.getCar());
+		Lexeme params = getParams(closure);
+		Environment lenv = new Environment(senv.extendEnv(params, args));
+		Lexeme body = getBody(closure);
+
+		/* Insert variable that points to the local environment *
+//		lenv.insertEnv(new Lexeme(ID, "this"), lenv.getEnv());
+		
+//		return eval(body, lenv);
+*/
 	}
 
 	/**
@@ -600,6 +638,17 @@ resolvedArg2.display(); System.out.println();
 
 	}
 
+	private Lexeme evalAssign(Lexeme tree, Environment env)
+	{
+/*
+		Lexeme result = eval(tree.getCdr(), env);
+		
+		if (tree.getCar().getType() == VARIABLE)
+			env.updateE
+*/
+		return null;
+	}
+
 	/**
 	 * Evaluates the constructor of a function/method call			FIXME: I think...?
 	 * @closure Parent closure of the constructor
@@ -698,6 +747,12 @@ resolvedArg2.display(); System.out.println();
 				/* Means that there is an id op unary */
 				if (isOperator(tree.getCdr().getCar()))
 					return eval(tree.getCdr().getCar(), env);
+			}
+			else if (tree.getCar().getType() == ID && tree.getCdr().getType() == ID)
+			{
+				/* If a dot access for objects */
+				Environment obj = new Environment(eval(tree.getCar(), env));
+				return eval(tree.getCdr(), obj);
 			}
 			else
 				return eval(tree.getCdr(), env);
@@ -904,6 +959,8 @@ resolvedArg2.display(); System.out.println();
 			case EQUAL_TO:
 			case ASSIGN:
 				return evalOp(tree, env);
+//			case ASSIGN:
+//				return evalAssign(tree, env);
 				
 		}
 
