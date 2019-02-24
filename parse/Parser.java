@@ -639,16 +639,22 @@ System.out.println("expr2carcdr val: " + expr2.getCar().getCdr().getName());
  		{
  			match(PERIOD);
  			mthdName = match(ID);
- 			match(OPEN_PAREN);
+ 			
+			if (check(OPEN_PAREN))
+			{
+				match(OPEN_PAREN);
 
- 			if ( exprListPending() )
- 			{
- 				exprList = exprList();
- 			}
+ 				if ( exprListPending() )
+ 				{
+ 					exprList = exprList();
+ 				}
 
- 			match(CLOSE_PAREN);
+ 				match(CLOSE_PAREN);
 
-            tree = cons(IDSTART, id, cons(GLUE, mthdName, exprList));
+            	tree = cons(IDSTART, id, cons(GLUE, mthdName, exprList));
+			}
+			else
+				tree = cons(IDSTART, id, mthdName);		// A dot access such as obj.a
  		}
         else
             tree = cons(IDSTART, id, null);
