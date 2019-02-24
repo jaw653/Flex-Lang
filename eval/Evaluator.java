@@ -278,7 +278,7 @@ public class Evaluator implements Types
 				// do the above with optexprlist at cdr()cdr()
 			//}
 		}
-
+		
 		env.insertEnv(id, val);
 // env.displayEnv(1);
 		return val;
@@ -434,7 +434,16 @@ System.out.println("lenv is: "); lenv.displayEnv(1);
 
 	private Lexeme evalObjMem(Lexeme tree, Environment env)
 	{
-		return null;
+		Lexeme obj = eval(tree.getCar(), env);
+		return eval(tree.getCdr(), new Environment(obj));
+/*
+System.out.println("tree car is: " + tree.getCar().getName());
+		Lexeme oclosure = lookup(tree.getCar(), env);
+System.out.println("oclosure is: " + oclosure.getName());
+System.out.println("env for evalobjmem is: ");
+env.displayEnv(1);
+return null;
+*/
 	}
 
 	/**
@@ -648,14 +657,26 @@ resolvedArg2.display(); System.out.println();
 	private Lexeme evalAssign(Lexeme tree, Environment env)
 	{
 		Lexeme id = eval(tree.getCar(), env);
-		env.updateVal(id, eval(tree.getCdr(), env));
+		Lexeme result = eval(tree.getCdr(), env);
+System.out.println("tree car type is: " + tree.getCar().getType());	
+		if (tree.getCar().getType() != OBJMEM)
+			env.updateVal(id, eval(tree.getCdr(), env));
+		else
+		{
+			Lexeme obj = eval(tree.getCar().getCar(), env);
+			Environment objEnv = new Environment(obj);
+			objEnv.updateVal(tree.getCdr().getCar(), result);
+
+System.out.println("objenv is: ");
+objEnv.displayEnv(1);
+		}
 /*
 		Lexeme result = eval(tree.getCdr(), env);
 		
 		if (tree.getCar().getType() == VARIABLE)
 			env.updateE
 */
-		return null;
+		return result;
 	}
 
 	/**
@@ -701,6 +722,8 @@ resolvedArg2.display(); System.out.println();
 
 		if (tree.getCar().getName().equals("print"))
 			return evalPrint(args);
+//		else if (tree.getCar().getName().equals("newArray"))
+//			return evalNewArray(args);
 		
 		Lexeme closure = lookup(tree.getCar(), env);
 		Environment senv = new Environment(closure.getCar());
@@ -714,6 +737,7 @@ resolvedArg2.display(); System.out.println();
 		return eval(body, lenv);
 	}
 
+/***** Builtin functions *****/
 	private Lexeme evalPrint(Lexeme args)
 	{
 		Lexeme toPrint = args.getCar();
@@ -735,6 +759,15 @@ resolvedArg2.display(); System.out.println();
 		
 		return null;
 	}
+/*
+	private Lexeme evalNewArray(Lexeme args)
+	{
+		int size = args.getCar().getInt();
+		Lexeme arr = new Lexeme(ARRAY);
+		arr.allocateArr(size);
+		return arr;
+	}
+*/
 /*
 	private Lexeme evalMethodCall(Lexeme tree, Environment env)
 	{
@@ -932,8 +965,8 @@ resolvedArg2.display(); System.out.println();
 				return evalClassDef(tree, env);
 			case CLASS_INSTANTIATION:
 				return evalClassInst(tree, env);
-//			case OBJMEM:
-//				return evalObjMem(tree, env);
+			case OBJMEM:
+				return evalObjMem(tree, env);
 			case EXPRDEF:
 				return evalExprDef(tree, env);
 			case UNARY:
