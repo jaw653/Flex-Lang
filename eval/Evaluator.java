@@ -361,6 +361,7 @@ public class Evaluator implements Types
 	 */
 	private Lexeme evalStatement(Lexeme tree, Environment env)
 	{
+		if (tree.getCar() == null) System.out.println("car is null...");
 		return eval(tree.getCar(), env);
 	}
 
@@ -629,6 +630,7 @@ resolvedArg2.display(); System.out.println();
 		}
 		else if (operandType == ID)
 		{
+			/* Assignment, moving to its own eval */
 			Lexeme id = eval(tree.getCar(), env);
 // System.out.print("id is: "); id.display(); System.out.println();
 			env.updateVal(id, eval(tree.getCdr(), env));
@@ -638,15 +640,35 @@ resolvedArg2.display(); System.out.println();
 
 	}
 
+	/**
+	 * Eval method for assignment
+	 * @tree Root of the assignment tree
+	 * @env Corresponding environment
+	 * @return ...
+	 */
 	private Lexeme evalAssign(Lexeme tree, Environment env)
 	{
-/*
+//		Lexeme id = eval(tree.getCar(), env);
 		Lexeme result = eval(tree.getCdr(), env);
+
+		if (tree.getCar().getType() != OBJMEM)
+		{
+			Lexeme id = eval(tree.getCar(), env);
+			env.updateVal(id, eval(tree.getCdr(), env));
+		}
+		else if (tree.getCar().getType() == OBJMEM)
+		{
+			Lexeme obj = eval(tree.getCar().getCar(), env);
+			Environment objEnv = new Environment(obj);
+			objEnv.updateVal(tree.getCar().getCdr(), result);
+		}
+		else
+		{
+			System.out.println("Bad assignment");
+			System.exit(-1);
+		}
 		
-		if (tree.getCar().getType() == VARIABLE)
-			env.updateE
-*/
-		return null;
+		return result;
 	}
 
 	/**
@@ -957,10 +979,9 @@ resolvedArg2.display(); System.out.println();
 			case LT_EQUAL:
 			case GT_EQUAL:
 			case EQUAL_TO:
-			case ASSIGN:
 				return evalOp(tree, env);
-//			case ASSIGN:
-//				return evalAssign(tree, env);
+			case ASSIGN:
+				return evalAssign(tree, env);
 				
 		}
 
