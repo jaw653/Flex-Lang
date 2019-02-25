@@ -16,6 +16,8 @@ public class Lexeme implements Types
     char cval;
     Lexeme car;
     Lexeme cdr;
+	int[] arr;
+	int arrSize;		// Keeps track of how many elements are in the array
 
     /**
      * Constructor method
@@ -121,6 +123,14 @@ public class Lexeme implements Types
         cdr = r;
     }
 
+	/**
+	 * Setter method for array allocation
+	 */
+	public void allocateArr(int size)
+	{
+		arr = new int[size];
+	}
+
     /**
      * Basic getter function for type field
      * @return The type field of the Lexeme
@@ -181,6 +191,18 @@ public class Lexeme implements Types
 		else if (this.type == ID)
 		{
 			System.out.print(this.type + " " + this.sval);
+		}
+		else if (this.type == ARRAY)
+		{
+			System.out.print("[");
+			for (int i = 0; i < this.arrSize; i++)
+			{
+				System.out.print(this.arr[i]);
+				if (i < this.arrSize - 1)
+					System.out.print(",");
+			}
+				
+			System.out.print("]\n");
 		}
 		else if (this.type == V)
 			System.out.print(this.type + " " + this.ival);
