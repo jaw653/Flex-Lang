@@ -128,7 +128,31 @@ public class Lexeme implements Types
 	 */
 	public void allocateArr(int size)
 	{
-		arr = new int[size];
+System.out.println("allocating new array of size " + size);
+		this.arr = new int[size];
+		arrSize = size;
+//		this.arr[0] = 1;
+System.out.println("arr[0] is: " + arr[0]);
+	}
+
+	/**
+	 * Getter method for the index of an array
+	 * @index The index of the element to return
+	 * @return The element at index in array
+	 */
+	public int getArr(int index)
+	{
+		return this.arr[index];
+	}
+
+	public void setArr(int i, Lexeme val)
+	{
+System.out.println("trying to set array index " + i);
+System.out.print("Lexeme val is: "); val.display(); System.out.println();
+System.out.println("val int is: " + val.getInt());
+System.out.println("arr[i] is: " + arr[i]);
+		this.arr[i] = val.getInt();
+System.out.println("flag");
 	}
 
     /**
@@ -202,7 +226,7 @@ public class Lexeme implements Types
 					System.out.print(",");
 			}
 				
-			System.out.print("]\n");
+			System.out.print("]");
 		}
 		else if (this.type == V)
 			System.out.print(this.type + " " + this.ival);
