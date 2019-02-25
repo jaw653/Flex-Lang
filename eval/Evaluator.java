@@ -722,8 +722,12 @@ objEnv.displayEnv(1);
 
 		if (tree.getCar().getName().equals("print"))
 			return evalPrint(args);
-//		else if (tree.getCar().getName().equals("newArray"))
-//			return evalNewArray(args);
+		else if (tree.getCar().getName().equals("newArray"))
+			return evalNewArray(args);
+		else if (tree.getCar().getName().equals("getArray"))
+			return evalGetArray(args, env);
+		else if (tree.getCar().getName().equals("setArray"))
+			return evalSetArray(args, env);
 		
 		Lexeme closure = lookup(tree.getCar(), env);
 		Environment senv = new Environment(closure.getCar());
@@ -759,7 +763,12 @@ objEnv.displayEnv(1);
 		
 		return null;
 	}
-/*
+
+	/**
+	 * Allocates array
+	 * @args The size of the array
+	 * @return Lexeme with allocated array inside
+	 */
 	private Lexeme evalNewArray(Lexeme args)
 	{
 		int size = args.getCar().getInt();
@@ -767,7 +776,35 @@ objEnv.displayEnv(1);
 		arr.allocateArr(size);
 		return arr;
 	}
-*/
+
+	/**
+	 * Gets desired element from array
+	 * @args The array from which to take the element along with the index
+	 * @return New Lexeme of Integer type with the value of the array at desired index
+	 */	 
+	private Lexeme evalGetArray(Lexeme args, Environment env)
+	{
+		Lexeme arr = lookup(args.getCar(), env);
+		Lexeme index = args.getCdr().getCar();
+		int i = index.getInt();
+		
+		return new Lexeme(INTEGER, arr.getArr(i));
+	}
+
+	/**
+	 * Sets val at desired index
+	 * @args The array, value and index
+	 * @return The value substituted
+	 */
+	private Lexeme evalSetArray(Lexeme args, Environment env)
+	{
+		Lexeme arr = lookup(args.getCar(), env);
+		Lexeme index = args.getCdr().getCar();
+		Lexeme val = args.getCdr().getCdr().getCar();
+		int i = index.getInt();
+		arr.setArr(i, val);
+		return val;
+	}
 /*
 	private Lexeme evalMethodCall(Lexeme tree, Environment env)
 	{
