@@ -7,5 +7,7 @@
 
 define function run()
 {
-	var a = "hello world
+	var a = "hello world";
+
+	print(b);		//Undefined variable semantic error
 }
