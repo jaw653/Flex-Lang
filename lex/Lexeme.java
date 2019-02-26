@@ -216,7 +216,7 @@ public class Lexeme implements Types
         }
         else if (this.type == REAL)
         {
-            System.out.println(this.type + " " + this.rval);
+            System.out.print(this.type + " " + this.rval);
         }
         else if (this.type == CHARACTER)
         {
