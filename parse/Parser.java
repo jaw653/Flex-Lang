@@ -338,11 +338,11 @@
 
             if ( paramListPending() )
                 paramList = paramList();
-
-            match(CLOSE_PAREN);
+            
+			match(CLOSE_PAREN);
 
 			block = block();
-
+			
 			tree = cons(LAMBDA, null, cons(GLUE, paramList, block));
 		}
         else if ( check(NOT) )
@@ -457,7 +457,6 @@
 
         if ( expressionPending() )
         {
-System.out.println("expression pending");
             tmp = expression();
 
 			match(SEMICOLON);
