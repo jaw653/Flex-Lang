@@ -666,10 +666,10 @@ System.out.println("expr2carcdr val: " + expr2.getCar().getCdr().getName());
 
  				match(CLOSE_PAREN);
 
-            	tree = cons(IDSTART, id, cons(GLUE, mthdName, exprList));
+            	tree = cons(OBJMETHOD, id, cons(GLUE, mthdName, exprList));
 			}
 			else
-				tree = cons(OBJMEM, id, mthdName);		// A dot access such as obj.a
+				tree = cons(OBJACCESS, id, mthdName);		// A dot access such as obj.a
  		}
         else
             tree = cons(IDSTART, id, null);
