@@ -743,7 +743,7 @@ objEnv.displayEnv(1);
 		Lexeme args = getArgs(tree, env);
 
 		if (tree.getCar().getName().equals("print"))
-			return evalPrint(args);
+			return evalPrint(args, env);
 		else if (tree.getCar().getName().equals("newArray"))
 			return evalNewArray(args);
 		else if (tree.getCar().getName().equals("getArray"))
@@ -772,10 +772,13 @@ objEnv.displayEnv(1);
 	}
 
 /***** Builtin functions *****/
-	private Lexeme evalPrint(Lexeme args)
+	private Lexeme evalPrint(Lexeme args, Environment env) throws IOException
 	{
-		Lexeme toPrint = args.getCar();
+		Lexeme toPrint = eval(args.getCar(), env);
 		
+		if (toPrint.getType() == ID)
+			toPrint = lookup(toPrint, env);
+
 		switch(toPrint.getType())
 		{
 			case STRING:
