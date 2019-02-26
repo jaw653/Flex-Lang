@@ -7,6 +7,8 @@
  */
 package lex;
 
+import java.io.*;
+
 public class Lexeme implements Types
 {
     String type;
@@ -18,6 +20,7 @@ public class Lexeme implements Types
     Lexeme cdr;
 	int[] arr;
 	int arrSize;		// Keeps track of how many elements are in the array
+	File fp;
 
     /**
      * Constructor method
@@ -85,6 +88,12 @@ public class Lexeme implements Types
 			this.ival = 1;
 		else
 			this.ival = 0;
+	}
+
+	public Lexeme(String type, File fp)
+	{
+		this.type = type;
+		this.fp = fp;
 	}
 
     /**
@@ -190,6 +199,15 @@ System.out.println("flag");
     {
         return rval;
     }
+
+	/**
+	 * Basic getter function for the value of the the file pointer Lexeme
+	 * @return The file pointer itself
+	 */
+	public File getFp()
+	{
+		return fp;
+	}
 
     /**
      * Displays Lexeme type to stdout
