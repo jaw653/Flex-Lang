@@ -73,6 +73,9 @@ test8: $(CLASSES)
 test9: $(CLASSES)
 	./flex eval/test9.flex
 
+test10: $(CLASSES)
+	./flex eval/test10.flex
+
 ##### Clean Command #####
 clean:
 	rm recognize/*.class
