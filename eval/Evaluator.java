@@ -310,6 +310,23 @@ public class Evaluator implements Types
 	}
 
 	/**
+	 * Evaluates a lambda/anonymous function
+	 * @tree Root of the lambda tree
+	 * @env Corresponding env
+	 * @return Closure of the lambda function
+	 */
+	private Lexeme evalLambda(Lexeme tree, Environment env) throws IOException
+	{
+		Lexeme closure = null, paramList = null;
+
+		closure = cons(CLOSURE, env.getEnv(), tree);
+	
+		if (tree.getCdr().getCar() != null) paramList = eval(tree.getCdr().getCar(),env);
+
+		return closure;
+	}
+
+	/**
 	 * Evaluates the block of the run function; the equivalent of c main
 	 * @tree Root of the run function parse tree
 	 * @env Corresponding environment
@@ -1075,6 +1092,8 @@ objEnv.displayEnv(1);
 				return evalVarDef(tree, env);
 			case FUNCDEF:
 				return evalFuncDef(tree, env);
+			case LAMBDA:
+				return evalLambda(tree, env);
 			case BLOCK:
 				return evalBlock(tree, env);
 			case STATEMENTS:
