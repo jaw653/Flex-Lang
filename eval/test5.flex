@@ -21,6 +21,8 @@ define function run()
 {
 	var m = new _myClass()_;
 	m.tester();
+	var x = m.a;
+	print(x);
 }
 
 

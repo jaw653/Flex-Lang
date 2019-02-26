@@ -419,8 +419,8 @@ public class Evaluator implements Types
 		/* Add class id to main environment and make it point to the oclosure */
 		env.insertEnv(objId, oclosure);
 
-System.out.println("objenv is: ");
-objEnv.displayEnv(1);
+//System.out.println("objenv is: ");
+//objEnv.displayEnv(1);
 
 		return oclosure;
 /*
@@ -476,7 +476,16 @@ env.displayEnv(1);
 
 	private Lexeme evalObjAccess(Lexeme tree, Environment env) throws IOException
 	{
-		return null;
+		Lexeme objId = eval(tree.getCar(), env);
+		Lexeme oclosure = env.getVal(objId);
+
+		Environment objEnv = new Environment(oclosure.getCar());
+
+		Lexeme args = getArgs(objId, env);
+
+		Lexeme accessVarName = objEnv.getVal(eval(tree.getCdr(), env));
+
+		return eval(accessVarName, objEnv);
 	}
 
 /*
@@ -1105,7 +1114,7 @@ resolvedArg2.display(); System.out.println();
 	 */
 	private Lexeme eval(Lexeme tree, Environment env) throws IOException
 	{
- tree.display();System.out.println();
+// tree.display();System.out.println();
 		switch (tree.getType())
 		{
 			case PROG:
