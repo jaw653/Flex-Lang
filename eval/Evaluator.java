@@ -488,22 +488,6 @@ env.displayEnv(1);
 		return eval(accessVarName, objEnv);
 	}
 
-/*
-	private Lexeme evalObjMem(Lexeme tree, Environment env) throws IOException
-	{
-		Lexeme obj = eval(tree.getCar(), env);
-		return eval(tree.getCdr(), new Environment(obj));
-/*
-System.out.println("tree car is: " + tree.getCar().getName());
-		Lexeme oclosure = lookup(tree.getCar(), env);
-System.out.println("oclosure is: " + oclosure.getName());
-System.out.println("env for evalobjmem is: ");
-env.displayEnv(1);
-return null;
-*
-	}
-*/
-
 	/**
 	 * Evaluates an EXPRDEF
 	 * @tree Root of the EXPRDEF tree
