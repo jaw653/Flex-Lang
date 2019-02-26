@@ -24,6 +24,7 @@ define function run()
 	var x = m.a;
 	print(x);
 
+
 	print(m.c);
 
 	var y = m.b;

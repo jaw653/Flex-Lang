@@ -447,6 +447,7 @@ env.displayEnv(1);
 		Lexeme varId = tree.getCar();
 		Lexeme objId = tree.getCdr().getCar();
 //		Lexeme exprList = tree.getCdr().getCdr();
+
 		/* This oclosure has all its vars and functions in the env to its car() */
 		Lexeme oclosure = lookup(objId, env);
 
@@ -712,12 +713,7 @@ resolvedArg2.display(); System.out.println();
 // System.out.println("objenv is: ");
 // objEnv.displayEnv(1);
 		}
-/*
-		Lexeme result = eval(tree.getCdr(), env);
 		
-		if (tree.getCar().getType() == VARIABLE)
-			env.updateE
-*/
 		return result;
 	}
 
