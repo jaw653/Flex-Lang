@@ -36,7 +36,6 @@ public class Evaluator implements Types
 	static int cmdLineNum;
 	static String[] cmdArgs;
 
-
 	/**
 	 * Default constructor
 	 */
@@ -97,7 +96,7 @@ public class Evaluator implements Types
 	 * @env Corresponding environment (only needed so I can call eval
 	 * @return The newly created value list
 	 */
-	private Lexeme exprListToValList(Lexeme head, Environment env)
+	private Lexeme exprListToValList(Lexeme head, Environment env) throws IOException
 	{
 		Lexeme tree = null, val = null, next = null;
 
@@ -119,7 +118,7 @@ public class Evaluator implements Types
 	 * @env Corresponding environment
 	 * @return A list of the evaluated args for insertion into an environment
 	 */
-	private Lexeme getArgs(Lexeme tree, Environment env)
+	private Lexeme getArgs(Lexeme tree, Environment env) throws IOException
 	{
 		return exprListToValList(tree.getCdr(), env);
 	}
@@ -218,7 +217,7 @@ public class Evaluator implements Types
 	 * @env Corresponding environment
 	 * @return Constructor function
 	 */
-	private Lexeme getConstructor(Lexeme id, Environment env)
+	private Lexeme getConstructor(Lexeme id, Environment env) throws IOException
 	{
 		System.out.println("searching env: "); env.displayEnv(1);
 		return env.getVal(id);
@@ -233,7 +232,7 @@ public class Evaluator implements Types
 	 * @env Environment for which to search for Lexeme id
 	 * @return The value of the id at tree
 	 */
-	private Lexeme lookup(Lexeme tree, Environment env)
+	private Lexeme lookup(Lexeme tree, Environment env) throws IOException
 	{
 // System.out.println("looking up: "); tree.display();
 		if (env.getVal(tree) != null)
@@ -250,7 +249,7 @@ public class Evaluator implements Types
 	 * @env Corresponding environment
 	 * @return the eval of the def
 	 */
-	private Lexeme evalProg(Lexeme tree, Environment env)
+	private Lexeme evalProg(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme def = null, prog = null;
 		
@@ -266,7 +265,7 @@ public class Evaluator implements Types
 	 * @env Corresponding environment
 	 * @return The value of the expression
 	 */			//FIXME: is this guy returning the right thing?
-	private Lexeme evalVarDef(Lexeme tree, Environment env)
+	private Lexeme evalVarDef(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme id = null, val = null;
 	
@@ -296,7 +295,7 @@ public class Evaluator implements Types
 	 * @env The environment into which the newly created tree will be inserted
 	 * @return The inserted Lexeme
 	 */
-	private Lexeme evalFuncDef(Lexeme tree, Environment env)
+	private Lexeme evalFuncDef(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme closure = null, paramList = null, block = null;
 
@@ -316,7 +315,7 @@ public class Evaluator implements Types
 	 * @env Corresponding environment
 	 * @return The value of the evaluated block
 	 */
-	private Lexeme evalRunDef(Lexeme tree, Environment env)
+	private Lexeme evalRunDef(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme closure = null, paramList = null, block = null;
 
@@ -337,7 +336,7 @@ public class Evaluator implements Types
 	 * @env Corresponding environment
 	 * @return The evaluated result of the block in Lexeme form
 	 */
-	private Lexeme evalBlock(Lexeme tree, Environment env)
+	private Lexeme evalBlock(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme statements = null, retStmt = null;
 		if (tree.getCar() != null) statements = eval(tree.getCar(), env);
@@ -351,7 +350,7 @@ public class Evaluator implements Types
 	 * @env Corresponding environment
 	 * @return statement or car(); this is somewhat the base case
 	 */
-	private Lexeme evalStatements(Lexeme tree, Environment env)
+	private Lexeme evalStatements(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme statement = null, statements = null;
 		statement = eval(tree.getCar(), env);
@@ -365,7 +364,7 @@ public class Evaluator implements Types
 	 * @env Corresponding environment
 	 * @return The eval() of an expr, loop, or definition
 	 */
-	private Lexeme evalStatement(Lexeme tree, Environment env)
+	private Lexeme evalStatement(Lexeme tree, Environment env) throws IOException
 	{
 		return eval(tree.getCar(), env);
 	}
@@ -376,7 +375,7 @@ public class Evaluator implements Types
 	 * @env Corresponding environment
 	 * @return The block of the while loop
 	 */
-	private Lexeme evalRetStmt(Lexeme tree, Environment env)
+	private Lexeme evalRetStmt(Lexeme tree, Environment env) throws IOException
 	{
 		return eval(tree.getCar(), env);
 	}
@@ -387,7 +386,7 @@ public class Evaluator implements Types
 	 * @env The environment into which the newly created tree will be inserted
 	 * @return The inserted Lexeme
 	 */
-	private Lexeme evalClassDef(Lexeme tree, Environment env)
+	private Lexeme evalClassDef(Lexeme tree, Environment env) throws IOException
 	{
 		Environment classEnv = new Environment(env.extendEnv(null, null));
 		Lexeme oclosure = cons(OCLOSURE, classEnv.getEnv(), tree);
@@ -405,7 +404,7 @@ env.displayEnv(1);
 	 * @env Corresponding environment
 	 * @return ...
 	 */
-	private Lexeme evalClassInst(Lexeme tree, Environment env)
+	private Lexeme evalClassInst(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme oclosure = lookup(tree.getCdr().getCar(), env);
 		Environment senv = new Environment(oclosure.getCar());
@@ -438,7 +437,7 @@ System.out.println("lenv is: "); lenv.displayEnv(1);
 */
 	}
 
-	private Lexeme evalObjMem(Lexeme tree, Environment env)
+	private Lexeme evalObjMem(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme obj = eval(tree.getCar(), env);
 		return eval(tree.getCdr(), new Environment(obj));
@@ -458,7 +457,7 @@ return null;
 	 * @env Corresponding environment
 	 * @return The value of the unary at the bottom of the expression
 	 */
-	private Lexeme evalExprDef(Lexeme tree, Environment env)
+	private Lexeme evalExprDef(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme unary = null, operator = null, expr = null, opTree = null;
 
@@ -490,7 +489,7 @@ return null;
 	 * @env Corresponding environment
 	 * @return eval() of children
 	 */
-	private Lexeme evalUnary(Lexeme tree, Environment env)
+	private Lexeme evalUnary(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme ret = null;
 
@@ -507,7 +506,7 @@ return null;
 	 * @env The corresponding environment
 	 * @return A new Lexeme with the value of the result of the op
 	 */
-	private Lexeme evalOp(Lexeme tree, Environment env)
+	private Lexeme evalOp(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme arg1 = null, arg2 = null;
 		Lexeme resolvedArg1 = null, resolvedArg2 = null;
@@ -660,7 +659,7 @@ resolvedArg2.display(); System.out.println();
 
 	}
 
-	private Lexeme evalAssign(Lexeme tree, Environment env)
+	private Lexeme evalAssign(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme id = eval(tree.getCar(), env);
 		Lexeme result = eval(tree.getCdr(), env);
@@ -691,7 +690,7 @@ objEnv.displayEnv(1);
 	 * @env Corresponding environment
 	 * @return The extended environment
 	 */
-	private Lexeme evalConstructor(Lexeme closure, Environment env)
+	private Lexeme evalConstructor(Lexeme closure, Environment env) throws IOException
 	{
 		Environment senv = new Environment(closure.getCar());
 		Environment xenv = new Environment(senv.extendEnv(null, null));
@@ -722,7 +721,7 @@ objEnv.displayEnv(1);
 	 * @env Environment corresponding to the function call in tree
 	 * @return Root Lexeme
 	 */
-	private Lexeme evalFunctionCall(Lexeme tree, Environment env)
+	private Lexeme evalFunctionCall(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme args = getArgs(tree, env);
 
@@ -738,6 +737,10 @@ objEnv.displayEnv(1);
 			return evalGetArgCount();
 		else if (tree.getCar().getName().equals("getArg"))
 			return evalGetArg(args, env);
+		else if (tree.getCar().getName().equals("openReadFile"))
+			return evalOpenReadFile(args, env);
+		else if (tree.getCar().getName().equals("readInt"))
+			return evalReadInt(args, env);
 		
 		Lexeme closure = lookup(tree.getCar(), env);
 		Environment senv = new Environment(closure.getCar());
@@ -792,7 +795,7 @@ objEnv.displayEnv(1);
 	 * @args The array from which to take the element along with the index
 	 * @return New Lexeme of Integer type with the value of the array at desired index
 	 */	 
-	private Lexeme evalGetArray(Lexeme args, Environment env)
+	private Lexeme evalGetArray(Lexeme args, Environment env) throws IOException
 	{
 		Lexeme arr = lookup(args.getCar(), env);
 		Lexeme index = args.getCdr().getCar();
@@ -806,7 +809,7 @@ objEnv.displayEnv(1);
 	 * @args The array, value and index
 	 * @return The value substituted
 	 */
-	private Lexeme evalSetArray(Lexeme args, Environment env)
+	private Lexeme evalSetArray(Lexeme args, Environment env) throws IOException
 	{
 		Lexeme arr = lookup(args.getCar(), env);
 		Lexeme index = args.getCdr().getCar();
@@ -831,10 +834,39 @@ objEnv.displayEnv(1);
 	 * @env Corresponding environment
 	 * @return String Lexeme of arg at given index
 	 */
-	private Lexeme evalGetArg(Lexeme args, Environment env)
+	private Lexeme evalGetArg(Lexeme args, Environment env) throws IOException
 	{
 		int index = eval(args.getCar(), env).getInt();
 		return new Lexeme(STRING, cmdArgs[index]);
+	}
+
+	/**
+	 * Opens a new file for reading
+	 * @args Args with filename
+	 * @env Corresponding environment
+	 * @return Lexeme with filepointer value and type
+	 */
+	private Lexeme evalOpenReadFile(Lexeme args, Environment env) throws IOException
+	{
+		String filename = eval(args.getCar(), env).getName();
+		File fp = new File(filename);
+		return new Lexeme(FILE_POINTER, fp);
+	}
+
+	/**
+	 * Reads an integer from the given file
+	 * @args Filepointer from which to read the file
+	 * @env Corresponding environment
+	 * @return ...
+	 */
+	private Lexeme evalReadInt(Lexeme args, Environment env) throws IOException
+	{
+		Lexeme fileLexeme = eval(args.getCar(), env);
+		File file = fileLexeme.getFp();
+
+		FileInputStream stream = new FileInputStream(file);
+
+		return null;
 	}
 
 	/*
@@ -843,7 +875,7 @@ objEnv.displayEnv(1);
 		Lexeme closure = eval(tree.getCar(), env);
 	}
 */
-	private Lexeme evalIDstart(Lexeme tree, Environment env)
+	private Lexeme evalIDstart(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme id = null;
 
@@ -878,7 +910,7 @@ objEnv.displayEnv(1);
 	 * @env Corresponding environment
 	 * @return eval of the ID lexeme to the left
 	 */
-	private Lexeme evalImport(Lexeme tree, Environment env)
+	private Lexeme evalImport(Lexeme tree, Environment env) throws IOException
 	{
 		return eval(tree.getCar(), env);
 	}
@@ -889,7 +921,7 @@ objEnv.displayEnv(1);
 	 * @env Corresponding environment
 	 * @return id held in the paramList
 	 */
-	private Lexeme evalParamList(Lexeme tree, Environment env)
+	private Lexeme evalParamList(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme id = null, plist = null;
 
@@ -907,7 +939,7 @@ objEnv.displayEnv(1);
 	 * @env Corresponding environment
 	 * @return first evaluated expression
 	 */
-	private Lexeme evalExprList(Lexeme tree, Environment env)
+	private Lexeme evalExprList(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme expr = null, elist = null;
 
@@ -924,7 +956,7 @@ objEnv.displayEnv(1);
 	 * @env Corresponding environment
 	 * @return The correct block
 	 */
-	private Lexeme evalIf(Lexeme tree, Environment env)
+	private Lexeme evalIf(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme expr = null, block = null, elif = null;
 
@@ -948,7 +980,7 @@ objEnv.displayEnv(1);
 	 * @env Corresponding environment
 	 * @return The correct block
 	 */
-	private Lexeme evalElseIf(Lexeme tree, Environment env)
+	private Lexeme evalElseIf(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme ifstmt = null, block = null;
 		return eval(tree.getCar(), env);
@@ -960,7 +992,7 @@ objEnv.displayEnv(1);
 	 * @env Corresponding environment
 	 * @return The block of the while loop
 	 */
-	private Lexeme evalWhile(Lexeme tree, Environment env)
+	private Lexeme evalWhile(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme expr = null, block = null;
 
@@ -981,7 +1013,7 @@ objEnv.displayEnv(1);
 	 * @env Corresponding environment
 	 * @return The block of the for loop
 	 */
-	private Lexeme evalFor(Lexeme tree, Environment env)
+	private Lexeme evalFor(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme expr = null, expr1 = null, expr2 = null, block = null;
 
@@ -1004,7 +1036,7 @@ objEnv.displayEnv(1);
 	 * @env Corresponding environment to tree
 	 * @return root of another Lexeme tree
 	 */
-	private Lexeme eval(Lexeme tree, Environment env)
+	private Lexeme eval(Lexeme tree, Environment env) throws IOException
 	{
  tree.display();System.out.println();
 		switch (tree.getType())
@@ -1017,6 +1049,7 @@ objEnv.displayEnv(1);
 			case REAL:
 			case STRING:
 			case ID:
+			case FILE_POINTER:
 				return tree;
 			case VARDEF:
 				return evalVarDef(tree, env);
