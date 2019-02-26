@@ -67,8 +67,8 @@ test6: $(CLASSES)
 test7: $(CLASSES)
 	./flex eval/test7.flex sample.txt
 
-# test8: $(CLASSES)
-#	./flex eval/test8.flex
+test8: $(CLASSES)
+	./flex eval/test8.flex
 
 ##### Clean Command #####
 clean:
