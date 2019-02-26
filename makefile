@@ -103,6 +103,12 @@ objects: $(CLASSES)
 objectsx: $(CLASSES)
 	./flex test/objects.flex
 
+problem: $(CLASSES)
+	cat test/problem.flex
+	cat test/ints.txt
+problemx: $(CLASSES)
+	./flex test/problem.flex test/ints.txt
+
 
 ##### Personal Test Cases #####
 test1: $(CLASSES)
