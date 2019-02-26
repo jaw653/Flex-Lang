@@ -12,8 +12,6 @@ CLASSES = lex/Types.class lex/Lexeme.class lex/Lexer.class recognize/Recognizer.
 all: $(CLASSES)
 
 run: $(CLASSES)
-	make test1
-	make test2
 
 
 ##### Classes #####
@@ -44,8 +42,69 @@ prettyPrint/PrettyPrinter.class: prettyPrint/PrettyPrinter.java
 eval/Evaluator.class: eval/Evaluator.java
 	javac $(OPTS) eval/Evaluator.java
 
+##### Lusth Test Cases #####
+error1: $(CLASSES)
+	cat test/error1.flex
+error1x: $(CLASSES)
+	./flex test/error1.flex
 
-##### Test Cases #####
+error2: $(CLASSES)
+	cat test/error2.flex
+error2x: $(CLASSES)
+	./flex test/error2.flex
+
+error3: $(CLASSES)
+	cat test/error3.flex
+error3x: $(CLASSES)
+	./flex test/error3.flex
+
+error4: $(CLASSES)
+	cat test/error4.flex
+error4x: $(CLASSES)
+	./flex test/error4.flex
+
+error5: $(CLASSES)
+	cat test/error5.flex
+error5x: $(CLASSES)
+	./flex test/error5.flex
+
+arrays: $(CLASSES)
+	cat test/arrays.flex
+arraysx: $(CLASSES)
+	./flex test/arrays.flex
+
+conditionals: $(CLASSES)
+	cat test/conditionals.flex
+conditionalsx: $(CLASSES)
+	./flex test/conditionals.flex
+
+recursion: $(CLASSES)
+	cat test/recursion.flex
+recursionx: $(CLASSES)
+	./flex test/recursion.flex
+
+iteration: $(CLASSES)
+	cat test/iteration.flex
+iterationx: $(CLASSES)
+	./flex test/iteration.flex
+
+functions: $(CLASSES)
+	cat test/functions.flex
+functionsx: $(CLASSES)
+	./flex test/functions.flex
+
+lambda: $(CLASSES)
+	cat test/lambda.flex
+lambdax: $(CLASSES)
+	./flex test/lambda.flex
+
+objects: $(CLASSES)
+	cat test/objects.flex
+objectsx: $(CLASSES)
+	./flex test/objects.flex
+
+
+##### Personal Test Cases #####
 test1: $(CLASSES)
 	./flex eval/test1.flex
 
