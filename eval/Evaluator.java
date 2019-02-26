@@ -35,7 +35,7 @@ public class Evaluator implements Types
 
 	static int cmdLineNum;
 	static String[] cmdArgs;
-
+	static Scanner sc;
 	/**
 	 * Default constructor
 	 */
@@ -778,6 +778,8 @@ resolvedArg2.display(); System.out.println();
 			return evalOpenReadFile(args, env);
 		else if (tree.getCar().getName().equals("readInt"))
 			return evalReadInt(args, env);
+		else if (tree.getCar().getName().equals("fileEnd"))
+			return evalFileEnd();
 		
 		Lexeme closure = lookup(tree.getCar(), env);
 		Environment senv = new Environment(closure.getCar());
@@ -891,10 +893,16 @@ resolvedArg2.display(); System.out.println();
 		Lexeme fileIDLexeme = eval(args.getCar(), env);
 		Lexeme fileNameLexeme = lookup(fileIDLexeme, env);
 		String filename = fileNameLexeme.getName();
-		
+			
 		File fp = new File(filename);
+		
+		if (!fp.exists())
+		{
+			System.out.println("Flex error, file does not exist");
+			System.exit(-1);
+		}
 
-		Scanner sc = new Scanner(fp);
+		sc = new Scanner(fp);
 		return new Lexeme(FILE_POINTER, fp);
 	}
 
@@ -916,8 +924,6 @@ resolvedArg2.display(); System.out.println();
 
 		File file = fileLexeme.getFp();
 		
-		Scanner sc = new Scanner(file);
-
 		if (sc.hasNextInt())
 			i = sc.nextInt();
 		else
@@ -927,6 +933,18 @@ resolvedArg2.display(); System.out.println();
 		}
 
 		return new Lexeme(INTEGER, i);
+	}
+
+	/**
+	 * Method for determining if end of file has been reached
+	 * @return Integer lexemes representing bools; 1 if end has been reached, 0 else
+	 */
+	private Lexeme evalFileEnd() throws IOException
+	{
+		if (!sc.hasNextInt())
+			return new Lexeme(INTEGER, 1);
+		else			
+			return new Lexeme(INTEGER, 0);
 	}
 
 	/*
