@@ -20,7 +20,7 @@
 
 // currently a variable defined inside an if loop will belong to the overarching function
 // currently do not allow for negative numbers
-
+// add that command line arguments are implicitly included in Flex, no need to have them as params
 package eval;
 
 import lex.*;
@@ -32,6 +32,11 @@ import java.io.*;
 
 public class Evaluator implements Types
 {
+
+	static int cmdLineNum;
+	static String[] cmdArgs;
+
+
 	/**
 	 * Default constructor
 	 */
@@ -61,7 +66,7 @@ public class Evaluator implements Types
 	 */
 	private static void checkCmdArgs(String[] args)
 	{
-		if (args.length != 1)
+		if (args.length < 1)
 		{
 			System.out.println("Incorrect number of command line args");
 			System.exit(-1);
@@ -218,6 +223,7 @@ public class Evaluator implements Types
 		System.out.println("searching env: "); env.displayEnv(1);
 		return env.getVal(id);
 	}
+
 
 
 /***** Private Methods *****/
@@ -728,6 +734,10 @@ objEnv.displayEnv(1);
 			return evalGetArray(args, env);
 		else if (tree.getCar().getName().equals("setArray"))
 			return evalSetArray(args, env);
+		else if (tree.getCar().getName().equals("getArgCount"))
+			return evalGetArgCount();
+		else if (tree.getCar().getName().equals("getArg"))
+			return evalGetArg(args, env);
 		
 		Lexeme closure = lookup(tree.getCar(), env);
 		Environment senv = new Environment(closure.getCar());
@@ -805,7 +815,29 @@ objEnv.displayEnv(1);
 		arr.setArr(i, val);
 		return val;
 	}
-/*
+
+	/**
+	 * Gets the number of command line arguments
+	 * @return Integer Lexeme with number of cmd line args
+	 */
+	private Lexeme evalGetArgCount()
+	{
+		return new Lexeme(INTEGER, cmdLineNum);
+	}
+
+	/**
+	 * Gets the command line arg at the given index
+	 * @args Root of argument tree for function
+	 * @env Corresponding environment
+	 * @return String Lexeme of arg at given index
+	 */
+	private Lexeme evalGetArg(Lexeme args, Environment env)
+	{
+		int index = eval(args.getCar(), env).getInt();
+		return new Lexeme(STRING, cmdArgs[index]);
+	}
+
+	/*
 	private Lexeme evalMethodCall(Lexeme tree, Environment env)
 	{
 		Lexeme closure = eval(tree.getCar(), env);
@@ -1052,6 +1084,13 @@ objEnv.displayEnv(1);
 	public static void main(String[] args) throws IOException
 	{
 		checkCmdArgs(args);
+
+		/* Set global command line variables */
+		cmdLineNum = args.length;
+		cmdArgs = args.clone();
+// System.out.println("num cmd line args is: " + cmdLineNum);
+// System.out.println("cmdargs is: " + cmdArgs[0]);
+//		System.arraycopy(args, 0, cmdArgs, 0, args.length);
 
 		File file = openFile(args[0]);
 		PushbackInputStream stream = new PushbackInputStream(new FileInputStream(file));
