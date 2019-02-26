@@ -198,7 +198,7 @@ System.out.println("flag");
     {
         if (this.type == STRING)
         {
-            System.out.println(this.type + " " + this.sval);
+            System.out.print(this.type + " " + this.sval);
         }
         else if (this.type == INTEGER)
         {
