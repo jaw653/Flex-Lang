@@ -219,7 +219,7 @@ public class Evaluator implements Types
 	 */
 	private Lexeme getConstructor(Lexeme id, Environment env) throws IOException
 	{
-		System.out.println("searching env: "); env.displayEnv(1);
+//		System.out.println("searching env: "); env.displayEnv(1);
 		return env.getVal(id);
 	}
 
@@ -680,7 +680,7 @@ resolvedArg2.display(); System.out.println();
 	{
 		Lexeme id = eval(tree.getCar(), env);
 		Lexeme result = eval(tree.getCdr(), env);
-System.out.println("tree car type is: " + tree.getCar().getType());	
+// System.out.println("tree car type is: " + tree.getCar().getType());	
 		if (tree.getCar().getType() != OBJMEM)
 			env.updateVal(id, eval(tree.getCdr(), env));
 		else
@@ -689,8 +689,8 @@ System.out.println("tree car type is: " + tree.getCar().getType());
 			Environment objEnv = new Environment(obj);
 			objEnv.updateVal(tree.getCdr().getCar(), result);
 
-System.out.println("objenv is: ");
-objEnv.displayEnv(1);
+// System.out.println("objenv is: ");
+// objEnv.displayEnv(1);
 		}
 /*
 		Lexeme result = eval(tree.getCdr(), env);
@@ -1078,7 +1078,7 @@ objEnv.displayEnv(1);
 	 */
 	private Lexeme eval(Lexeme tree, Environment env) throws IOException
 	{
- tree.display();System.out.println();
+// tree.display();System.out.println();
 		switch (tree.getType())
 		{
 			case PROG:
