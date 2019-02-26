@@ -28,7 +28,7 @@ import parse.*;
 import env.*;
 
 import java.io.*;
-
+import java.util.Scanner;
 
 public class Evaluator implements Types
 {
@@ -848,8 +848,13 @@ objEnv.displayEnv(1);
 	 */
 	private Lexeme evalOpenReadFile(Lexeme args, Environment env) throws IOException
 	{
-		String filename = eval(args.getCar(), env).getName();
+		Lexeme fileIDLexeme = eval(args.getCar(), env);
+		Lexeme fileNameLexeme = lookup(fileIDLexeme, env);
+		String filename = fileNameLexeme.getName();
+		
 		File fp = new File(filename);
+
+		Scanner sc = new Scanner(fp);
 		return new Lexeme(FILE_POINTER, fp);
 	}
 
@@ -857,16 +862,31 @@ objEnv.displayEnv(1);
 	 * Reads an integer from the given file
 	 * @args Filepointer from which to read the file
 	 * @env Corresponding environment
-	 * @return ...
+	 * @return The read-in int as an Integer Lexeme
 	 */
 	private Lexeme evalReadInt(Lexeme args, Environment env) throws IOException
 	{
-		Lexeme fileLexeme = eval(args.getCar(), env);
+		int i = 0;
+
+		Lexeme fileLexeme = null;
+		Lexeme fileID = eval(args.getCar(), env);
+
+		if (fileID.getType() == ID)
+			fileLexeme = lookup(fileID, env);
+
 		File file = fileLexeme.getFp();
+		
+		Scanner sc = new Scanner(file);
 
-		FileInputStream stream = new FileInputStream(file);
+		if (sc.hasNextInt())
+			i = sc.nextInt();
+		else
+		{
+			System.out.println("Flex error: no more integers!");
+			System.exit(-1);
+		}
 
-		return null;
+		return new Lexeme(INTEGER, i);
 	}
 
 	/*
