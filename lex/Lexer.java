@@ -200,6 +200,8 @@ public class Lexer implements Types
             return new Lexeme(CLASS);
         else if ( buffer.equals("new") )
             return new Lexeme(NEW);
+		else if ( buffer.equals("lambda") )
+			return new Lexeme(LAMBDA);
         else
             return new Lexeme(ID, buffer);
     }

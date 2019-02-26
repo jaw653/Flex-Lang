@@ -317,6 +317,7 @@
     public Lexeme unary() throws IOException
     {
         Lexeme tmp = null, tmp1 = null, tree = null;
+		Lexeme block = null, paramList = null;
 
         if ( check(ID) )
         {
@@ -330,10 +331,20 @@
             tree = cons(UNARY, match(CHARACTER), null);
         else if ( check(STRING) )
             tree = cons(UNARY, match(STRING), null);
-        /*                                  //FIXME: array not currently defined
-        else if ( check(ARRAY) )
-            match(ARRAY);
-        */
+		else if ( check(LAMBDA) )
+		{
+            match(LAMBDA);
+            match(OPEN_PAREN);
+
+            if ( paramListPending() )
+                paramList = paramList();
+
+            match(CLOSE_PAREN);
+
+			block = block();
+
+			tree = cons(LAMBDA, null, cons(GLUE, paramList, block));
+		}
         else if ( check(NOT) )
         {
             tmp = match(NOT);
@@ -756,10 +767,11 @@ System.out.println("expr2carcdr val: " + expr2.getCar().getCdr().getName());
 
  	public boolean unaryPending()
  	{
-System.out.println("running unaryPending(), ");
-if (check(OBJMEM) == true) System.out.println("OBJMEM pending");
+// System.out.println("running unaryPending(), ");
+// if (check(OBJMEM) == true) System.out.println("OBJMEM pending");
  		return ( idStartPending() || check(INTEGER) || check(REAL) || check(STRING) ||
- 			check(NOT) || check(OPEN_PAREN) || check(MINUS) || check(NEW) || check(OBJMEM) );
+ 			check(NOT) || check(OPEN_PAREN) || check(MINUS) || check(NEW) ||
+			check(LAMBDA) || check(OBJMEM) );
  	}
 
  	public boolean idStartPending()
