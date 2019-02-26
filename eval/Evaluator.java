@@ -405,6 +405,25 @@ public class Evaluator implements Types
 	 */
 	private Lexeme evalClassDef(Lexeme tree, Environment env) throws IOException
 	{
+		/* New environment for just the object and its variables */
+		Environment objEnv = new Environment(env.extendEnv(null, null));
+
+		Lexeme objId = eval(tree.getCar(), env);
+
+		/* Set oclosure env to point to new empty object env */
+		Lexeme oclosure = cons(OCLOSURE, objEnv.getEnv(), tree);
+
+		/* Add all class functions and vars to its personal env */
+		Lexeme block = eval(tree.getCdr(), objEnv);
+
+		/* Add class id to main environment and make it point to the oclosure */
+		env.insertEnv(objId, oclosure);
+
+System.out.println("objenv is: ");
+objEnv.displayEnv(1);
+
+		return oclosure;
+/*
 		Environment classEnv = new Environment(env.extendEnv(null, null));
 		Lexeme oclosure = cons(OCLOSURE, classEnv.getEnv(), tree);
 		Lexeme classBody = eval(tree.getCdr(), classEnv);			//Adds all vars and funcdefs to env
@@ -413,6 +432,7 @@ env.displayEnv(1);
 //		Environment classEnv = new Environment(env.extendEnv(classBody, null));
 //		classEnv.insertEnv(tree.getCar(), oclosure);					//FIXME: should this be OCLOSURE?
 		return oclosure;
+*/
 	}
 
 	/**
@@ -423,37 +443,43 @@ env.displayEnv(1);
 	 */
 	private Lexeme evalClassInst(Lexeme tree, Environment env) throws IOException
 	{
-		Lexeme oclosure = lookup(tree.getCdr().getCar(), env);
-		Environment senv = new Environment(oclosure.getCar());
-		Environment lenv = new Environment(senv.extendEnv(null, null));
-		Lexeme body = oclosure.getCdr().getCdr();
+//		System.out.println("class inst tree is: "); tree.display(); System.out.println();
+		Lexeme varId = tree.getCar();
+		Lexeme objId = tree.getCdr().getCar();
+//		Lexeme exprList = tree.getCdr().getCdr();
+		/* This oclosure has all its vars and functions in the env to its car() */
+		Lexeme oclosure = lookup(objId, env);
 
-		lenv.insertEnv(new Lexeme(ID, "this"), lenv.getEnv());
-System.out.println("lenv is: "); lenv.displayEnv(1);
+		env.insertEnv(varId, oclosure);
+
 		return oclosure;
-//		Lexeme constructor = getConstructor(tree.getCdr().getCar(), env);
-//System.out.println("constructor is: "); constructor.display(); System.out.println();
-//		return null;
-
-/*
-		Lexeme args = getArgs(tree, env);
-
-		if (tree.getCar().getName().equals("print"))
-			return evalPrint(args);
-		
-		Lexeme closure = lookup(tree.getCar(), env);
-		Environment senv = new Environment(closure.getCar());
-		Lexeme params = getParams(closure);
-		Environment lenv = new Environment(senv.extendEnv(params, args));
-		Lexeme body = getBody(closure);
-
-		/* Insert variable that points to the local environment *
-//		lenv.insertEnv(new Lexeme(ID, "this"), lenv.getEnv());
-		
-//		return eval(body, lenv);
-*/
 	}
 
+	private Lexeme evalObjMethod(Lexeme tree, Environment env) throws IOException
+	{
+		Lexeme objId = eval(tree.getCar(), env);
+		Lexeme oclosure = env.getVal(objId);
+
+		/* Environment of the object with corresponding var and function values */
+		Environment objEnv = new Environment(oclosure.getCar());
+
+		/* Args to be passed to the method */
+		Lexeme args = getArgs(objId, env);
+
+		/* Name of the method to be called */
+		Lexeme methodName = eval(tree.getCdr().getCar(), env);
+
+		Lexeme functionTree = cons(FUNCCALL, methodName, args);
+		
+		return eval(functionTree, objEnv);
+	}
+
+	private Lexeme evalObjAccess(Lexeme tree, Environment env) throws IOException
+	{
+		return null;
+	}
+
+/*
 	private Lexeme evalObjMem(Lexeme tree, Environment env) throws IOException
 	{
 		Lexeme obj = eval(tree.getCar(), env);
@@ -465,8 +491,9 @@ System.out.println("oclosure is: " + oclosure.getName());
 System.out.println("env for evalobjmem is: ");
 env.displayEnv(1);
 return null;
-*/
+*
 	}
+*/
 
 	/**
 	 * Evaluates an EXPRDEF
@@ -1078,7 +1105,7 @@ resolvedArg2.display(); System.out.println();
 	 */
 	private Lexeme eval(Lexeme tree, Environment env) throws IOException
 	{
-// tree.display();System.out.println();
+ tree.display();System.out.println();
 		switch (tree.getType())
 		{
 			case PROG:
@@ -1109,8 +1136,10 @@ resolvedArg2.display(); System.out.println();
 				return evalClassDef(tree, env);
 			case CLASS_INSTANTIATION:
 				return evalClassInst(tree, env);
-			case OBJMEM:
-				return evalObjMem(tree, env);
+			case OBJMETHOD:
+				return evalObjMethod(tree, env);
+			case OBJACCESS:
+				return evalObjAccess(tree, env);
 			case EXPRDEF:
 				return evalExprDef(tree, env);
 			case UNARY:
