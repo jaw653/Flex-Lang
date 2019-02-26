@@ -61,6 +61,8 @@ public interface Types
 	public static final String ARRAY = "ARRAY";
 	public static final String FILE_POINTER = "FILE_POINTER";
 	public static final String LAMBDA = "LAMBDA";
+	public static final String OBJMETHOD = "OBJMETHOD";
+	public static final String OBJACCESS = "OBJACCESS";
 
     /***** Parse tree macros *****/
 	public static final String RUNDEF = "RUNDEF";
