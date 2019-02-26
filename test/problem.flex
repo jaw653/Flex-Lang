@@ -19,8 +19,6 @@ define function run()
 
 		var fp = openReadFile(filename);
 		
-		// therefore need an end of file function?
-
 		var total = 0;
 		while (fileEnd() == 0)		//While more ints to read
 		{

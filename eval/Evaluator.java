@@ -1203,9 +1203,6 @@ resolvedArg2.display(); System.out.println();
 		/* Set global command line variables */
 		cmdLineNum = args.length;
 		cmdArgs = args.clone();
-// System.out.println("num cmd line args is: " + cmdLineNum);
-// System.out.println("cmdargs is: " + cmdArgs[0]);
-//		System.arraycopy(args, 0, cmdArgs, 0, args.length);
 
 		File file = openFile(args[0]);
 		PushbackInputStream stream = new PushbackInputStream(new FileInputStream(file));
@@ -1223,29 +1220,7 @@ resolvedArg2.display(); System.out.println();
 		e.eval(tree, env);
 
 		System.out.println();
-		env.displayEnv(1);									//FIXME: this line for testing purposes only
-
-/*
-		tree.display();
-		tree.getCar().display();
-		tree.getCar().getCar().display();
-		tree.getCar().getCar().getCar().display();
-		tree.getCar().getCar().getCdr().display();
-		tree.getCar().getCar().getCdr().getCdr().display();	//block
-		tree.getCar().getCar().getCdr().getCdr().getCar().display();	//statements
-//		tree.getCar().getCar().getCdr().getCdr().getCar().getCar().display();
-		Lexeme statement = tree.getCar().getCar().getCdr().getCdr().getCar().getCar();
-		statement.display();
-		statement.getCar().display();
-		statement.getCar().getCar().display();
-		statement.getCar().getCdr().display();
-		Lexeme un = statement.getCar().getCdr().getCar();
-		un.display();
-		un.getCar().display();
-//		tree.getCar().getCar().getCdr().getCar().getCar().getCar().getCar().display();
-//		tree.getCar().getCar().getCdr().getCar().getCar().getCar().getCar().getCar().display();
-//		env.displayEnv(1);
-*/
+//		env.displayEn(1);									//FIXME: this line for testing purposes only
 
 		stream.close();
 	}

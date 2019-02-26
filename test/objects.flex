@@ -7,8 +7,8 @@
 define class myClass
 {
 	var a = 10;
-	var b = 0;
-	var c = "hello world";
+	var b = 7;
+	var c = "I'm a variable";
 
 	define function tester()
 	{
@@ -23,5 +23,11 @@ define function run()
 	m.tester();
 	var x = m.a;
 	print(x);
+
+	print(m.c);
+
+	var y = m.b;
+	print("m.b (and therefore y) is:");
+	print(y);
 }
 

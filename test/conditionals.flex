@@ -7,17 +7,26 @@
 define function run()
 {
 	var x = 3;
+	var y = 8;
 
-	if (5 < x)
+	if (x < y)
 	{
-		x = 12;
+		print("cond0: x is less than y!");
+	}
+	else if (x > y)
+	{
+		print("cond0: y is less than x!");		// Should not run
 	}
 
-	else if (x > 1)
-	{
-		print("else if ran");
-		x = 1;
-	}
+	x = x + 10;
 
+	if (x < y)
+	{
+		print("cond1: x is less than y!");		// Should not run
+	}
+	else if (x > y)
+	{
+		print("cond1: y is less than x!");
+	}
 
 }

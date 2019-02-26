@@ -6,7 +6,9 @@
 
 define function f(var x)
 {
-	print("recur");
+	print("recur f with x of value: ");
+	print(x);
+
 	if (x <= 5)
 	{
 		f(x+1);
