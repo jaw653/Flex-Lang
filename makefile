@@ -147,6 +147,9 @@ problem:
 problemx: $(CLASSES)
 	./flex test/problem.flex test/ints.txt
 
+test: $(CLASSES)
+	make run
+
 
 ##### Personal Test Cases #####
 test1: $(CLASSES)
